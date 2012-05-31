@@ -18,6 +18,16 @@ No development anymore.
 
 Our solution is KissMDA (Keep It Simple Stupid, MDA!).
 
-1. KissMDA is a pure Java API approach. No DSL. OK, we still need a templating engine. But that's it!
+1. KissMDA is a pure Java API approach. No DSL. OK, we still need a templating engine and its Eclipse plugin. Therefore we will
+choose the best templating engine available!
 
-2. No need to have special Eclipse plugin, we just Java, Java and Java!
+2. No need to have special Eclipse plugins, we just use Java, Java and Java!
+
+3. We'll try not to use XML, instead we'll implement annotations as much as possible.
+
+4. Maven will be the core part of KissMDA. We'll generate the codes with Maven, we'll generate the skeleton of 
+the MDA application and cartridge project with Maven archetype. No other choice!
+
+We are still in the beginning of the project, so if you want to influence our direction, you are welcome to do so!
+
+KissMDA team: Lofi, Ingo, Markus
