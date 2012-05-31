@@ -1,6 +1,6 @@
 KissMDA app-examples
 ====================
-In this directory you will find all the UML2 application examples.
+In this directory you will find all the UML2 application examples which use the KissMDA cartridges.
 
 kissmda-app-test
 ----------------
