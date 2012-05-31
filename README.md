@@ -20,4 +20,4 @@ Our solution is KissMDA (Keep It Simple Stupid, MDA!).
 
 1. KissMDA is a pure Java API approach. No DSL. OK, we still need a templating engine. But that's it!
 
-2. No need to have special Eclipse plugin, Java, Java and Java!
+2. No need to have special Eclipse plugin, we just Java, Java and Java!
