@@ -12,4 +12,11 @@ project. Yes, you need to model the cartridge to build your own cartridge. In th
 your own dog food" but at the end it makes the things much more complex to build. 
 
 2. oAW has a different story. After going to Eclipse it seems that the project has no activity anymore. No news anymore
-from oAW 5 release. 
+from oAW 5 release. It's really a pitty. The big problem of oAW is its Domain Specific Language (DSL) XTend. Since
+it depends on the editor capability in Eclipse and the project seems to be dead, you stuck with Eclipse 3.4!
+
+Our solution is KissMDA (Keep It Simple Stupid, MDA!).
+
+1. KissMDA is a pure Java approach. No DSL. OK, we still need a templating engine. But that's it!
+
+2. No need to have special Eclipse plugin, Java, Java and Java!
