@@ -31,5 +31,4 @@ the MDA application and the cartridge project with Maven archetypes. No other ch
 
 We are still in the beginning of the project, so if you want to influence our direction, you are welcome to do so!
 
-KissMDA team,
-Lofi, Ingo, Markus
+KissMDA team: Lofi, Ingo, Markus
