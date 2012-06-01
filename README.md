@@ -31,4 +31,6 @@ the MDA application and the cartridge project with Maven archetypes. No other ch
 
 We are still in the beginning of the project, so if you want to influence our direction, you are welcome to do so!
 
+For more information please check out our Wiki pages: https://github.com/crowdcode-de/KissMDA/wiki
+
 KissMDA team: Lofi, Ingo, Markus
