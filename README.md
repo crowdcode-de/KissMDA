@@ -3,7 +3,7 @@ KissMDA
 
 Keep It Simple Stupid, MDA!
 
-After working a while with MDA / MDSD technologies like AndroMDA, oAW, ... we feel like we need just another MDA tool!
+After working a while with MDA / MDSD technologies like AndroMDA, oAW, ... we feel lihttp://stackoverflow.com/questions/121324/a-java-api-to-generate-java-source-fileske we need just another MDA tool!
 Why?
 
 1. We still like AndroMDA, yes the project is very much alive and it has already proven itself to be a strong Open Source 
@@ -20,11 +20,14 @@ definitely stuck with Eclipse 3.4! No development anymore in the future.
 Our solution is KissMDA (Keep It Simple Stupid, MDA!).
 
 1. KissMDA is a pure Java API approach. No DSL. OK, we still need a templating engine and it also depends on an Eclipse
-plugin. Therefore we will choose the best templating engine available wisely!
+plugin. Therefore we will choose the best templating engine available wisely. Nope! This is not true!
+a. For generating Java code we will use Eclipse JDT. Check this out: http://stackoverflow.com/questions/121324/a-java-api-to-generate-java-source-files
+b. For generating XML we will use DOM API.
+c. For generating any other things we will use Java!
 
 2. No need to have special Eclipse plugins, we just use Java with its Java editor in Eclipse!
 
-3. We'll try not to use XML, instead we'll implement annotations as much as we need it.
+3. We'll try not to use XML in our framework, instead we'll implement annotations as much as we need it.
 
 4. Maven will be the core part of KissMDA. We'll generate the codes with a Maven plugin, we'll generate the skeleton of 
 the MDA application and the cartridge project with Maven archetypes. No other choice!
