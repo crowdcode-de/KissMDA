@@ -72,7 +72,8 @@ public class SimpleJavaTransformer implements Transformer {
 						Class clazz = (Class) element;
 						logger.info("Class: " + clazz.getName() + " - "
 								+ "Stereotype: " + stereotype.getName());
-						createClazz(clazz);
+						// Generate the interface for this class
+						generateInterface(clazz);
 					}
 				}
 			}
@@ -97,7 +98,7 @@ public class SimpleJavaTransformer implements Transformer {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void createClazz(Class clazz) {
+	public void generateInterface(Class clazz) {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 
