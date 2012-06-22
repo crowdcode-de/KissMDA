@@ -34,7 +34,9 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
+import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Stereotype;
 
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.ReaderWriter;
@@ -48,49 +50,60 @@ import de.crowdcode.kissmda.core.TransformerException;
  * @version 1.0.0
  */
 public class SimpleJavaTransformer implements Transformer {
+
 	private static final Logger logger = Logger
 			.getLogger(SimpleJavaTransformer.class.getName());
+
+	private static final String STEREOTYPE_INTERFACE = "Interface";
 
 	@Override
 	public void transform(Context context) throws TransformerException {
 		try {
-			ReaderWriter app = new ReaderWriter();
-			String uriString = this.getClass()
-					.getResource(context.getSourceModel()).toURI().toString();
-			URI uri = URI.createURI(uriString);
-			app.registerSchema();
-			app.registerResourceFactories();
-			app.registerPathmaps(uri);
+			// Get the root package
+			org.eclipse.uml2.uml.Package outPackage = getRootPackage(context);
 
-			org.eclipse.uml2.uml.Package outPackage = app.load(uri);
-
-			logger.log(Level.INFO, outPackage.getName());
-			logger.log(Level.INFO, outPackage.getPackagedElements().toString());
-			logger.log(Level.INFO, outPackage.getProfileApplications()
-					.toString());
-			logger.log(Level.INFO, outPackage.getAllAppliedProfiles()
-					.toString());
-
+			// Get all elements with defined stereotypes
 			EList<Element> list = outPackage.allOwnedElements();
-			int index = 1;
 			for (Element element : list) {
-				logger.log(Level.INFO, index + " - " + element.toString());
-				index++;
+				EList<Stereotype> stereotypes = element.getAppliedStereotypes();
+				for (Stereotype stereotype : stereotypes) {
+					if (stereotype.getName().equals(STEREOTYPE_INTERFACE)) {
+						// Stereotype Interface
+						Class clazz = (Class) element;
+						logger.info("Class: " + clazz.getName() + " - "
+								+ "Stereotype: " + stereotype.getName());
+						createClazz(clazz);
+					}
+				}
 			}
-
-			createClazz();
 		} catch (URISyntaxException e) {
 			throw new TransformerException(e);
 		}
 	}
 
+	private org.eclipse.uml2.uml.Package getRootPackage(Context context)
+			throws URISyntaxException {
+		ReaderWriter app = new ReaderWriter();
+		String uriString = this.getClass()
+				.getResource(context.getSourceModel()).toURI().toString();
+		URI uri = URI.createURI(uriString);
+		app.registerSchema();
+		app.registerResourceFactories();
+		app.registerPathmaps(uri);
+
+		org.eclipse.uml2.uml.Package outPackage = app.load(uri);
+
+		return outPackage;
+	}
+
 	@SuppressWarnings("unchecked")
-	public void createClazz() {
+	public void createClazz(Class clazz) {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 
 		PackageDeclaration p1 = ast.newPackageDeclaration();
-		p1.setName(ast.newSimpleName("foo"));
+		org.eclipse.uml2.uml.Package packagez = clazz.getPackage();
+		p1.setName(ast.newSimpleName(packagez.getName()));
 		cu.setPackage(p1);
 
 		ImportDeclaration id = ast.newImportDeclaration();
@@ -116,6 +129,6 @@ public class SimpleJavaTransformer implements Transformer {
 		ExpressionStatement e = ast.newExpressionStatement(mi);
 		block.statements().add(e);
 
-		System.out.println(cu);
+		logger.log(Level.INFO, cu.toString());
 	}
 }
