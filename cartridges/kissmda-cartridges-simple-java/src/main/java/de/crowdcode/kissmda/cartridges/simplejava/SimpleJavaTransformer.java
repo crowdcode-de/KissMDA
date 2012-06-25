@@ -56,17 +56,43 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private static final String STEREOTYPE_INTERFACE = "Interface";
 
+	private static final String STEREOTYPE_SOURCEDIRECTORY = "SourceDirectory";
+
+	private String sourceDirectoryPackageName;
+
 	@Override
 	public void transform(Context context) throws TransformerException {
 		try {
 			// Get the root package
 			org.eclipse.uml2.uml.Package outPackage = getRootPackage(context);
+			sourceDirectoryPackageName = "";
+
+			// Check the stereotype of the root package
+			EList<Stereotype> rootStereotypes = outPackage
+					.getAppliedStereotypes();
+			for (Stereotype stereotype : rootStereotypes) {
+				if (stereotype.getName().equals(STEREOTYPE_SOURCEDIRECTORY)) {
+					// From this SourceDirectory we can work...
+					org.eclipse.uml2.uml.Package packagez = outPackage;
+					sourceDirectoryPackageName = packagez.getName();
+					logger.info("SourceDirectory package name: "
+							+ sourceDirectoryPackageName);
+				}
+			}
 
 			// Get all elements with defined stereotypes
 			EList<Element> list = outPackage.allOwnedElements();
+
 			for (Element element : list) {
 				EList<Stereotype> stereotypes = element.getAppliedStereotypes();
 				for (Stereotype stereotype : stereotypes) {
+					if (stereotype.getName().equals(STEREOTYPE_SOURCEDIRECTORY)) {
+						// From this SourceDirectory we can work...
+						org.eclipse.uml2.uml.Package packagez = (org.eclipse.uml2.uml.Package) element;
+						sourceDirectoryPackageName = packagez.getName();
+						logger.info("SourceDirectory package name: "
+								+ sourceDirectoryPackageName);
+					}
 					if (stereotype.getName().equals(STEREOTYPE_INTERFACE)) {
 						// Stereotype Interface
 						Class clazz = (Class) element;
@@ -103,8 +129,9 @@ public class SimpleJavaTransformer implements Transformer {
 		CompilationUnit cu = ast.newCompilationUnit();
 
 		PackageDeclaration p1 = ast.newPackageDeclaration();
-		org.eclipse.uml2.uml.Package packagez = clazz.getPackage();
-		p1.setName(ast.newSimpleName(packagez.getName()));
+		String fullPackageName = getFullPackageName(clazz);
+
+		p1.setName(ast.newName(fullPackageName));
 		cu.setPackage(p1);
 
 		ImportDeclaration id = ast.newImportDeclaration();
@@ -131,5 +158,21 @@ public class SimpleJavaTransformer implements Transformer {
 		block.statements().add(e);
 
 		logger.log(Level.INFO, cu.toString());
+	}
+
+	private String getFullPackageName(Class clazz) {
+		// Get package until the beginning of SourceDirectory
+		logger.info("Qualified name: " + clazz.getQualifiedName());
+		// Remove the sourceDirectoryPackageName
+		String toBeDeleted = sourceDirectoryPackageName + "::";
+		String fullPackageName = clazz.getQualifiedName().replaceFirst(
+				toBeDeleted, "");
+		// Remove class name
+		toBeDeleted = "::" + clazz.getName();
+		fullPackageName = fullPackageName.replaceFirst(toBeDeleted, "");
+		// Change :: to .
+		fullPackageName = fullPackageName.replaceAll("::", ".");
+		logger.info("Real package name: " + fullPackageName);
+		return fullPackageName;
 	}
 }

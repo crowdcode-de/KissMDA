@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Profile xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_17_0_1_2_7e40267_1336479729046_679021_1682" name="kissmda-profile-core" metamodelReference="_17_0_1_2_7e40267_1336479729046_291557_1683">
-  <eAnnotations xmi:id="_Z-75iplVEeG0LvPJtc52fQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
-    <contents xmi:type="ecore:EPackage" xmi:id="_Z-75i5lVEeG0LvPJtc52fQ" name="kissmdaprofilecore" nsURI="http:///schemas/kissmdaprofilecore/_ZxX-MplVEeG0LvPJtc52fQ/0" nsPrefix="kissmdaprofilecore">
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_Z-75jJlVEeG0LvPJtc52fQ" name="Interface">
-        <eAnnotations xmi:id="_Z-75jZlVEeG0LvPJtc52fQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_17_0_1_2_7e40267_1336479766687_497288_1684"/>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_Z-75jplVEeG0LvPJtc52fQ" name="base_Class" ordered="false" lowerBound="1">
+  <eAnnotations xmi:id="_HiZp7b6hEeGbA8XC-Iy7nA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_HiZp7r6hEeGbA8XC-Iy7nA" name="kissmdaprofilecore" nsURI="http:///schemas/kissmdaprofilecore/_HU_Z0L6hEeGbA8XC-Iy7nA/0" nsPrefix="kissmdaprofilecore">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_HiZp776hEeGbA8XC-Iy7nA" name="Interface">
+        <eAnnotations xmi:id="_HiZp8L6hEeGbA8XC-Iy7nA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_17_0_1_2_7e40267_1336479766687_497288_1684"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_HiZp8b6hEeGbA8XC-Iy7nA" name="base_Class" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Class"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_HiZp876hEeGbA8XC-Iy7nA" name="SourceDirectory">
+        <eAnnotations xmi:id="_HiZp9L6hEeGbA8XC-Iy7nA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_17_0_1_2_7e40267_1340613045061_456585_1721"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_HiZp9b6hEeGbA8XC-Iy7nA" name="base_Package" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Package"/>
         </eStructuralFeatures>
       </eClassifiers>
     </contents>
@@ -29,6 +35,17 @@
     <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_17_0_1_2_7e40267_1336480459015_968195_1889" name="extension_Interface" visibility="private" type="_17_0_1_2_7e40267_1336479766687_497288_1684" aggregation="composite" association="_17_0_1_2_7e40267_1336480459015_320065_1887">
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_17_0_1_2_7e40267_1336480459015_937198_1891" name="" value="1"/>
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_17_0_1_2_7e40267_1336480459015_312119_1890" name=""/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_17_0_1_2_7e40267_1340613045061_456585_1721" name="SourceDirectory">
+    <ownedAttribute xmi:id="_17_0_1_2_7e40267_1340613049907_463375_1723" name="base_Package" visibility="private" association="_17_0_1_2_7e40267_1340613049907_718148_1722">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Package"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_17_0_1_2_7e40267_1340613049907_718148_1722" name="" memberEnd="_17_0_1_2_7e40267_1340613049907_531430_1724 _17_0_1_2_7e40267_1340613049907_463375_1723" navigableOwnedEnd="_17_0_1_2_7e40267_1340613049907_531430_1724">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_17_0_1_2_7e40267_1340613049907_531430_1724" name="extension_" visibility="private" type="_17_0_1_2_7e40267_1340613045061_456585_1721" aggregation="composite" association="_17_0_1_2_7e40267_1340613049907_718148_1722">
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_17_0_1_2_7e40267_1340613049923_941052_1726" name="" value="1"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_17_0_1_2_7e40267_1340613049923_152875_1725" name=""/>
     </ownedEnd>
   </packagedElement>
 </uml:Profile>
