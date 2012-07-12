@@ -32,6 +32,14 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>de.crowdcode.kissmda.maven.plugin</groupId>
+				<artifactId>kissmda-maven-plugin</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+				<configuration>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
