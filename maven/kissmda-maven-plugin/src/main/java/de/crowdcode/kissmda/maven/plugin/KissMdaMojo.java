@@ -18,16 +18,32 @@
  */
 package de.crowdcode.kissmda.maven.plugin;
 
+import java.util.logging.Logger;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+
+import de.crowdcode.kissmda.core.Context;
+import de.crowdcode.kissmda.core.Transformer;
+import de.crowdcode.kissmda.core.TransformerException;
 
 /**
  * KissMDA Mojo.
  * 
- * @goal generateVersion
- * @phase prepare-package
+ * @goal genenerate
+ * @phase generate-sources
+ * 
+ * @author Lofi Dewanto
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class KissMdaMojo extends AbstractMojo {
+
+	private static final Logger logger = Logger.getLogger(KissMdaMojo.class
+			.getName());
+
+	private Transformer transformer;
+	private Context context;
 
 	/**
 	 * Execute.
@@ -36,6 +52,15 @@ public class KissMdaMojo extends AbstractMojo {
 	 */
 	@Override
 	public void execute() throws MojoExecutionException {
-
+		// We need to execute the transformer, check what transformer should we
+		// start
+		try {
+			logger.info("Start the transformation...");
+			transformer.transform(context);
+			logger.info("Stop the transformation...");
+		} catch (TransformerException e) {
+			throw new MojoExecutionException("Error transform the model: "
+					+ e.getLocalizedMessage(), e);
+		}
 	}
 }
