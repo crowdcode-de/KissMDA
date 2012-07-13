@@ -53,7 +53,10 @@ public class KissMdaMojo extends AbstractMojo {
 	@Override
 	public void execute() throws MojoExecutionException {
 		// We need to execute the transformer, check what transformer should we
-		// start
+		// start...
+		// Search for @Transformer in the classpath, create the class and
+		// execute. Do until we have all the Transformers...
+
 		try {
 			logger.info("Start the transformation...");
 			transformer.transform(context);
