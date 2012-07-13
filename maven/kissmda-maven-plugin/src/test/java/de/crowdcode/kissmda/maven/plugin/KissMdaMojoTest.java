@@ -18,8 +18,6 @@
  */
 package de.crowdcode.kissmda.maven.plugin;
 
-import static org.junit.Assert.fail;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +35,5 @@ public class KissMdaMojoTest {
 
 	@Test
 	public void testExecute() {
-		fail("Not yet implemented");
 	}
-
 }
