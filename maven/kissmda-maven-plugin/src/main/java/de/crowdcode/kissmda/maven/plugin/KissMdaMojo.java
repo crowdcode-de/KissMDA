@@ -30,7 +30,7 @@ import de.crowdcode.kissmda.core.TransformerException;
 /**
  * KissMDA Mojo.
  * 
- * @goal genenerate
+ * @goal generate
  * @phase generate-sources
  * 
  * @author Lofi Dewanto
