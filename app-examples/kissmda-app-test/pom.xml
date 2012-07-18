@@ -46,10 +46,11 @@
 					</execution>
 				</executions>
 				<configuration>
+					<packageNames>
+						<packageName>de.crowdcode.kissmda.cartridges</packageName>
+					</packageNames>
 					<modelFiles>
-						<modelFile>
-							src/main/resources/model/emf/test-uml.uml
-						</modelFile>
+						<modelFile>src/main/resources/model/emf/test-uml.uml</modelFile>
 					</modelFiles>
 				</configuration>
 			</plugin>
