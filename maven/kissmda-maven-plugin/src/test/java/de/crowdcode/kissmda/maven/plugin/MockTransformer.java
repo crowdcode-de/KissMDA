@@ -38,6 +38,7 @@ public class MockTransformer implements Transformer {
 
 	@Override
 	public void transform(Context context) throws TransformerException {
-		logger.info("Hello I'm MockTransformer implements Transformer");
+		logger.info("Hello I'm MockTransformer implements Transformer, the content of my sourceModel: "
+				+ context.getSourceModel());
 	}
 }

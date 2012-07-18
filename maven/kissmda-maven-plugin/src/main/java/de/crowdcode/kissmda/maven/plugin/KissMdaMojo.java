@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.maven.plugin;
 
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -26,6 +27,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.reflections.Reflections;
 
 import de.crowdcode.kissmda.core.Context;
+import de.crowdcode.kissmda.core.StandardContext;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
 
@@ -44,11 +46,27 @@ public class KissMdaMojo extends AbstractMojo {
 	private static final Logger logger = Logger.getLogger(KissMdaMojo.class
 			.getName());
 
-	private Context context;
-	private String packageName = "de.crowdcode";
+	/**
+	 * Package name to scan as collections.
+	 * 
+	 * @parameter
+	 */
+	private List<String> transformerScanPackageNames;
 
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
+	/**
+	 * Model file.
+	 * 
+	 * @parameter
+	 */
+	private String modelFile;
+
+	public void setModelFile(String modelFile) {
+		this.modelFile = modelFile;
+	}
+
+	public void setTransformerScanPackageNames(
+			List<String> transformerScanPackageNames) {
+		this.transformerScanPackageNames = transformerScanPackageNames;
 	}
 
 	/**
@@ -63,17 +81,21 @@ public class KissMdaMojo extends AbstractMojo {
 		// Search for Interface Transformer in the classpath, create the class
 		// and execute. Do until we have all the Transformers...
 		try {
-			Reflections reflections = new Reflections(packageName);
-			Set<Class<? extends Transformer>> transformers = reflections
-					.getSubTypesOf(Transformer.class);
-			for (Class<? extends Transformer> transformerClazz : transformers) {
-				logger.info("Start the transformation with following Transformer: "
-						+ transformerClazz.getName());
-				// Create the class
-				Transformer transformer = transformerClazz.newInstance();
-				transformer.transform(context);
-				logger.info("Stop the transformation with following Transformer:"
-						+ transformerClazz.getName());
+			Context context = new StandardContext();
+			context.setSourceModel(modelFile);
+			for (String packageName : transformerScanPackageNames) {
+				Reflections reflections = new Reflections(packageName);
+				Set<Class<? extends Transformer>> transformers = reflections
+						.getSubTypesOf(Transformer.class);
+				for (Class<? extends Transformer> transformerClazz : transformers) {
+					logger.info("Start the transformation with following Transformer: "
+							+ transformerClazz.getName());
+					// Create the transformer class and execute
+					Transformer transformer = transformerClazz.newInstance();
+					transformer.transform(context);
+					logger.info("Stop the transformation with following Transformer:"
+							+ transformerClazz.getName());
+				}
 			}
 		} catch (TransformerException e) {
 			throw new MojoExecutionException("Error transform the model: "

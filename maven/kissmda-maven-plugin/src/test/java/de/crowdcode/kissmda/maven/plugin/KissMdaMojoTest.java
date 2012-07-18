@@ -18,6 +18,9 @@
  */
 package de.crowdcode.kissmda.maven.plugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +42,10 @@ public class KissMdaMojoTest {
 
 	@Test
 	public void testExecute() throws MojoExecutionException {
-		kissMdaMojo.setPackageName("de.crowdcode.kissmda.maven.plugin");
+		List<String> packageNames = new ArrayList<String>();
+		packageNames.add("de.crowdcode.kissmda.maven.plugin");
+		kissMdaMojo.setTransformerScanPackageNames(packageNames);
+		kissMdaMojo.setModelFile("src/main/resources/model/emf/test-uml.uml");
 		kissMdaMojo.execute();
 	}
 }
