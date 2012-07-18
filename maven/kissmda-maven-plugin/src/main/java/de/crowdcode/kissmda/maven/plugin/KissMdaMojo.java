@@ -80,6 +80,7 @@ public class KissMdaMojo extends AbstractMojo {
 		// start...
 		// Search for Interface Transformer in the classpath, create the class
 		// and execute. Do until we have all the Transformers...
+		logger.info("Start KissMdaMojo...");
 		try {
 			Context context = new StandardContext();
 			context.setSourceModel(modelFile);
@@ -97,6 +98,7 @@ public class KissMdaMojo extends AbstractMojo {
 							+ transformerClazz.getName());
 				}
 			}
+			logger.info("Stop KissMdaMojo without error...");
 		} catch (TransformerException e) {
 			throw new MojoExecutionException("Error transform the model: "
 					+ e.getLocalizedMessage(), e);
