@@ -21,6 +21,8 @@ package de.crowdcode.kissmda.cartridges.simplejava;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.logging.Logger;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,6 +40,8 @@ public class SimpleJavaTransformerTest {
 
 	private SimpleJavaTransformer simpleJavaTransformer;
 	private Context context;
+	private static final Logger logger = Logger
+			.getLogger(SimpleJavaTransformerTest.class.getName());
 
 	@Before
 	public void setUp() {
@@ -48,7 +52,10 @@ public class SimpleJavaTransformerTest {
 	@Test
 	public void testTransform() {
 		try {
-			context.setSourceModel("/model/emf/test-uml.uml");
+			String thisPath = this.getClass().getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			logger.info("Path: " + thisPath);
+			context.setSourceModel(thisPath + "model/emf/test-uml.uml");
 			simpleJavaTransformer.transform(context);
 		} catch (TransformerException e) {
 			assertFalse(true);

@@ -56,7 +56,7 @@
 					<transformerScanPackageNames>
 						<transformerScanPackageName>de.crowdcode.kissmda.cartridges</transformerScanPackageName>
 					</transformerScanPackageNames>
-					<modelFile>/model/emf/test-uml.uml</modelFile>
+					<modelFile>src/main/resources/model/emf/test-uml.uml</modelFile>
 				</configuration>
 			</plugin>
 		</plugins>

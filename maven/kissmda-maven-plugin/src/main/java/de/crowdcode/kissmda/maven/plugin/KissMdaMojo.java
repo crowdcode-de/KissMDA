@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 import org.reflections.Reflections;
 
 import de.crowdcode.kissmda.core.Context;
@@ -47,9 +48,19 @@ public class KissMdaMojo extends AbstractMojo {
 			.getName());
 
 	/**
+	 * The enclosing project.
+	 * 
+	 * @parameter default-value="${project}"
+	 * @required
+	 * @readonly
+	 */
+	protected MavenProject project;
+
+	/**
 	 * Package name to scan as collections.
 	 * 
 	 * @parameter
+	 * @required
 	 */
 	private List<String> transformerScanPackageNames;
 
@@ -57,6 +68,7 @@ public class KissMdaMojo extends AbstractMojo {
 	 * Model file.
 	 * 
 	 * @parameter
+	 * @required
 	 */
 	private String modelFile;
 
@@ -67,6 +79,10 @@ public class KissMdaMojo extends AbstractMojo {
 	public void setTransformerScanPackageNames(
 			List<String> transformerScanPackageNames) {
 		this.transformerScanPackageNames = transformerScanPackageNames;
+	}
+
+	public void setProject(MavenProject project) {
+		this.project = project;
 	}
 
 	/**
@@ -83,7 +99,8 @@ public class KissMdaMojo extends AbstractMojo {
 		logger.info("Start KissMdaMojo...");
 		try {
 			Context context = new StandardContext();
-			context.setSourceModel(modelFile);
+			String fullNameModelFile = project.getBasedir() + "/" + modelFile;
+			context.setSourceModel(fullNameModelFile);
 			for (String packageName : transformerScanPackageNames) {
 				Reflections reflections = new Reflections(packageName);
 				Set<Class<? extends Transformer>> transformers = reflections

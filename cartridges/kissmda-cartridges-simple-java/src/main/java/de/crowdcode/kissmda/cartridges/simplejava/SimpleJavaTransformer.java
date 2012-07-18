@@ -113,8 +113,9 @@ public class SimpleJavaTransformer implements Transformer {
 		ReaderWriter app = new ReaderWriter();
 		logger.info("Get from following sourceModel: "
 				+ context.getSourceModel());
-		String uriString = this.getClass()
-				.getResource(context.getSourceModel()).toURI().toString();
+		// String uriString = this.getClass()
+		// .getResource(context.getSourceModel()).toURI().toString();
+		String uriString = "file:/" + context.getSourceModel();
 		logger.info("Get from following URI: " + uriString);
 		URI uri = URI.createURI(uriString);
 		app.registerSchema();
