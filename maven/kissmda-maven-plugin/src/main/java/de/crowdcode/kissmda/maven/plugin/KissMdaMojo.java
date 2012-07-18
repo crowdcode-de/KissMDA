@@ -67,12 +67,13 @@ public class KissMdaMojo extends AbstractMojo {
 			Set<Class<? extends Transformer>> transformers = reflections
 					.getSubTypesOf(Transformer.class);
 			for (Class<? extends Transformer> transformerClazz : transformers) {
-				logger.info("Transformer: " + transformerClazz.getName());
-				logger.info("Start the transformation...");
+				logger.info("Start the transformation with following Transformer: "
+						+ transformerClazz.getName());
 				// Create the class
 				Transformer transformer = transformerClazz.newInstance();
 				transformer.transform(context);
-				logger.info("Stop the transformation...");
+				logger.info("Stop the transformation with following Transformer:"
+						+ transformerClazz.getName());
 			}
 		} catch (TransformerException e) {
 			throw new MojoExecutionException("Error transform the model: "
