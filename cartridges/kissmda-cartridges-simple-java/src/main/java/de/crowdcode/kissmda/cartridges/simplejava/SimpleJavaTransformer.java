@@ -111,8 +111,11 @@ public class SimpleJavaTransformer implements Transformer {
 	private org.eclipse.uml2.uml.Package getRootPackage(Context context)
 			throws URISyntaxException {
 		ReaderWriter app = new ReaderWriter();
+		logger.info("Get from following sourceModel: "
+				+ context.getSourceModel());
 		String uriString = this.getClass()
 				.getResource(context.getSourceModel()).toURI().toString();
+		logger.info("Get from following URI: " + uriString);
 		URI uri = URI.createURI(uriString);
 		app.registerSchema();
 		app.registerResourceFactories();

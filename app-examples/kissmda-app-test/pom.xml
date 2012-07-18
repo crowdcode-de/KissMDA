@@ -37,6 +37,13 @@
 				<groupId>de.crowdcode.kissmda.maven.plugin</groupId>
 				<artifactId>kissmda-maven-plugin</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
+				<dependencies>
+					<dependency>
+						<groupId>de.crowdcode.kissmda.cartridges</groupId>
+						<artifactId>kissmda-cartridges-simple-java</artifactId>
+						<version>1.0.0-SNAPSHOT</version>
+					</dependency>
+				</dependencies>
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
@@ -49,9 +56,7 @@
 					<transformerScanPackageNames>
 						<transformerScanPackageName>de.crowdcode.kissmda.cartridges</transformerScanPackageName>
 					</transformerScanPackageNames>
-					<modelFile>
-						src/main/resources/model/emf/test-uml.uml
-					</modelFile>
+					<modelFile>/model/emf/test-uml.uml</modelFile>
 				</configuration>
 			</plugin>
 		</plugins>
