@@ -46,9 +46,6 @@
 					</execution>
 				</executions>
 				<configuration>
-					<transformers>
-						<transformer>de.crowdcode.kissmda.cartridges.simplejava.SimpleJavaTransformer</transformer>
-					</transformers>
 					<modelFiles>
 						<modelFile>
 							src/main/resources/model/emf/test-uml.uml

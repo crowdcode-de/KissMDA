@@ -24,6 +24,13 @@ import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
 
+/**
+ * Mock Transformer for Unit Testing.
+ * 
+ * @author Lofi Dewanto
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class MockTransformer implements Transformer {
 
 	private static final Logger logger = Logger.getLogger(MockTransformer.class
