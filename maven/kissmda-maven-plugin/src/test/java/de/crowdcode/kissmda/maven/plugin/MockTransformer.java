@@ -18,28 +18,19 @@
  */
 package de.crowdcode.kissmda.maven.plugin;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.logging.Logger;
 
-/**
- * Unit test for KissMDA mojo.
- * 
- * @author Lofi Dewanto
- * @version 1.0.0
- */
-public class KissMdaMojoTest {
+import de.crowdcode.kissmda.core.Context;
+import de.crowdcode.kissmda.core.Transformer;
+import de.crowdcode.kissmda.core.TransformerException;
 
-	private KissMdaMojo kissMdaMojo;
+public class MockTransformer implements Transformer {
 
-	@Before
-	public void setUp() throws Exception {
-		kissMdaMojo = new KissMdaMojo();
-	}
+	private static final Logger logger = Logger.getLogger(MockTransformer.class
+			.getName());
 
-	@Test
-	public void testExecute() throws MojoExecutionException {
-		kissMdaMojo.setPackageName("de.crowdcode.kissmda.maven.plugin");
-		kissMdaMojo.execute();
+	@Override
+	public void transform(Context context) throws TransformerException {
+		logger.info("Hello I'm MockTransformer implements Transformer");
 	}
 }

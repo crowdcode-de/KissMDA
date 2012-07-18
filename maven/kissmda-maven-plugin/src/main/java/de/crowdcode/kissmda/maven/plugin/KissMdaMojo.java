@@ -18,10 +18,12 @@
  */
 package de.crowdcode.kissmda.maven.plugin;
 
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.reflections.Reflections;
 
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.Transformer;
@@ -42,8 +44,12 @@ public class KissMdaMojo extends AbstractMojo {
 	private static final Logger logger = Logger.getLogger(KissMdaMojo.class
 			.getName());
 
-	private Transformer transformer;
 	private Context context;
+	private String packageName = "de.crowdcode";
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
 
 	/**
 	 * Execute.
@@ -54,14 +60,27 @@ public class KissMdaMojo extends AbstractMojo {
 	public void execute() throws MojoExecutionException {
 		// We need to execute the transformer, check what transformer should we
 		// start...
-		// Search for @Transformer in the classpath, create the class and
-		// execute. Do until we have all the Transformers...
-
+		// Search for Interface Transformer in the classpath, create the class
+		// and execute. Do until we have all the Transformers...
 		try {
-			logger.info("Start the transformation...");
-			transformer.transform(context);
-			logger.info("Stop the transformation...");
+			Reflections reflections = new Reflections(packageName);
+			Set<Class<? extends Transformer>> transformers = reflections
+					.getSubTypesOf(Transformer.class);
+			for (Class<? extends Transformer> transformerClazz : transformers) {
+				logger.info("Transformer: " + transformerClazz.getName());
+				logger.info("Start the transformation...");
+				// Create the class
+				Transformer transformer = transformerClazz.newInstance();
+				transformer.transform(context);
+				logger.info("Stop the transformation...");
+			}
 		} catch (TransformerException e) {
+			throw new MojoExecutionException("Error transform the model: "
+					+ e.getLocalizedMessage(), e);
+		} catch (InstantiationException e) {
+			throw new MojoExecutionException("Error transform the model: "
+					+ e.getLocalizedMessage(), e);
+		} catch (IllegalAccessException e) {
 			throw new MojoExecutionException("Error transform the model: "
 					+ e.getLocalizedMessage(), e);
 		}
