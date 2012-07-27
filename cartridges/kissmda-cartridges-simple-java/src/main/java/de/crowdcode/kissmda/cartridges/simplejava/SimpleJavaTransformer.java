@@ -67,21 +67,10 @@ public class SimpleJavaTransformer implements Transformer {
 			sourceDirectoryPackageName = "";
 
 			// Check the stereotype of the root package
-			EList<Stereotype> rootStereotypes = outPackage
-					.getAppliedStereotypes();
-			for (Stereotype stereotype : rootStereotypes) {
-				if (stereotype.getName().equals(STEREOTYPE_SOURCEDIRECTORY)) {
-					// From this SourceDirectory we can work...
-					org.eclipse.uml2.uml.Package packagez = outPackage;
-					sourceDirectoryPackageName = packagez.getName();
-					logger.info("SourceDirectory package name: "
-							+ sourceDirectoryPackageName);
-				}
-			}
+			checkStereotypeRootPackage(outPackage);
 
 			// Get all elements with defined stereotypes
 			EList<Element> list = outPackage.allOwnedElements();
-
 			for (Element element : list) {
 				EList<Stereotype> stereotypes = element.getAppliedStereotypes();
 				for (Stereotype stereotype : stereotypes) {
@@ -104,6 +93,20 @@ public class SimpleJavaTransformer implements Transformer {
 			}
 		} catch (URISyntaxException e) {
 			throw new TransformerException(e);
+		}
+	}
+
+	private void checkStereotypeRootPackage(
+			org.eclipse.uml2.uml.Package outPackage) {
+		EList<Stereotype> rootStereotypes = outPackage.getAppliedStereotypes();
+		for (Stereotype stereotype : rootStereotypes) {
+			if (stereotype.getName().equals(STEREOTYPE_SOURCEDIRECTORY)) {
+				// From this SourceDirectory we can work...
+				org.eclipse.uml2.uml.Package packagez = outPackage;
+				sourceDirectoryPackageName = packagez.getName();
+				logger.info("SourceDirectory package name: "
+						+ sourceDirectoryPackageName);
+			}
 		}
 	}
 
