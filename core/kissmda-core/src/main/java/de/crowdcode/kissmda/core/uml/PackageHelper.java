@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.uml2.uml.Class;
 
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.ReaderWriter;
@@ -53,5 +54,22 @@ public class PackageHelper {
 		org.eclipse.uml2.uml.Package outPackage = app.load(uri);
 
 		return outPackage;
+	}
+
+	public String getFullPackageName(Class clazz,
+			String sourceDirectoryPackageName) {
+		// Get package until the beginning of SourceDirectory
+		logger.info("Qualified name: " + clazz.getQualifiedName());
+		// Remove the sourceDirectoryPackageName
+		String toBeDeleted = sourceDirectoryPackageName + "::";
+		String fullPackageName = clazz.getQualifiedName().replaceFirst(
+				toBeDeleted, "");
+		// Remove class name
+		toBeDeleted = "::" + clazz.getName();
+		fullPackageName = fullPackageName.replaceFirst(toBeDeleted, "");
+		// Change :: to .
+		fullPackageName = fullPackageName.replaceAll("::", ".");
+		logger.info("Real package name: " + fullPackageName);
+		return fullPackageName;
 	}
 }

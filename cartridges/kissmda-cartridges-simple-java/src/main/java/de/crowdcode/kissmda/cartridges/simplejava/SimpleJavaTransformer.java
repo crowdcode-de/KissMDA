@@ -59,8 +59,11 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private String sourceDirectoryPackageName;
 
+	private PackageHelper packageHelper;
+
 	@Override
 	public void transform(Context context) throws TransformerException {
+		packageHelper = new PackageHelper();
 		try {
 			// Get the root package
 			org.eclipse.uml2.uml.Package outPackage = getRootPackage(context);
@@ -112,7 +115,6 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private org.eclipse.uml2.uml.Package getRootPackage(Context context)
 			throws URISyntaxException {
-		PackageHelper packageHelper = new PackageHelper();
 		org.eclipse.uml2.uml.Package outPackage = packageHelper
 				.getRootPackage(context);
 		return outPackage;
@@ -156,18 +158,8 @@ public class SimpleJavaTransformer implements Transformer {
 	}
 
 	private String getFullPackageName(Class clazz) {
-		// Get package until the beginning of SourceDirectory
-		logger.info("Qualified name: " + clazz.getQualifiedName());
-		// Remove the sourceDirectoryPackageName
-		String toBeDeleted = sourceDirectoryPackageName + "::";
-		String fullPackageName = clazz.getQualifiedName().replaceFirst(
-				toBeDeleted, "");
-		// Remove class name
-		toBeDeleted = "::" + clazz.getName();
-		fullPackageName = fullPackageName.replaceFirst(toBeDeleted, "");
-		// Change :: to .
-		fullPackageName = fullPackageName.replaceAll("::", ".");
-		logger.info("Real package name: " + fullPackageName);
+		String fullPackageName = packageHelper.getFullPackageName(clazz,
+				sourceDirectoryPackageName);
 		return fullPackageName;
 	}
 }
