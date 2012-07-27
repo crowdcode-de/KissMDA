@@ -23,7 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -39,9 +38,9 @@ import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Stereotype;
 
 import de.crowdcode.kissmda.core.Context;
-import de.crowdcode.kissmda.core.ReaderWriter;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
+import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
  * Simple Java Transformer.
@@ -110,20 +109,9 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private org.eclipse.uml2.uml.Package getRootPackage(Context context)
 			throws URISyntaxException {
-		ReaderWriter app = new ReaderWriter();
-		logger.info("Get from following sourceModel: "
-				+ context.getSourceModel());
-		// String uriString = this.getClass()
-		// .getResource(context.getSourceModel()).toURI().toString();
-		String uriString = "file:/" + context.getSourceModel();
-		logger.info("Get from following URI: " + uriString);
-		URI uri = URI.createURI(uriString);
-		app.registerSchema();
-		app.registerResourceFactories();
-		app.registerPathmaps(uri);
-
-		org.eclipse.uml2.uml.Package outPackage = app.load(uri);
-
+		PackageHelper packageHelper = new PackageHelper();
+		org.eclipse.uml2.uml.Package outPackage = packageHelper
+				.getRootPackage(context);
 		return outPackage;
 	}
 
