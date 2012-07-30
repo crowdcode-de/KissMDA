@@ -3,7 +3,7 @@ KissMDA
 
 Keep It Simple Stupid, MDA!
 
-After working a while with MDA / MDSD technologies like AndroMDA, oAW, ... we feel lihttp://stackoverflow.com/questions/121324/a-java-api-to-generate-java-source-fileske we need just another MDA tool!
+After working a while with MDA / MDSD technologies like AndroMDA, oAW, ... we feel like we need just another MDA tool!
 Why?
 
 1. We still like AndroMDA, yes the project is very much alive and it has already proven itself to be a strong Open Source 
