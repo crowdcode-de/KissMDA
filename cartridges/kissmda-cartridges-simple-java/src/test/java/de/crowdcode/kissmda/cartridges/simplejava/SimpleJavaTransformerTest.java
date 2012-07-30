@@ -29,6 +29,7 @@ import org.junit.Test;
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.StandardContext;
 import de.crowdcode.kissmda.core.TransformerException;
+import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
  * Unit test for simple Transformer.
@@ -38,14 +39,17 @@ import de.crowdcode.kissmda.core.TransformerException;
  */
 public class SimpleJavaTransformerTest {
 
-	private SimpleJavaTransformer simpleJavaTransformer;
-	private Context context;
 	private static final Logger logger = Logger
 			.getLogger(SimpleJavaTransformerTest.class.getName());
+	private SimpleJavaTransformer simpleJavaTransformer;
+	private Context context;
+	private PackageHelper packageHelper;
 
 	@Before
 	public void setUp() {
+		packageHelper = new PackageHelper();
 		simpleJavaTransformer = new SimpleJavaTransformer();
+		simpleJavaTransformer.setPackageHelper(packageHelper);
 		context = new StandardContext();
 	}
 

@@ -22,6 +22,8 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Block;
@@ -59,11 +61,15 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private String sourceDirectoryPackageName;
 
+	@Inject
 	private PackageHelper packageHelper;
+
+	public void setPackageHelper(PackageHelper packageHelper) {
+		this.packageHelper = packageHelper;
+	}
 
 	@Override
 	public void transform(Context context) throws TransformerException {
-		packageHelper = new PackageHelper();
 		try {
 			// Get the root package
 			org.eclipse.uml2.uml.Package outPackage = getRootPackage(context);

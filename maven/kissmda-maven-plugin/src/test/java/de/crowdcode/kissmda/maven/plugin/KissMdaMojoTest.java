@@ -18,6 +18,9 @@
  */
 package de.crowdcode.kissmda.maven.plugin;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +46,9 @@ public class KissMdaMojoTest {
 	}
 
 	@Test
-	public void testExecute() throws MojoExecutionException {
+	public void testExecuteOk() throws MojoExecutionException {
 		List<String> packageNames = new ArrayList<String>();
-		packageNames.add("de.crowdcode.kissmda.maven.plugin");
+		packageNames.add("de.crowdcode.kissmda.maven.plugin.withguice");
 		MavenProject mavenProject = new MavenProject();
 		mavenProject.setFile(new File("target/tmp/test"));
 
@@ -53,5 +56,41 @@ public class KissMdaMojoTest {
 		kissMdaMojo.setModelFile("src/main/resources/model/emf/test-uml.uml");
 		kissMdaMojo.setProject(mavenProject);
 		kissMdaMojo.execute();
+		assertTrue(true);
+	}
+
+	@Test
+	public void testExecuteNoGuiceModule() {
+		List<String> packageNames = new ArrayList<String>();
+		packageNames.add("de.crowdcode.kissmda.maven.plugin.noguice");
+		MavenProject mavenProject = new MavenProject();
+		mavenProject.setFile(new File("target/tmp/test"));
+
+		kissMdaMojo.setTransformerScanPackageNames(packageNames);
+		kissMdaMojo.setModelFile("src/main/resources/model/emf/test-uml.uml");
+		kissMdaMojo.setProject(mavenProject);
+		try {
+			kissMdaMojo.execute();
+		} catch (MojoExecutionException e) {
+			assertEquals(e.getMessage(), KissMdaMojo.ERROR_GUICE_NOT_FOUND);
+		}
+	}
+
+	@Test
+	public void testExecuteWithGuiceModuleButInTheDifferentPackage() {
+		List<String> packageNames = new ArrayList<String>();
+		packageNames.add("de.crowdcode.kissmda.maven.plugin.differentpackage");
+		MavenProject mavenProject = new MavenProject();
+		mavenProject.setFile(new File("target/tmp/test"));
+
+		kissMdaMojo.setTransformerScanPackageNames(packageNames);
+		kissMdaMojo.setModelFile("src/main/resources/model/emf/test-uml.uml");
+		kissMdaMojo.setProject(mavenProject);
+		try {
+			kissMdaMojo.execute();
+		} catch (MojoExecutionException e) {
+			assertEquals(e.getMessage(),
+					KissMdaMojo.ERROR_GUICE_SAME_PACKAGE_NOT_FOUND);
+		}
 	}
 }

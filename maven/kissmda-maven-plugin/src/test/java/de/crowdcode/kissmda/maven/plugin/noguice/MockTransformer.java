@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.maven.plugin;
+package de.crowdcode.kissmda.maven.plugin.noguice;
 
 import java.util.logging.Logger;
 
