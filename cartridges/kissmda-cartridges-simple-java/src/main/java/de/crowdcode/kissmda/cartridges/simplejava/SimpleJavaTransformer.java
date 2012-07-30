@@ -26,17 +26,14 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Stereotype;
 
 import de.crowdcode.kissmda.core.Context;
@@ -96,7 +93,8 @@ public class SimpleJavaTransformer implements Transformer {
 						logger.info("Class: " + clazz.getName() + " - "
 								+ "Stereotype: " + stereotype.getName());
 						// Generate the interface for this class
-						generateInterface(clazz);
+						String compilationUnit = generateInterface(clazz);
+						generateClassFile(clazz, compilationUnit);
 					}
 				}
 			}
@@ -127,45 +125,53 @@ public class SimpleJavaTransformer implements Transformer {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void generateInterface(Class clazz) {
+	public String generateInterface(Class clazz) {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 
 		PackageDeclaration p1 = ast.newPackageDeclaration();
 		String fullPackageName = getFullPackageName(clazz);
-
 		p1.setName(ast.newName(fullPackageName));
 		cu.setPackage(p1);
 
-		ImportDeclaration id = ast.newImportDeclaration();
-		id.setName(ast.newName(new String[] { "java", "util", "Set" }));
-		cu.imports().add(id);
-
+		String className = getClassName(clazz);
 		TypeDeclaration td = ast.newTypeDeclaration();
-		td.setName(ast.newSimpleName("Foo"));
-		TypeParameter tp = ast.newTypeParameter();
-		tp.setName(ast.newSimpleName("X"));
-		td.typeParameters().add(tp);
+		td.setInterface(true);
+		td.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+		td.setName(ast.newSimpleName(className));
 		cu.types().add(td);
 
-		MethodDeclaration md = ast.newMethodDeclaration();
-		td.bodyDeclarations().add(md);
+		// Get all methods for this clazz
+		EList<Operation> operations = clazz.getAllOperations();
+		for (Operation operation : operations) {
+			MethodDeclaration md = ast.newMethodDeclaration();
+			md.modifiers().add(
+					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+			md.setName(ast.newSimpleName(operation.getName()));
+			td.bodyDeclarations().add(md);
+		}
 
-		Block block = ast.newBlock();
-		md.setBody(block);
+		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
+		return cu.toString();
+	}
 
-		MethodInvocation mi = ast.newMethodInvocation();
-		mi.setName(ast.newSimpleName("x"));
-
-		ExpressionStatement e = ast.newExpressionStatement(mi);
-		block.statements().add(e);
-
-		logger.log(Level.INFO, cu.toString());
+	private String getClassName(Class clazz) {
+		String className = clazz.getName();
+		logger.info("Classname: " + className);
+		return className;
 	}
 
 	private String getFullPackageName(Class clazz) {
 		String fullPackageName = packageHelper.getFullPackageName(clazz,
 				sourceDirectoryPackageName);
 		return fullPackageName;
+	}
+
+	private void generateClassFile(Class clazz, String compilationUnit) {
+		// TODO Create the class file on the file system
+		// Create the package directories
+
+		// Create the class file
 	}
 }
