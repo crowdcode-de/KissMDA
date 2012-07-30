@@ -172,8 +172,8 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private void generateClassFile(Class clazz, String compilationUnit) {
 		// TODO Create the class file on the file system
-		// Create the package directories
+		// TODO Create the package directories from context information
 
-		// Create the class file
+		// TODO Create the class file
 	}
 }
