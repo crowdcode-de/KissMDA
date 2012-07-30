@@ -152,6 +152,8 @@ public class SimpleJavaTransformer implements Transformer {
 			td.bodyDeclarations().add(md);
 		}
 
+		// TODO Get all the relationships of this class
+
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		return cu.toString();
 	}
