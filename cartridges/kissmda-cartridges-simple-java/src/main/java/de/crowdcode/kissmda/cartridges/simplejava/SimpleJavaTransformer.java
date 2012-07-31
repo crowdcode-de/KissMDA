@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
@@ -154,13 +155,22 @@ public class SimpleJavaTransformer implements Transformer {
 			// Return type?
 			Type type = operation.getType();
 			logger.info("Type: " + type.getName());
-			md.setReturnType2(ast.newPrimitiveType(PrimitiveType.VOID));
+			if (type instanceof org.eclipse.uml2.uml.PrimitiveType) {
+				org.eclipse.uml2.uml.PrimitiveType primitiveType = (org.eclipse.uml2.uml.PrimitiveType) type;
+				logger.info("PrimitiveType: " + primitiveType.getName());
+				md.setReturnType2(ast.newPrimitiveType(PrimitiveType.VOID));
+			} else {
+				String typeName = type.getName();
+				SimpleType tp = ast.newSimpleType(ast.newSimpleName(typeName));
+				md.setReturnType2(tp);
+			}
+
 			td.bodyDeclarations().add(md);
 		}
 
 		// TODO Get all the relationships of this class
 
-		// TODO Getter and setter
+		// TODO Create getter and setter
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		return cu.toString();

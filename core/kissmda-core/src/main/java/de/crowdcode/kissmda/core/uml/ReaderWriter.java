@@ -20,6 +20,7 @@ package de.crowdcode.kissmda.core.uml;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +30,6 @@ import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.uml2.uml.Element;
@@ -76,14 +76,16 @@ public class ReaderWriter {
 	}
 
 	public void registerPathmaps(URI uri) {
-		URIConverter.URI_MAP.put(URI.createURI(UMLResource.LIBRARIES_PATHMAP),
-				uri.appendSegment("libraries").appendSegment(""));
+		Map<URI, URI> uriMap = resourceSet.getURIConverter().getURIMap();
 
-		URIConverter.URI_MAP.put(URI.createURI(UMLResource.METAMODELS_PATHMAP),
-				uri.appendSegment("metamodels").appendSegment(""));
+		uriMap.put(URI.createURI(UMLResource.LIBRARIES_PATHMAP), uri
+				.appendSegment("libraries").appendSegment(""));
 
-		URIConverter.URI_MAP.put(URI.createURI(UMLResource.PROFILES_PATHMAP),
-				uri.appendSegment("profiles").appendSegment(""));
+		uriMap.put(URI.createURI(UMLResource.METAMODELS_PATHMAP), uri
+				.appendSegment("metamodels").appendSegment(""));
+
+		uriMap.put(URI.createURI(UMLResource.PROFILES_PATHMAP), uri
+				.appendSegment("profiles").appendSegment(""));
 	}
 
 	public void save(org.eclipse.uml2.uml.Package packageInput, URI uri) {
