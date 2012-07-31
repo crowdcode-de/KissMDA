@@ -30,11 +30,13 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Stereotype;
+import org.eclipse.uml2.uml.Type;
 
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.Transformer;
@@ -149,10 +151,16 @@ public class SimpleJavaTransformer implements Transformer {
 			md.modifiers().add(
 					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 			md.setName(ast.newSimpleName(operation.getName()));
+			// Return type?
+			Type type = operation.getType();
+			logger.info("Type: " + type.getName());
+			md.setReturnType2(ast.newPrimitiveType(PrimitiveType.VOID));
 			td.bodyDeclarations().add(md);
 		}
 
 		// TODO Get all the relationships of this class
+
+		// TODO Getter and setter
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		return cu.toString();
