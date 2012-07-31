@@ -25,8 +25,6 @@ import java.net.URISyntaxException;
 import org.eclipse.emf.common.util.URI;
 import org.junit.Test;
 
-import de.crowdcode.kissmda.core.uml.ReaderWriter;
-
 /**
  * Unit test for simple Transformer.
  * 
@@ -44,7 +42,7 @@ public class ReaderWriterTest {
 		URI uri = URI.createURI(uriString);
 		app.registerSchema();
 		app.registerResourceFactories();
-		app.registerPathmaps(uri);
+		app.registerPathmaps();
 
 		org.eclipse.uml2.uml.Package outPackage = app.load(uri);
 		app.out(outPackage.getName());

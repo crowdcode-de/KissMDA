@@ -18,6 +18,8 @@
  */
 package de.crowdcode.kissmda.core.file;
 
+import org.eclipse.uml2.uml.Class;
+
 /**
  * File writer for UML class.
  * 
@@ -27,4 +29,9 @@ package de.crowdcode.kissmda.core.file;
  */
 public class FileWriter {
 
+	public void createFile(Class clazz, String classContent) {
+		// TODO Create the package directories from context information
+
+		// TODO Create the class file
+	}
 }

@@ -56,7 +56,7 @@ public class PackageHelper {
 		URI uri = URI.createURI(uriString);
 		readerWriter.registerSchema();
 		readerWriter.registerResourceFactories();
-		readerWriter.registerPathmaps(uri);
+		readerWriter.registerPathmaps();
 
 		org.eclipse.uml2.uml.Package outPackage = readerWriter.load(uri);
 

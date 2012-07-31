@@ -19,6 +19,7 @@
 package de.crowdcode.kissmda.core.uml;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
@@ -75,15 +76,23 @@ public class ReaderWriter {
 				.put(UMLResource.FILE_EXTENSION, UMLResource.Factory.INSTANCE);
 	}
 
-	public void registerPathmaps(URI uri) {
+	public void registerPathmaps() {
+		// We check one of UML library to be able to create the URI without
+		// the absolute jar file like this:
+		// "jar:file:/D:/progjava/repository/org/eclipse/uml2/org.eclipse.uml2.uml.resources/
+		// 3.1.0.v201005031530/org.eclipse.uml2.uml.resources-3.1.0.v201005031530.jar!/"
+		URL url = this.getClass().getResource(
+				"/libraries/UMLPrimitiveTypes.library.uml");
+		String path = url.getPath().substring(0,
+				url.getPath().indexOf("libraries"));
+		URI uri = URI.createURI("jar:" + path);
+
 		Map<URI, URI> uriMap = resourceSet.getURIConverter().getURIMap();
 
 		uriMap.put(URI.createURI(UMLResource.LIBRARIES_PATHMAP), uri
 				.appendSegment("libraries").appendSegment(""));
-
 		uriMap.put(URI.createURI(UMLResource.METAMODELS_PATHMAP), uri
 				.appendSegment("metamodels").appendSegment(""));
-
 		uriMap.put(URI.createURI(UMLResource.PROFILES_PATHMAP), uri
 				.appendSegment("profiles").appendSegment(""));
 	}

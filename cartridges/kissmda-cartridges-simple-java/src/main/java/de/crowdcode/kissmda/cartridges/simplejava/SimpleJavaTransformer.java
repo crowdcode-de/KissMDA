@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Class;
@@ -42,6 +43,8 @@ import org.eclipse.uml2.uml.Type;
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
+import de.crowdcode.kissmda.core.file.FileWriter;
+import de.crowdcode.kissmda.core.uml.DataTypeUtils;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -63,6 +66,20 @@ public class SimpleJavaTransformer implements Transformer {
 
 	@Inject
 	private PackageHelper packageHelper;
+
+	@Inject
+	private FileWriter fileWriter;
+
+	@Inject
+	private DataTypeUtils dataTypeUtils;
+
+	public void setDataTypeUtils(DataTypeUtils dataTypeUtils) {
+		this.dataTypeUtils = dataTypeUtils;
+	}
+
+	public void setFileWriter(FileWriter fileWriter) {
+		this.fileWriter = fileWriter;
+	}
 
 	public void setPackageHelper(PackageHelper packageHelper) {
 		this.packageHelper = packageHelper;
@@ -156,9 +173,9 @@ public class SimpleJavaTransformer implements Transformer {
 			Type type = operation.getType();
 			logger.info("Type: " + type.getName());
 			if (type instanceof org.eclipse.uml2.uml.PrimitiveType) {
-				org.eclipse.uml2.uml.PrimitiveType primitiveType = (org.eclipse.uml2.uml.PrimitiveType) type;
-				logger.info("PrimitiveType: " + primitiveType.getName());
-				md.setReturnType2(ast.newPrimitiveType(PrimitiveType.VOID));
+				PrimitiveType primitiveType = getAstPrimitiveType(ast,
+						type.getName());
+				md.setReturnType2(primitiveType);
 			} else {
 				String typeName = type.getName();
 				SimpleType tp = ast.newSimpleType(ast.newSimpleName(typeName));
@@ -176,6 +193,12 @@ public class SimpleJavaTransformer implements Transformer {
 		return cu.toString();
 	}
 
+	private PrimitiveType getAstPrimitiveType(AST ast, String name) {
+		Code typeCode = dataTypeUtils.getPrimitiveTypeCodes().get(
+				name.toLowerCase());
+		return ast.newPrimitiveType(typeCode);
+	}
+
 	private String getClassName(Class clazz) {
 		String className = clazz.getName();
 		logger.info("Classname: " + className);
@@ -190,8 +213,6 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private void generateClassFile(Class clazz, String compilationUnit) {
 		// TODO Create the class file on the file system
-		// TODO Create the package directories from context information
-
-		// TODO Create the class file
+		fileWriter.createFile(clazz, compilationUnit);
 	}
 }
