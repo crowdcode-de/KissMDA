@@ -30,6 +30,7 @@ import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.StandardContext;
 import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
+import de.crowdcode.kissmda.core.uml.ReaderWriter;
 
 /**
  * Unit test for simple Transformer.
@@ -44,10 +45,13 @@ public class SimpleJavaTransformerTest {
 	private SimpleJavaTransformer simpleJavaTransformer;
 	private Context context;
 	private PackageHelper packageHelper;
+	private ReaderWriter readerWriter;
 
 	@Before
 	public void setUp() {
+		readerWriter = new ReaderWriter();
 		packageHelper = new PackageHelper();
+		packageHelper.setReaderWriter(readerWriter);
 		simpleJavaTransformer = new SimpleJavaTransformer();
 		simpleJavaTransformer.setPackageHelper(packageHelper);
 		context = new StandardContext();

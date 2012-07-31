@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.core;
+package de.crowdcode.kissmda.core.uml;
 
 import static org.junit.Assert.assertTrue;
 
@@ -24,6 +24,8 @@ import java.net.URISyntaxException;
 
 import org.eclipse.emf.common.util.URI;
 import org.junit.Test;
+
+import de.crowdcode.kissmda.core.uml.ReaderWriter;
 
 /**
  * Unit test for simple Transformer.

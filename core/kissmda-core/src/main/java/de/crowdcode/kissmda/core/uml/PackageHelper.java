@@ -21,11 +21,12 @@ package de.crowdcode.kissmda.core.uml;
 import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.uml2.uml.Class;
 
 import de.crowdcode.kissmda.core.Context;
-import de.crowdcode.kissmda.core.ReaderWriter;
 
 /**
  * Package Helper class for UML.
@@ -39,19 +40,25 @@ public class PackageHelper {
 	private static final Logger logger = Logger.getLogger(PackageHelper.class
 			.getName());
 
+	@Inject
+	private ReaderWriter readerWriter;
+
+	public void setReaderWriter(ReaderWriter readerWriter) {
+		this.readerWriter = readerWriter;
+	}
+
 	public org.eclipse.uml2.uml.Package getRootPackage(Context context)
 			throws URISyntaxException {
-		ReaderWriter app = new ReaderWriter();
 		logger.info("Get from following sourceModel: "
 				+ context.getSourceModel());
 		String uriString = "file:/" + context.getSourceModel();
 		logger.info("Get from following URI: " + uriString);
 		URI uri = URI.createURI(uriString);
-		app.registerSchema();
-		app.registerResourceFactories();
-		app.registerPathmaps(uri);
+		readerWriter.registerSchema();
+		readerWriter.registerResourceFactories();
+		readerWriter.registerPathmaps(uri);
 
-		org.eclipse.uml2.uml.Package outPackage = app.load(uri);
+		org.eclipse.uml2.uml.Package outPackage = readerWriter.load(uri);
 
 		return outPackage;
 	}

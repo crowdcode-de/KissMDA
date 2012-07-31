@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.core;
+package de.crowdcode.kissmda.core.uml;
 
 import java.io.IOException;
 import java.util.Iterator;
