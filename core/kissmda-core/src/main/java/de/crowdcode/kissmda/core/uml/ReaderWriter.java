@@ -51,6 +51,7 @@ import org.eclipse.uml2.uml.util.UMLUtil;
  * @version 1.0.0
  */
 public class ReaderWriter {
+
 	private static final Logger logger = Logger.getLogger(ReaderWriter.class
 			.getName());
 
