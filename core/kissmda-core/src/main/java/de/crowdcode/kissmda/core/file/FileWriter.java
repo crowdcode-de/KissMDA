@@ -18,7 +18,10 @@
  */
 package de.crowdcode.kissmda.core.file;
 
-import org.eclipse.uml2.uml.Class;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 
 import de.crowdcode.kissmda.core.Context;
 
@@ -31,9 +34,26 @@ import de.crowdcode.kissmda.core.Context;
  */
 public class FileWriter {
 
-	public void createFile(Context context, Class clazz, String classContent) {
-		// TODO Create the package directories from context information
+	public void createFile(final Context context, final String packageName,
+			final String className, final String classContent)
+			throws IOException {
+		// Create the package directories from context information
+		String packageNameToBeCreated = packageName.replace(".", "/");
+		String directoryToBeCreated = context.getTargetModel() + "/"
+				+ packageNameToBeCreated;
+		new File(directoryToBeCreated).mkdirs();
 
-		// TODO Create the class file
+		// Create the class file
+		Writer writer = null;
+		try {
+			File file = new File(directoryToBeCreated + "/" + className
+					+ ".java");
+			writer = new BufferedWriter(new java.io.FileWriter(file));
+			writer.write(classContent);
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
 	}
 }

@@ -18,38 +18,33 @@
  */
 package de.crowdcode.kissmda.examples.apptest;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.util.logging.Logger;
+
+import de.crowdcode.kissmda.testapp.Person;
 
 /**
- * Unit test for simple App.
+ * Person implementation.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
  */
-public class AppTest extends TestCase {
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public AppTest(String testName) {
-		super(testName);
+public class PersonImpl implements Person {
+
+	private static final Logger logger = Logger.getLogger(PersonImpl.class
+			.getName());
+
+	@Override
+	public int calculateAge() {
+		return 0;
 	}
 
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(AppTest.class);
+	@Override
+	public boolean isInRetirement() {
+		return false;
 	}
 
-	/**
-	 * Rigourous Test :-)
-	 */
-	public void testApp() {
-		assertTrue(true);
+	@Override
+	public void run() {
+		logger.info("We are running the PersonImpl which implements the generated Person interface!");
 	}
 }

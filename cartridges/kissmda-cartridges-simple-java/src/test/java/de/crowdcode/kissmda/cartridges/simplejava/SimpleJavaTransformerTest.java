@@ -72,6 +72,7 @@ public class SimpleJavaTransformerTest {
 					.getCodeSource().getLocation().getPath();
 			logger.info("Path: " + thisPath);
 			context.setSourceModel(thisPath + "model/emf/test-uml.uml");
+			context.setTargetModel("target/generated-sources/java-transformer");
 			simpleJavaTransformer.transform(context);
 		} catch (TransformerException e) {
 			assertFalse(true);

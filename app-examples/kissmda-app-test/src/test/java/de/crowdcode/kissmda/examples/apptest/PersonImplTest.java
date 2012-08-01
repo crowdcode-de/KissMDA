@@ -18,14 +18,30 @@
  */
 package de.crowdcode.kissmda.examples.apptest;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+
 /**
- * Hello world!
+ * Unit test for PersonImpl class.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
  */
-public class App {
-	public static void main(String[] args) {
-		System.out.println("Hello World!");
+public class PersonImplTest {
+
+	private PersonImpl person;
+
+	@Before
+	public void setUp() {
+		person = new PersonImpl();
+	}
+
+	@Test
+	public void testApp() {
+		person.run();
+		assertEquals(0, person.calculateAge());
+		assertEquals(false, person.isInRetirement());
 	}
 }

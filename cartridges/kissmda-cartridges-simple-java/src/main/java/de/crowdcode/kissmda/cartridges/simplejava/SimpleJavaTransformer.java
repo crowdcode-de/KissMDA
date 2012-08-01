@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.cartridges.simplejava;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -123,6 +124,8 @@ public class SimpleJavaTransformer implements Transformer {
 			}
 		} catch (URISyntaxException e) {
 			throw new TransformerException(e);
+		} catch (IOException e) {
+			throw new TransformerException(e);
 		}
 	}
 
@@ -214,8 +217,11 @@ public class SimpleJavaTransformer implements Transformer {
 		return fullPackageName;
 	}
 
-	private void generateClassFile(Class clazz, String compilationUnit) {
-		// TODO Create the class file on the file system
-		fileWriter.createFile(context, clazz, compilationUnit);
+	private void generateClassFile(Class clazz, String compilationUnit)
+			throws IOException {
+		String fullPackageName = packageHelper.getFullPackageName(clazz,
+				sourceDirectoryPackageName);
+		fileWriter.createFile(context, fullPackageName, clazz.getName(),
+				compilationUnit);
 	}
 }

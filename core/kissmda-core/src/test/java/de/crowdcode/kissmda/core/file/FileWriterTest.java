@@ -16,58 +16,53 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.cartridges.simplejava;
+package de.crowdcode.kissmda.core.file;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.util.logging.Logger;
+import java.io.IOException;
 
-import javax.inject.Inject;
-
-import org.jukito.JukitoRunner;
+import org.eclipse.uml2.uml.Class;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import de.crowdcode.kissmda.core.Context;
-import de.crowdcode.kissmda.core.StandardContext;
-import de.crowdcode.kissmda.core.TransformerException;
 
 /**
- * Test Guice Java Module.
+ * Unit test for FileWriter class.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
- * @since 1.0.0
  */
-@RunWith(JukitoRunner.class)
-public class SimpleJavaModuleTest {
+public class FileWriterTest {
 
-	private static final Logger logger = Logger
-			.getLogger(SimpleJavaModuleTest.class.getName());
-	@Inject
-	private SimpleJavaTransformer simpleJavaTransformer;
-	private Context context;
+	private FileWriter fileWriter;
 
 	@Before
 	public void setUp() throws Exception {
-		context = new StandardContext();
+		fileWriter = new FileWriter();
 	}
 
 	@Test
-	public void testConfigure() {
-		try {
-			String thisPath = this.getClass().getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
-			logger.info("Path: " + thisPath);
-			context.setSourceModel(thisPath + "model/emf/test-uml.uml");
-			context.setTargetModel("target/generated-sources/java-module");
-			simpleJavaTransformer.transform(context);
-		} catch (TransformerException e) {
-			assertFalse(true);
-		}
-		assertTrue(true);
-	}
+	public void testCreateFile() throws IOException {
+		String classContent = "package de.crowdcode.kissmda.testapp.components;\n "
+				+ "public interface Company {\n" + "}";
+		String packageName = "de.kissmda.test";
+		Class clazz = mock(Class.class);
+		Context context = mock(Context.class);
 
+		when(clazz.getName()).thenReturn("Company");
+		when(context.getTargetModel()).thenReturn(
+				"target/generated-sources/java");
+
+		fileWriter.createFile(context, packageName, clazz.getName(),
+				classContent);
+
+		assertTrue(true);
+		verify(clazz).getName();
+		verify(context).getTargetModel();
+	}
 }
