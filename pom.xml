@@ -12,6 +12,7 @@
 
 	<modules>
 		<module>core/kissmda-core</module>
+		<module>maven/kissmda-maven-plugin</module>
 		<module>cartridges/kissmda-cartridges-simple-java</module>
 	</modules>
 </project>
