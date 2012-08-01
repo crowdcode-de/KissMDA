@@ -30,6 +30,8 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.crowdcode.kissmda.core.Context;
+
 /**
  * Unit test for KissMDA mojo.
  * 
@@ -92,5 +94,27 @@ public class KissMdaMojoTest {
 			assertEquals(e.getMessage(),
 					KissMdaMojo.ERROR_GUICE_SAME_PACKAGE_NOT_FOUND);
 		}
+	}
+
+	@Test
+	public void testContextObject() throws MojoExecutionException {
+		List<String> packageNames = new ArrayList<String>();
+		packageNames.add("de.crowdcode.kissmda.maven.plugin.withguice");
+		MavenProject mavenProject = new MavenProject();
+		mavenProject.setFile(new File("target/tmp/test"));
+
+		kissMdaMojo.setTransformerScanPackageNames(packageNames);
+		kissMdaMojo.setModelFile("src/main/resources/model/emf/test-uml.uml");
+		kissMdaMojo
+				.setGeneratedSourcesTargetDirectory("target/generated-sources/kissmda");
+		kissMdaMojo.setProject(mavenProject);
+		kissMdaMojo.execute();
+
+		Context context = kissMdaMojo.getContext();
+
+		assertEquals(context.getSourceModel(),
+				"target\\tmp/src/main/resources/model/emf/test-uml.uml");
+		assertEquals(context.getTargetModel(),
+				"target\\tmp/target/generated-sources/kissmda");
 	}
 }

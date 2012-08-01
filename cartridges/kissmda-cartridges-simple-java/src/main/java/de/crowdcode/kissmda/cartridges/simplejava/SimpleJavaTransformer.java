@@ -73,6 +73,8 @@ public class SimpleJavaTransformer implements Transformer {
 	@Inject
 	private DataTypeUtils dataTypeUtils;
 
+	private Context context;
+
 	public void setDataTypeUtils(DataTypeUtils dataTypeUtils) {
 		this.dataTypeUtils = dataTypeUtils;
 	}
@@ -87,6 +89,7 @@ public class SimpleJavaTransformer implements Transformer {
 
 	@Override
 	public void transform(Context context) throws TransformerException {
+		this.context = context;
 		try {
 			// Get the root package
 			org.eclipse.uml2.uml.Package outPackage = getRootPackage(context);
@@ -213,6 +216,6 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private void generateClassFile(Class clazz, String compilationUnit) {
 		// TODO Create the class file on the file system
-		fileWriter.createFile(clazz, compilationUnit);
+		fileWriter.createFile(context, clazz, compilationUnit);
 	}
 }

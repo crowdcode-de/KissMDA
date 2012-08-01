@@ -20,10 +20,10 @@ package de.crowdcode.kissmda.maven.plugin;
 
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.reflections.Reflections;
 
@@ -31,7 +31,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.StandardContext;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
@@ -48,8 +47,7 @@ import de.crowdcode.kissmda.core.TransformerException;
  */
 public class KissMdaMojo extends AbstractMojo {
 
-	private static final Logger logger = Logger.getLogger(KissMdaMojo.class
-			.getName());
+	private final Log logger = getLog();
 
 	public static final String ERROR_GUICE_NOT_FOUND = "Error Guice module for the transformer not found!";
 
@@ -80,6 +78,30 @@ public class KissMdaMojo extends AbstractMojo {
 	 */
 	private String modelFile;
 
+	/**
+	 * Target directory for generated sources.
+	 * 
+	 * @parameter default-value="target/generated-sources/java"
+	 * @required
+	 */
+	private String generatedSourcesTargetDirectory;
+
+	private final StandardContext context;
+
+	public KissMdaMojo() {
+		super();
+		context = new StandardContext();
+	}
+
+	public StandardContext getContext() {
+		return context;
+	}
+
+	public void setGeneratedSourcesTargetDirectory(
+			String generatedSourcesTargetDirectory) {
+		this.generatedSourcesTargetDirectory = generatedSourcesTargetDirectory;
+	}
+
 	public void setModelFile(String modelFile) {
 		this.modelFile = modelFile;
 	}
@@ -106,9 +128,11 @@ public class KissMdaMojo extends AbstractMojo {
 		// and execute. Do until we have all the Transformers...
 		logger.info("Start KissMdaMojo...");
 		try {
-			Context context = new StandardContext();
 			String fullNameModelFile = project.getBasedir() + "/" + modelFile;
+			String fullNameTargetDirectory = project.getBasedir() + "/"
+					+ generatedSourcesTargetDirectory;
 			context.setSourceModel(fullNameModelFile);
+			context.setTargetModel(fullNameTargetDirectory);
 			for (String packageName : transformerScanPackageNames) {
 				Reflections reflections = new Reflections(packageName);
 				Set<Class<? extends Transformer>> transformers = reflections
