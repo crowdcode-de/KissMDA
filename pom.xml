@@ -11,6 +11,7 @@
 	</properties>
 
 	<modules>
+		<module>core/kissmda-profiles/kissmda-profile-core</module>
 		<module>core/kissmda-core</module>
 		<module>maven/kissmda-maven-plugin</module>
 		<module>cartridges/kissmda-cartridges-simple-java</module>
