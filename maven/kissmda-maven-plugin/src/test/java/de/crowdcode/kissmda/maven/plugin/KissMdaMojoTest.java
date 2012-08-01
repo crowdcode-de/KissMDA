@@ -112,9 +112,13 @@ public class KissMdaMojoTest {
 
 		Context context = kissMdaMojo.getContext();
 
-		assertEquals(context.getSourceModel(),
-				"target\\tmp/src/main/resources/model/emf/test-uml.uml");
-		assertEquals(context.getTargetModel(),
-				"target\\tmp/target/generated-sources/kissmda");
+		String resultSourceModel = context.getSourceModel().replace("\\", ".");
+		resultSourceModel = resultSourceModel.replace("/", ".");
+		String resultTargetModel = context.getTargetModel().replace("\\", ".");
+		resultTargetModel = resultTargetModel.replace("/", ".");
+		assertEquals(resultSourceModel,
+				"target.tmp.src.main.resources.model.emf.test-uml.uml");
+		assertEquals(resultTargetModel,
+				"target.tmp.target.generated-sources.kissmda");
 	}
 }
