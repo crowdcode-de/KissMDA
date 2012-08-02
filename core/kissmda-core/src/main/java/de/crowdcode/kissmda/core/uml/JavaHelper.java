@@ -18,6 +18,16 @@
  */
 package de.crowdcode.kissmda.core.uml;
 
+import javax.inject.Inject;
+
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.PrimitiveType.Code;
+import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.uml2.uml.Type;
+
 /**
  * Java Helper class for UML.
  * 
@@ -26,4 +36,54 @@ package de.crowdcode.kissmda.core.uml;
  * @version 1.0.0
  */
 public class JavaHelper {
+
+	@Inject
+	private PackageHelper packageHelper;
+
+	@Inject
+	private DataTypeUtils dataTypeUtils;
+
+	public void setDataTypeUtils(DataTypeUtils dataTypeUtils) {
+		this.dataTypeUtils = dataTypeUtils;
+	}
+
+	public void setPackageHelper(PackageHelper packageHelper) {
+		this.packageHelper = packageHelper;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void getType(AST ast, TypeDeclaration td, MethodDeclaration md,
+			Type type, String typeNameInput, String sourceDirectoryPackageName) {
+		String typeName = packageHelper.removeUmlPrefixes(typeNameInput);
+		typeName = packageHelper.getFullPackageName(typeName,
+				sourceDirectoryPackageName);
+		if (typeName.equalsIgnoreCase("void")) {
+			PrimitiveType primitiveType = getAstPrimitiveType(ast,
+					type.getName());
+			md.setReturnType2(primitiveType);
+			td.bodyDeclarations().add(md);
+		} else {
+			SimpleType tp = getAstSimpleType(ast, typeName);
+			md.setReturnType2(tp);
+			td.bodyDeclarations().add(md);
+		}
+	}
+
+	private SimpleType getAstSimpleType(AST ast, String typeName) {
+		String javaType = dataTypeUtils.getJavaTypes().get(
+				typeName.toLowerCase());
+		SimpleType tp = null;
+		if (javaType != null) {
+			tp = ast.newSimpleType(ast.newName(javaType));
+		} else {
+			tp = ast.newSimpleType(ast.newName(typeName));
+		}
+		return tp;
+	}
+
+	private PrimitiveType getAstPrimitiveType(AST ast, String name) {
+		Code typeCode = dataTypeUtils.getPrimitiveTypeCodes().get(
+				name.toLowerCase());
+		return ast.newPrimitiveType(typeCode);
+	}
 }

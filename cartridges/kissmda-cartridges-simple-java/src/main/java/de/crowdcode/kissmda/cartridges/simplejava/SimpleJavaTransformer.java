@@ -31,9 +31,6 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.jdt.core.dom.PrimitiveType;
-import org.eclipse.jdt.core.dom.PrimitiveType.Code;
-import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
@@ -47,6 +44,7 @@ import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.file.FileWriter;
 import de.crowdcode.kissmda.core.uml.DataTypeUtils;
+import de.crowdcode.kissmda.core.uml.JavaHelper;
 import de.crowdcode.kissmda.core.uml.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
@@ -56,7 +54,8 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * 
  * <p>
  * Most important helper classes from kissmda-core which are used in this
- * Transformer: PackageHelper, MethodHelper, FileWriter and DataTypeUtils
+ * Transformer: PackageHelper, MethodHelper, JavaHelper, FileWriter and
+ * DataTypeUtils
  * </p>
  * 
  * @author Lofi Dewanto
@@ -80,11 +79,15 @@ public class SimpleJavaTransformer implements Transformer {
 	@Inject
 	private FileWriter fileWriter;
 
+	@SuppressWarnings("unused")
 	@Inject
 	private DataTypeUtils dataTypeUtils;
 
 	@Inject
 	private MethodHelper methodHelper;
+
+	@Inject
+	private JavaHelper javaHelper;
 
 	private Context context;
 
@@ -102,6 +105,10 @@ public class SimpleJavaTransformer implements Transformer {
 
 	public void setMethodHelper(MethodHelper methodHelper) {
 		this.methodHelper = methodHelper;
+	}
+
+	public void setJavaHelper(JavaHelper javaHelper) {
+		this.javaHelper = javaHelper;
 	}
 
 	/**
@@ -211,38 +218,9 @@ public class SimpleJavaTransformer implements Transformer {
 			Type type = property.getType();
 			String typeName = type.getQualifiedName();
 			logger.info("Type: " + typeName);
-			getType(ast, td, md, type, typeName);
+			javaHelper.getType(ast, td, md, type, typeName,
+					sourceDirectoryPackageName);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void getType(AST ast, TypeDeclaration td, MethodDeclaration md,
-			Type type, String typeNameInput) {
-		String typeName = packageHelper.removeUmlPrefixes(typeNameInput);
-		typeName = packageHelper.getFullPackageName(typeName,
-				sourceDirectoryPackageName);
-		if (typeName.equalsIgnoreCase("void")) {
-			PrimitiveType primitiveType = getAstPrimitiveType(ast,
-					type.getName());
-			md.setReturnType2(primitiveType);
-			td.bodyDeclarations().add(md);
-		} else {
-			SimpleType tp = getAstSimpleType(ast, typeName);
-			md.setReturnType2(tp);
-			td.bodyDeclarations().add(md);
-		}
-	}
-
-	private SimpleType getAstSimpleType(AST ast, String typeName) {
-		String javaType = dataTypeUtils.getJavaTypes().get(
-				typeName.toLowerCase());
-		SimpleType tp = null;
-		if (javaType != null) {
-			tp = ast.newSimpleType(ast.newName(javaType));
-		} else {
-			tp = ast.newSimpleType(ast.newName(typeName));
-		}
-		return tp;
 	}
 
 	private void generateRelationships(Class clazz, AST ast, TypeDeclaration td) {
@@ -283,14 +261,9 @@ public class SimpleJavaTransformer implements Transformer {
 			Type type = operation.getType();
 			String typeName = type.getQualifiedName();
 			logger.info("Type: " + typeName);
-			getType(ast, td, md, type, typeName);
+			javaHelper.getType(ast, td, md, type, typeName,
+					sourceDirectoryPackageName);
 		}
-	}
-
-	private PrimitiveType getAstPrimitiveType(AST ast, String name) {
-		Code typeCode = dataTypeUtils.getPrimitiveTypeCodes().get(
-				name.toLowerCase());
-		return ast.newPrimitiveType(typeCode);
 	}
 
 	private String getClassName(Class clazz) {
