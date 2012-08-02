@@ -49,10 +49,17 @@ import de.crowdcode.kissmda.core.uml.DataTypeUtils;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
- * Simple Java Transformer.
+ * Simple Java Transformer. This generates Interfaces for all the classes from
+ * the given UML model.
+ * 
+ * <p>
+ * Most important helper classes from kissmda-core which are used in this
+ * Transformer: PackageHelper, FileWriter and DataTypeUtils
+ * </p>
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
+ * @since 1.0.0
  */
 public class SimpleJavaTransformer implements Transformer {
 
@@ -88,6 +95,15 @@ public class SimpleJavaTransformer implements Transformer {
 		this.packageHelper = packageHelper;
 	}
 
+	/**
+	 * Start the transformation and generation.
+	 * 
+	 * @param context
+	 *            context object from Maven plugin
+	 * @return void nothing
+	 * @exception throw
+	 *                TransformerException if something wrong happens
+	 */
 	@Override
 	public void transform(Context context) throws TransformerException {
 		this.context = context;
@@ -129,6 +145,28 @@ public class SimpleJavaTransformer implements Transformer {
 		}
 	}
 
+	/**
+	 * Generate the Class Interface. This is the main generation part for this
+	 * SimpleJavaTransformer.
+	 * 
+	 * @param Class
+	 *            clazz the UML class
+	 * @return String the complete class with its content as a String
+	 */
+	public String generateInterface(Class clazz) {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+
+		generatePackage(clazz, ast, cu);
+		TypeDeclaration td = generateClass(clazz, ast, cu);
+		generateMethods(clazz, ast, td);
+		generateRelationships(clazz, ast, td);
+		generateGettersSetters(clazz, ast, td);
+
+		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
+		return cu.toString();
+	}
+
 	private void checkStereotypeRootPackage(
 			org.eclipse.uml2.uml.Package outPackage) {
 		EList<Stereotype> rootStereotypes = outPackage.getAppliedStereotypes();
@@ -148,20 +186,6 @@ public class SimpleJavaTransformer implements Transformer {
 		org.eclipse.uml2.uml.Package outPackage = packageHelper
 				.getRootPackage(context);
 		return outPackage;
-	}
-
-	public String generateInterface(Class clazz) {
-		AST ast = AST.newAST(AST.JLS3);
-		CompilationUnit cu = ast.newCompilationUnit();
-
-		generatePackage(clazz, ast, cu);
-		TypeDeclaration td = generateClass(clazz, ast, cu);
-		generateMethods(clazz, ast, td);
-		generateRelationships(clazz, ast, td);
-		generateGettersSetters(clazz, ast, td);
-
-		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
-		return cu.toString();
 	}
 
 	private void generateGettersSetters(Class clazz, AST ast, TypeDeclaration td) {
