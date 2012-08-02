@@ -150,16 +150,33 @@ public class SimpleJavaTransformer implements Transformer {
 		return outPackage;
 	}
 
-	@SuppressWarnings("unchecked")
 	public String generateInterface(Class clazz) {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 
-		PackageDeclaration p1 = ast.newPackageDeclaration();
-		String fullPackageName = getFullPackageName(clazz);
-		p1.setName(ast.newName(fullPackageName));
-		cu.setPackage(p1);
+		generatePackage(clazz, ast, cu);
+		TypeDeclaration td = generateClass(clazz, ast, cu);
+		generateMethods(clazz, ast, td);
+		generateRelationships(clazz, ast, td);
+		generateGettersSetters(clazz, ast, td);
 
+		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
+		return cu.toString();
+	}
+
+	private void generateGettersSetters(Class clazz, AST ast, TypeDeclaration td) {
+		// TODO Create getter and setter
+
+	}
+
+	private void generateRelationships(Class clazz, AST ast, TypeDeclaration td) {
+		// TODO Get all the relationships of this class
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private TypeDeclaration generateClass(Class clazz, AST ast,
+			CompilationUnit cu) {
 		String className = getClassName(clazz);
 		TypeDeclaration td = ast.newTypeDeclaration();
 		td.setInterface(true);
@@ -167,7 +184,18 @@ public class SimpleJavaTransformer implements Transformer {
 				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		td.setName(ast.newSimpleName(className));
 		cu.types().add(td);
+		return td;
+	}
 
+	private void generatePackage(Class clazz, AST ast, CompilationUnit cu) {
+		PackageDeclaration p1 = ast.newPackageDeclaration();
+		String fullPackageName = getFullPackageName(clazz);
+		p1.setName(ast.newName(fullPackageName));
+		cu.setPackage(p1);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void generateMethods(Class clazz, AST ast, TypeDeclaration td) {
 		// Get all methods for this clazz
 		EList<Operation> operations = clazz.getAllOperations();
 		for (Operation operation : operations) {
@@ -190,13 +218,6 @@ public class SimpleJavaTransformer implements Transformer {
 
 			td.bodyDeclarations().add(md);
 		}
-
-		// TODO Get all the relationships of this class
-
-		// TODO Create getter and setter
-
-		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
-		return cu.toString();
 	}
 
 	private PrimitiveType getAstPrimitiveType(AST ast, String name) {
