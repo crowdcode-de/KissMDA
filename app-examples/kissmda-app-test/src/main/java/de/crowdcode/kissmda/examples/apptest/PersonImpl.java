@@ -20,7 +20,9 @@ package de.crowdcode.kissmda.examples.apptest;
 
 import java.util.logging.Logger;
 
+import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.Person;
+import de.crowdcode.kissmda.testapp.components.Company;
 
 /**
  * Person implementation.
@@ -34,17 +36,32 @@ public class PersonImpl implements Person {
 			.getName());
 
 	@Override
-	public int calculateAge() {
+	public Integer calculateAge() {
 		return 0;
 	}
 
 	@Override
-	public boolean isInRetirement() {
+	public Boolean isInRetirement() {
 		return false;
 	}
 
 	@Override
 	public void run() {
 		logger.info("We are running the PersonImpl which implements the generated Person interface!");
+	}
+
+	@Override
+	public String getName() {
+		return "Lofi";
+	}
+
+	@Override
+	public Address getAddresses() {
+		return null;
+	}
+
+	@Override
+	public Company getCompany() {
+		return null;
 	}
 }

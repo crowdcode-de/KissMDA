@@ -35,6 +35,8 @@ public class DataTypeUtils {
 
 	private static Map<String, Code> primitiveTypeCodes = null;
 
+	private static Map<String, String> javaTypes = null;
+
 	public Map<String, Code> getPrimitiveTypeCodes() {
 		if (primitiveTypeCodes == null) {
 			primitiveTypeCodes = new HashMap<String, Code>();
@@ -49,5 +51,20 @@ public class DataTypeUtils {
 		}
 
 		return primitiveTypeCodes;
+	}
+
+	public Map<String, String> getJavaTypes() {
+		if (javaTypes == null) {
+			javaTypes = new HashMap<String, String>();
+			javaTypes.put("integer", "Integer");
+			javaTypes.put("short", "Short");
+			javaTypes.put("double", "Double");
+			javaTypes.put("long", "Long");
+			javaTypes.put("boolean", "Boolean");
+			javaTypes.put("string", "String");
+			javaTypes.put("date", "java.util.Date");
+		}
+
+		return javaTypes;
 	}
 }

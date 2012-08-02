@@ -44,7 +44,7 @@ public class PackageHelperTest {
 	}
 
 	@Test
-	public void testGetFullPackageName() {
+	public void testGetFullPackageNameWithClass() {
 		Class clazz = mock(Class.class);
 		when(clazz.getQualifiedName()).thenReturn(
 				"Data::de::crowdcode::test::Company");
@@ -55,5 +55,44 @@ public class PackageHelperTest {
 
 		verify(clazz, atLeastOnce()).getQualifiedName();
 		assertEquals("de.crowdcode.test.Company", result);
+	}
+
+	@Test
+	public void testGetFullPackageNameWithString() {
+		String sourceDirectoryPackageName = "Data";
+		String umlPackageNameWithClass = "Data::de.crowdcode.test.Company";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("de.crowdcode.test.Company", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes1() {
+		String fullQualifiedName = "UMLPrimitiveTypes::Boolean";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("Boolean", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes2() {
+		String fullQualifiedName = "Data::de.crowdcode.test.Company";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("Data::de.crowdcode.test.Company", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes3() {
+		String fullQualifiedName = "MagicDraw Profile::datatypes::void";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("void", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes4() {
+		String fullQualifiedName = "JavaPrimitiveTypes::double";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("double", result);
 	}
 }

@@ -41,7 +41,7 @@ public class PersonImplTest {
 	@Test
 	public void testApp() {
 		person.run();
-		assertEquals(0, person.calculateAge());
+		assertEquals(0, person.calculateAge().intValue());
 		assertEquals(false, person.isInRetirement());
 	}
 }

@@ -38,6 +38,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.Type;
 
@@ -46,6 +47,7 @@ import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.file.FileWriter;
 import de.crowdcode.kissmda.core.uml.DataTypeUtils;
+import de.crowdcode.kissmda.core.uml.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -54,7 +56,7 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * 
  * <p>
  * Most important helper classes from kissmda-core which are used in this
- * Transformer: PackageHelper, FileWriter and DataTypeUtils
+ * Transformer: PackageHelper, MethodHelper, FileWriter and DataTypeUtils
  * </p>
  * 
  * @author Lofi Dewanto
@@ -81,6 +83,9 @@ public class SimpleJavaTransformer implements Transformer {
 	@Inject
 	private DataTypeUtils dataTypeUtils;
 
+	@Inject
+	private MethodHelper methodHelper;
+
 	private Context context;
 
 	public void setDataTypeUtils(DataTypeUtils dataTypeUtils) {
@@ -93,6 +98,10 @@ public class SimpleJavaTransformer implements Transformer {
 
 	public void setPackageHelper(PackageHelper packageHelper) {
 		this.packageHelper = packageHelper;
+	}
+
+	public void setMethodHelper(MethodHelper methodHelper) {
+		this.methodHelper = methodHelper;
 	}
 
 	/**
@@ -188,9 +197,52 @@ public class SimpleJavaTransformer implements Transformer {
 		return outPackage;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void generateGettersSetters(Class clazz, AST ast, TypeDeclaration td) {
-		// TODO Create getter and setter
+		// Create getter and setter
+		EList<Property> properties = clazz.getAllAttributes();
+		for (Property property : properties) {
+			MethodDeclaration md = ast.newMethodDeclaration();
+			md.modifiers().add(
+					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+			String getterName = methodHelper.getGetterName(property.getName());
+			md.setName(ast.newSimpleName(getterName));
+			// Return type?
+			Type type = property.getType();
+			String typeName = type.getQualifiedName();
+			logger.info("Type: " + typeName);
+			getType(ast, td, md, type, typeName);
+		}
+	}
 
+	@SuppressWarnings("unchecked")
+	private void getType(AST ast, TypeDeclaration td, MethodDeclaration md,
+			Type type, String typeNameInput) {
+		String typeName = packageHelper.removeUmlPrefixes(typeNameInput);
+		typeName = packageHelper.getFullPackageName(typeName,
+				sourceDirectoryPackageName);
+		if (typeName.equalsIgnoreCase("void")) {
+			PrimitiveType primitiveType = getAstPrimitiveType(ast,
+					type.getName());
+			md.setReturnType2(primitiveType);
+			td.bodyDeclarations().add(md);
+		} else {
+			SimpleType tp = getAstSimpleType(ast, typeName);
+			md.setReturnType2(tp);
+			td.bodyDeclarations().add(md);
+		}
+	}
+
+	private SimpleType getAstSimpleType(AST ast, String typeName) {
+		String javaType = dataTypeUtils.getJavaTypes().get(
+				typeName.toLowerCase());
+		SimpleType tp = null;
+		if (javaType != null) {
+			tp = ast.newSimpleType(ast.newName(javaType));
+		} else {
+			tp = ast.newSimpleType(ast.newName(typeName));
+		}
+		return tp;
 	}
 
 	private void generateRelationships(Class clazz, AST ast, TypeDeclaration td) {
@@ -229,18 +281,9 @@ public class SimpleJavaTransformer implements Transformer {
 			md.setName(ast.newSimpleName(operation.getName()));
 			// Return type?
 			Type type = operation.getType();
-			logger.info("Type: " + type.getName());
-			if (type instanceof org.eclipse.uml2.uml.PrimitiveType) {
-				PrimitiveType primitiveType = getAstPrimitiveType(ast,
-						type.getName());
-				md.setReturnType2(primitiveType);
-			} else {
-				String typeName = type.getName();
-				SimpleType tp = ast.newSimpleType(ast.newSimpleName(typeName));
-				md.setReturnType2(tp);
-			}
-
-			td.bodyDeclarations().add(md);
+			String typeName = type.getQualifiedName();
+			logger.info("Type: " + typeName);
+			getType(ast, td, md, type, typeName);
 		}
 	}
 
@@ -262,6 +305,16 @@ public class SimpleJavaTransformer implements Transformer {
 		return fullPackageName;
 	}
 
+	/**
+	 * Create the output file on the directory.
+	 * 
+	 * @param clazz
+	 *            UML2 class of Eclipse
+	 * @param compilationUnit
+	 *            compilation unit from JDT
+	 * @throws IOException
+	 *             input or output error on file system
+	 */
 	private void generateClassFile(Class clazz, String compilationUnit)
 			throws IOException {
 		String fullPackageName = packageHelper.getFullPackageName(clazz,

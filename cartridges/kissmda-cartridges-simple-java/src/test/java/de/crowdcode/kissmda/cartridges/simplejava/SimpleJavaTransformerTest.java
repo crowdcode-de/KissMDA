@@ -31,6 +31,7 @@ import de.crowdcode.kissmda.core.StandardContext;
 import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.file.FileWriter;
 import de.crowdcode.kissmda.core.uml.DataTypeUtils;
+import de.crowdcode.kissmda.core.uml.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 import de.crowdcode.kissmda.core.uml.ReaderWriter;
 
@@ -47,6 +48,7 @@ public class SimpleJavaTransformerTest {
 	private SimpleJavaTransformer simpleJavaTransformer;
 	private Context context;
 	private PackageHelper packageHelper;
+	private MethodHelper methodHelper;
 	private ReaderWriter readerWriter;
 	private FileWriter fileWriter;
 	private DataTypeUtils dataTypeUtils;
@@ -55,11 +57,13 @@ public class SimpleJavaTransformerTest {
 	public void setUp() {
 		readerWriter = new ReaderWriter();
 		packageHelper = new PackageHelper();
+		methodHelper = new MethodHelper();
 		fileWriter = new FileWriter();
 		dataTypeUtils = new DataTypeUtils();
 		packageHelper.setReaderWriter(readerWriter);
 		simpleJavaTransformer = new SimpleJavaTransformer();
 		simpleJavaTransformer.setPackageHelper(packageHelper);
+		simpleJavaTransformer.setMethodHelper(methodHelper);
 		simpleJavaTransformer.setFileWriter(fileWriter);
 		simpleJavaTransformer.setDataTypeUtils(dataTypeUtils);
 		context = new StandardContext();

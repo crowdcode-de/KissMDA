@@ -79,4 +79,26 @@ public class PackageHelper {
 		logger.info("Real package name: " + fullPackageName);
 		return fullPackageName;
 	}
+
+	public String getFullPackageName(String umlPackageNameWithClass,
+			String sourceDirectoryPackageName) {
+		// Get package until the beginning of SourceDirectory
+		logger.info("Qualified name: " + umlPackageNameWithClass);
+		// Remove the sourceDirectoryPackageName
+		String toBeDeleted = sourceDirectoryPackageName + "::";
+		String fullPackageName = umlPackageNameWithClass.replaceFirst(
+				toBeDeleted, "");
+		// Change :: to .
+		fullPackageName = fullPackageName.replaceAll("::", ".");
+		logger.info("Real package name: " + fullPackageName);
+		return fullPackageName;
+	}
+
+	public String removeUmlPrefixes(final String fullQualifiedName) {
+		String result = fullQualifiedName.replace(
+				"MagicDraw Profile::datatypes::", "");
+		result = result.replace("UMLPrimitiveTypes::", "");
+		result = result.replace("JavaPrimitiveTypes::", "");
+		return result;
+	}
 }
