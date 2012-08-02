@@ -220,6 +220,8 @@ public class SimpleJavaTransformer implements Transformer {
 			logger.info("Type: " + typeName);
 			javaHelper.getType(ast, td, md, type, typeName,
 					sourceDirectoryPackageName);
+
+			// TODO Create setter method for each property
 		}
 	}
 
