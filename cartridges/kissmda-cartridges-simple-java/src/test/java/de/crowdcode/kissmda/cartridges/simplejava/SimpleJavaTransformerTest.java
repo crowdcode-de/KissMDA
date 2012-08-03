@@ -54,6 +54,7 @@ public class SimpleJavaTransformerTest {
 	private FileWriter fileWriter;
 	private DataTypeUtils dataTypeUtils;
 	private JavaHelper javaHelper;
+	private InterfaceGenerator interfaceGenerator;
 
 	@Before
 	public void setUp() {
@@ -66,12 +67,14 @@ public class SimpleJavaTransformerTest {
 		javaHelper.setDataTypeUtils(dataTypeUtils);
 		javaHelper.setPackageHelper(packageHelper);
 		packageHelper.setReaderWriter(readerWriter);
+		interfaceGenerator = new InterfaceGenerator();
+		interfaceGenerator.setJavaHelper(javaHelper);
+		interfaceGenerator.setMethodHelper(methodHelper);
+		interfaceGenerator.setPackageHelper(packageHelper);
 		simpleJavaTransformer = new SimpleJavaTransformer();
 		simpleJavaTransformer.setPackageHelper(packageHelper);
-		simpleJavaTransformer.setMethodHelper(methodHelper);
 		simpleJavaTransformer.setFileWriter(fileWriter);
-		simpleJavaTransformer.setDataTypeUtils(dataTypeUtils);
-		simpleJavaTransformer.setJavaHelper(javaHelper);
+		simpleJavaTransformer.setInterfaceGenerator(interfaceGenerator);
 		context = new StandardContext();
 	}
 

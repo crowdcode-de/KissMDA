@@ -20,32 +20,19 @@ package de.crowdcode.kissmda.cartridges.simplejava;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Operation;
-import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Stereotype;
-import org.eclipse.uml2.uml.Type;
 
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.file.FileWriter;
-import de.crowdcode.kissmda.core.uml.DataTypeUtils;
-import de.crowdcode.kissmda.core.uml.JavaHelper;
-import de.crowdcode.kissmda.core.uml.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -79,21 +66,14 @@ public class SimpleJavaTransformer implements Transformer {
 	@Inject
 	private FileWriter fileWriter;
 
-	@SuppressWarnings("unused")
 	@Inject
-	private DataTypeUtils dataTypeUtils;
+	private InterfaceGenerator interfaceGenerator;
 
-	@Inject
-	private MethodHelper methodHelper;
-
-	@Inject
-	private JavaHelper javaHelper;
+	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
+		this.interfaceGenerator = interfaceGenerator;
+	}
 
 	private Context context;
-
-	public void setDataTypeUtils(DataTypeUtils dataTypeUtils) {
-		this.dataTypeUtils = dataTypeUtils;
-	}
 
 	public void setFileWriter(FileWriter fileWriter) {
 		this.fileWriter = fileWriter;
@@ -101,14 +81,6 @@ public class SimpleJavaTransformer implements Transformer {
 
 	public void setPackageHelper(PackageHelper packageHelper) {
 		this.packageHelper = packageHelper;
-	}
-
-	public void setMethodHelper(MethodHelper methodHelper) {
-		this.methodHelper = methodHelper;
-	}
-
-	public void setJavaHelper(JavaHelper javaHelper) {
-		this.javaHelper = javaHelper;
 	}
 
 	/**
@@ -149,7 +121,9 @@ public class SimpleJavaTransformer implements Transformer {
 						logger.info("Class: " + clazz.getName() + " - "
 								+ "Stereotype: " + stereotype.getName());
 						// Generate the interface for this class
-						String compilationUnit = generateInterface(clazz);
+						String compilationUnit = interfaceGenerator
+								.generateInterface(clazz,
+										sourceDirectoryPackageName);
 						generateClassFile(clazz, compilationUnit);
 					}
 				}
@@ -159,28 +133,6 @@ public class SimpleJavaTransformer implements Transformer {
 		} catch (IOException e) {
 			throw new TransformerException(e);
 		}
-	}
-
-	/**
-	 * Generate the Class Interface. This is the main generation part for this
-	 * SimpleJavaTransformer.
-	 * 
-	 * @param Class
-	 *            clazz the UML class
-	 * @return String the complete class with its content as a String
-	 */
-	public String generateInterface(Class clazz) {
-		AST ast = AST.newAST(AST.JLS3);
-		CompilationUnit cu = ast.newCompilationUnit();
-
-		generatePackage(clazz, ast, cu);
-		TypeDeclaration td = generateClass(clazz, ast, cu);
-		generateMethods(clazz, ast, td);
-		generateRelationships(clazz, ast, td);
-		generateGettersSetters(clazz, ast, td);
-
-		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
-		return cu.toString();
 	}
 
 	private void checkStereotypeRootPackage(
@@ -202,82 +154,6 @@ public class SimpleJavaTransformer implements Transformer {
 		org.eclipse.uml2.uml.Package outPackage = packageHelper
 				.getRootPackage(context);
 		return outPackage;
-	}
-
-	@SuppressWarnings("unchecked")
-	private void generateGettersSetters(Class clazz, AST ast, TypeDeclaration td) {
-		// Create getter and setter
-		EList<Property> properties = clazz.getAllAttributes();
-		for (Property property : properties) {
-			MethodDeclaration md = ast.newMethodDeclaration();
-			md.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
-			String getterName = methodHelper.getGetterName(property.getName());
-			md.setName(ast.newSimpleName(getterName));
-			// Return type?
-			Type type = property.getType();
-			String typeName = type.getQualifiedName();
-			logger.info("Type: " + typeName);
-			javaHelper.getType(ast, td, md, type, typeName,
-					sourceDirectoryPackageName);
-
-			// TODO Create setter method for each property
-		}
-	}
-
-	private void generateRelationships(Class clazz, AST ast, TypeDeclaration td) {
-		// TODO Get all the relationships of this class
-
-	}
-
-	@SuppressWarnings("unchecked")
-	private TypeDeclaration generateClass(Class clazz, AST ast,
-			CompilationUnit cu) {
-		String className = getClassName(clazz);
-		TypeDeclaration td = ast.newTypeDeclaration();
-		td.setInterface(true);
-		td.modifiers().add(
-				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
-		td.setName(ast.newSimpleName(className));
-		cu.types().add(td);
-		return td;
-	}
-
-	private void generatePackage(Class clazz, AST ast, CompilationUnit cu) {
-		PackageDeclaration p1 = ast.newPackageDeclaration();
-		String fullPackageName = getFullPackageName(clazz);
-		p1.setName(ast.newName(fullPackageName));
-		cu.setPackage(p1);
-	}
-
-	@SuppressWarnings("unchecked")
-	private void generateMethods(Class clazz, AST ast, TypeDeclaration td) {
-		// Get all methods for this clazz
-		EList<Operation> operations = clazz.getAllOperations();
-		for (Operation operation : operations) {
-			MethodDeclaration md = ast.newMethodDeclaration();
-			md.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
-			md.setName(ast.newSimpleName(operation.getName()));
-			// Return type?
-			Type type = operation.getType();
-			String typeName = type.getQualifiedName();
-			logger.info("Type: " + typeName);
-			javaHelper.getType(ast, td, md, type, typeName,
-					sourceDirectoryPackageName);
-		}
-	}
-
-	private String getClassName(Class clazz) {
-		String className = clazz.getName();
-		logger.info("Classname: " + className);
-		return className;
-	}
-
-	private String getFullPackageName(Class clazz) {
-		String fullPackageName = packageHelper.getFullPackageName(clazz,
-				sourceDirectoryPackageName);
-		return fullPackageName;
 	}
 
 	/**
