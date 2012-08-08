@@ -50,22 +50,23 @@ public class PersonImpl implements Person {
 
 	@Override
 	public void run() {
-		logger.info("We are running the PersonImpl which implements the generated Person interface!");
+		logger.info("We are running the PersonImpl which implements the generated Person interface with: "
+				+ name + " - Company: " + company.getName());
 	}
 
 	@Override
 	public String getName() {
-		return "Lofi";
+		return name;
 	}
 
 	@Override
 	public Address getAddresses() {
-		return null;
+		return addresses;
 	}
 
 	@Override
 	public Company getCompany() {
-		return null;
+		return company;
 	}
 
 	@Override

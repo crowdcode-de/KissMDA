@@ -23,6 +23,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.crowdcode.kissmda.examples.apptest.components.CompanyImpl;
+import de.crowdcode.kissmda.testapp.components.Company;
+
 /**
  * Unit test for PersonImpl class.
  * 
@@ -40,7 +43,12 @@ public class PersonImplTest {
 
 	@Test
 	public void testApp() {
+		Company company = new CompanyImpl();
+		company.setName("CrowdCode");
+		person.setName("Lofi");
+		person.setCompany(company);
 		person.run();
+
 		assertEquals(0, person.calculateAge().intValue());
 		assertEquals(false, person.isInRetirement());
 	}
