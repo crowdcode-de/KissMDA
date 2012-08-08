@@ -34,6 +34,9 @@ public class PersonImpl implements Person {
 
 	private static final Logger logger = Logger.getLogger(PersonImpl.class
 			.getName());
+	private String name;
+	private Address addresses;
+	private Company company;
 
 	@Override
 	public Integer calculateAge() {
@@ -63,5 +66,20 @@ public class PersonImpl implements Person {
 	@Override
 	public Company getCompany() {
 		return null;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public void setAddresses(Address addresses) {
+		this.addresses = addresses;
+	}
+
+	@Override
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 }
