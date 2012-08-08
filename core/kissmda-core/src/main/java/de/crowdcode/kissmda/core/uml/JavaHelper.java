@@ -98,7 +98,7 @@ public class JavaHelper {
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
 		// Primitive or simple type?
-		if (dataTypeUtils.isPrimitiveType(typeName)) {
+		if (typeName.equalsIgnoreCase("void")) {
 			PrimitiveType primitiveType = getAstPrimitiveType(ast,
 					type.getName());
 			SingleVariableDeclaration variableDeclaration = ast

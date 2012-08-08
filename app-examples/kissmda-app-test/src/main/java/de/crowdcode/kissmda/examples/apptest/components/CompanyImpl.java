@@ -26,7 +26,7 @@ public class CompanyImpl implements Company {
 	}
 
 	@Override
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
