@@ -60,6 +60,7 @@ public class JavaHelper {
 		String typeName = packageHelper.removeUmlPrefixes(typeNameInput);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
+		// Only void is primitive, everything else are simple type
 		if (typeName.equalsIgnoreCase("void")) {
 			PrimitiveType primitiveType = getAstPrimitiveType(ast,
 					type.getName());
@@ -97,7 +98,7 @@ public class JavaHelper {
 		String typeName = packageHelper.removeUmlPrefixes(typeNameInput);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
-		// Primitive or simple type?
+		// Only void is primitive, everything else are simple type
 		if (typeName.equalsIgnoreCase("void")) {
 			PrimitiveType primitiveType = getAstPrimitiveType(ast,
 					type.getName());
