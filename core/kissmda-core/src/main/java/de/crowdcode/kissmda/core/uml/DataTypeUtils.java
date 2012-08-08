@@ -67,4 +67,14 @@ public class DataTypeUtils {
 
 		return javaTypes;
 	}
+
+	public boolean isPrimitiveType(String typeName) {
+		Map<String, Code> primitiveTypeCodes = getPrimitiveTypeCodes();
+		Code primitiveTypeCode = primitiveTypeCodes.get(typeName);
+		if (primitiveTypeCode != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

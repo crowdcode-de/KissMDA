@@ -25,7 +25,9 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 
 /**
@@ -52,8 +54,9 @@ public class JavaHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void getType(AST ast, TypeDeclaration td, MethodDeclaration md,
-			Type type, String typeNameInput, String sourceDirectoryPackageName) {
+	public void createReturnType(AST ast, TypeDeclaration td,
+			MethodDeclaration md, Type type, String typeNameInput,
+			String sourceDirectoryPackageName) {
 		String typeName = packageHelper.removeUmlPrefixes(typeNameInput);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
@@ -81,9 +84,43 @@ public class JavaHelper {
 		return tp;
 	}
 
-	private PrimitiveType getAstPrimitiveType(AST ast, String name) {
+	public PrimitiveType getAstPrimitiveType(AST ast, String name) {
 		Code typeCode = dataTypeUtils.getPrimitiveTypeCodes().get(
 				name.toLowerCase());
 		return ast.newPrimitiveType(typeCode);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void createParameterTypes(AST ast, TypeDeclaration td,
+			MethodDeclaration md, Type type, String typeNameInput,
+			String sourceDirectoryPackageName, Property property) {
+		String typeName = packageHelper.removeUmlPrefixes(typeNameInput);
+		typeName = packageHelper.getFullPackageName(typeName,
+				sourceDirectoryPackageName);
+		// Primitive or simple type?
+		if (dataTypeUtils.isPrimitiveType(typeName)) {
+			PrimitiveType primitiveType = getAstPrimitiveType(ast,
+					type.getName());
+			SingleVariableDeclaration variableDeclaration = ast
+					.newSingleVariableDeclaration();
+			variableDeclaration.setType(ast.newPrimitiveType(primitiveType
+					.getPrimitiveTypeCode()));
+			variableDeclaration.setName(ast.newSimpleName(property.getName()));
+			md.parameters().add(variableDeclaration);
+		} else {
+			SimpleType tp = getAstSimpleType(ast, typeName);
+			SingleVariableDeclaration variableDeclaration = ast
+					.newSingleVariableDeclaration();
+			variableDeclaration.setType(tp);
+			variableDeclaration.setName(ast.newSimpleName(property.getName()));
+			md.parameters().add(variableDeclaration);
+		}
+	}
+
+	public String getClassName(final String fullClassName) {
+		int lastIndexPoint = fullClassName.lastIndexOf(".");
+		String resultClassName = fullClassName.substring(lastIndexPoint + 1,
+				fullClassName.length());
+		return resultClassName;
 	}
 }

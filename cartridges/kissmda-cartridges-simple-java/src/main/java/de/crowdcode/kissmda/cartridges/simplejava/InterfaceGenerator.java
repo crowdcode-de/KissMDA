@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Operation;
@@ -110,19 +111,31 @@ public class InterfaceGenerator {
 		// Create getter and setter
 		EList<Property> properties = clazz.getAllAttributes();
 		for (Property property : properties) {
-			MethodDeclaration md = ast.newMethodDeclaration();
-			md.modifiers().add(
+			MethodDeclaration mdGetter = ast.newMethodDeclaration();
+			mdGetter.modifiers().add(
 					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 			String getterName = methodHelper.getGetterName(property.getName());
-			md.setName(ast.newSimpleName(getterName));
+			mdGetter.setName(ast.newSimpleName(getterName));
 			// Return type?
 			Type type = property.getType();
 			String typeName = type.getQualifiedName();
-			logger.info("Type: " + typeName);
-			javaHelper.getType(ast, td, md, type, typeName,
+			javaHelper.createReturnType(ast, td, mdGetter, type, typeName,
 					sourceDirectoryPackageName);
 
-			// TODO Create setter method for each property
+			// Create setter method for each property
+			MethodDeclaration mdSetter = ast.newMethodDeclaration();
+			mdSetter.modifiers().add(
+					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+			String setterName = methodHelper.getSetterName(property.getName());
+			mdSetter.setName(ast.newSimpleName(setterName));
+			// Return type void
+			PrimitiveType primitiveType = javaHelper.getAstPrimitiveType(ast,
+					"void");
+			mdSetter.setReturnType2(primitiveType);
+			td.bodyDeclarations().add(mdSetter);
+			// Params
+			javaHelper.createParameterTypes(ast, td, mdSetter, type, typeName,
+					sourceDirectoryPackageName, property);
 		}
 	}
 
@@ -164,7 +177,7 @@ public class InterfaceGenerator {
 			Type type = operation.getType();
 			String typeName = type.getQualifiedName();
 			logger.info("Type: " + typeName);
-			javaHelper.getType(ast, td, md, type, typeName,
+			javaHelper.createReturnType(ast, td, md, type, typeName,
 					sourceDirectoryPackageName);
 		}
 	}
