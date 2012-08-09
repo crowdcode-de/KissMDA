@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.core.uml;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -264,6 +265,7 @@ public class UmlHelper {
 	 *            The NamedElement the dependencies should be collected
 	 * @return An <code>EList</code> with all collected dependencies
 	 */
+	@SuppressWarnings("unchecked")
 	public EList<Dependency> getAllDependencies(NamedElement element) {
 		EList<Dependency> dependencies = new UniqueEList<Dependency>();
 
@@ -271,8 +273,9 @@ public class UmlHelper {
 		if (element instanceof org.eclipse.uml2.uml.Class) {
 			Class clazz = (Class) element;
 			for (int i = 0; i < clazz.getImplementedInterfaces().size(); i++) {
-				dependencies.addAll(getAllInterfaceAssociations(clazz
-						.getImplementedInterfaces().get(i)));
+				dependencies
+						.addAll((Collection<? extends Dependency>) getAllInterfaceAssociations(clazz
+								.getImplementedInterfaces().get(i)));
 			}
 		}
 
@@ -338,8 +341,8 @@ public class UmlHelper {
 	 *            The interface to collect the operations from
 	 * @return An <code>EList</code> with all collected operations
 	 */
-	private EList getAllInterfaceOperations(Interface iFace) {
-		EList operations = new UniqueEList();
+	private EList<Operation> getAllInterfaceOperations(Interface iFace) {
+		EList<Operation> operations = new UniqueEList<Operation>();
 
 		operations.addAll(iFace.getAllOperations());
 		if (iFace.getGeneralizations().size() > 0) {
@@ -359,8 +362,8 @@ public class UmlHelper {
 	 *            The interface to collect the associations from
 	 * @return An <code>EList</code> with all collected associations
 	 */
-	private EList getAllInterfaceAssociations(Interface iFace) {
-		EList associations = new UniqueEList();
+	private EList<Association> getAllInterfaceAssociations(Interface iFace) {
+		EList<Association> associations = new UniqueEList<Association>();
 
 		associations.addAll(iFace.getAssociations());
 		if (iFace.getGeneralizations().size() > 0) {
@@ -373,15 +376,16 @@ public class UmlHelper {
 		return associations;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String formatComment(Element element, String prefix,
 			String propertyFileName) {
 		String comment = "";
 		EList comments = new BasicEList();
 
 		createAnnotationSourceKey(propertyFileName);
-		for (Iterator iter = annotationSourceKeyMap.keySet().iterator(); iter
+		for (Iterator<String> iter = annotationSourceKeyMap.keySet().iterator(); iter
 				.hasNext();) {
-			String source = (String) iter.next();
+			String source = iter.next();
 			String key = annotationSourceKeyMap.get(source);
 			comment = findDocumentationAnnotation(element, source, key);
 			if (comment != null) {
@@ -394,6 +398,7 @@ public class UmlHelper {
 		} else {
 			comments = element.getOwnedComments();
 		}
+
 		return getFormatedComment(comments, prefix, null);
 	}
 
@@ -406,7 +411,7 @@ public class UmlHelper {
 			return false;
 		}
 
-		annotationSourceKeyMap = new HashMap();
+		annotationSourceKeyMap = new HashMap<String, String>();
 		items = propertyFileName.split(",");
 		for (int i = 0; i < items.length; i++) {
 			String item = items[i];
@@ -434,7 +439,7 @@ public class UmlHelper {
 		String comment = null;
 
 		if (ea != null) {
-			EMap details = ea.getDetails();
+			EMap<?, ?> details = ea.getDetails();
 			if (details != null && !details.isEmpty()
 					&& details.get("documentation") != null) {
 				comment = details.get("documentation").toString();
@@ -456,6 +461,7 @@ public class UmlHelper {
 	 * @param propertyFileName
 	 * @return The line in the comment describing given parameter
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String formatParameterComment(Parameter parameter, String prefix,
 			String annotation, String propertyFileName) {
 		String comment = "";
@@ -524,7 +530,7 @@ public class UmlHelper {
 		}
 	}
 
-	private String getFormatedComment(EList comments, String prefix,
+	private String getFormatedComment(EList<?> comments, String prefix,
 			String annotation) {
 		String s = "";
 
@@ -575,13 +581,13 @@ public class UmlHelper {
 	 * @return theList
 	 * @since 2.1.0
 	 */
-	public EList convertStringToList(String theString, String delimiter) {
+	public EList<String> convertStringToList(String theString, String delimiter) {
 		if (delimiter == null || delimiter.equals("")) {
 			delimiter = ",";
 		}
 
 		StringTokenizer tokenizer = new StringTokenizer(theString, delimiter);
-		EList theList = new UniqueEList(tokenizer.countTokens());
+		EList<String> theList = new UniqueEList<String>(tokenizer.countTokens());
 
 		String currentToken = null;
 		while (tokenizer.hasMoreTokens()) {
