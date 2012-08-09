@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Property;
@@ -39,6 +40,7 @@ import org.eclipse.uml2.uml.Type;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.jdt.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
+import de.crowdcode.kissmda.core.uml.UmlHelper;
 
 /**
  * Generate Interface from UML class.
@@ -67,6 +69,9 @@ public class InterfaceGenerator {
 	@Inject
 	private PackageHelper packageHelper;
 
+	@Inject
+	private UmlHelper umlHelper;
+
 	private String sourceDirectoryPackageName;
 
 	public void setMethodHelper(MethodHelper methodHelper) {
@@ -75,6 +80,10 @@ public class InterfaceGenerator {
 
 	public void setJdtHelper(JdtHelper javaHelper) {
 		this.jdtHelper = javaHelper;
+	}
+
+	public void setUmlHelper(UmlHelper umlHelper) {
+		this.umlHelper = umlHelper;
 	}
 
 	public void setPackageHelper(PackageHelper packageHelper) {
@@ -99,7 +108,7 @@ public class InterfaceGenerator {
 		generatePackage(clazz, ast, cu);
 		TypeDeclaration td = generateClass(clazz, ast, cu);
 		generateMethods(clazz, ast, td);
-		generateRelationships(clazz, ast, td);
+		generateAssociations(clazz, ast, td);
 		generateGettersSetters(clazz, ast, td);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
@@ -142,9 +151,12 @@ public class InterfaceGenerator {
 		}
 	}
 
-	private void generateRelationships(Class clazz, AST ast, TypeDeclaration td) {
-		// TODO Get all the relationships of this class
-
+	private void generateAssociations(Class clazz, AST ast, TypeDeclaration td) {
+		// TODO Get all the relationships/associations of this class
+		EList<Association> associations = umlHelper.getAllAssociations(clazz);
+		for (Association association : associations) {
+			logger.info("Association: " + association.toString());
+		}
 	}
 
 	@SuppressWarnings("unchecked")

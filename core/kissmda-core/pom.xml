@@ -33,6 +33,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.eclipse.uml2</groupId>
 			<artifactId>org.eclipse.uml2.uml.resources</artifactId>
 			<version>3.1.0.v201005031530</version>

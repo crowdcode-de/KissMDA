@@ -35,6 +35,7 @@ import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.jdt.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 import de.crowdcode.kissmda.core.uml.ReaderWriter;
+import de.crowdcode.kissmda.core.uml.UmlHelper;
 
 /**
  * Unit test for simple Transformer.
@@ -53,7 +54,8 @@ public class SimpleJavaTransformerTest {
 	private ReaderWriter readerWriter;
 	private FileWriter fileWriter;
 	private DataTypeUtils dataTypeUtils;
-	private JdtHelper javaHelper;
+	private JdtHelper jdtHelper;
+	private UmlHelper umlHelper;
 	private InterfaceGenerator interfaceGenerator;
 
 	@Before
@@ -63,14 +65,16 @@ public class SimpleJavaTransformerTest {
 		methodHelper = new MethodHelper();
 		fileWriter = new FileWriter();
 		dataTypeUtils = new DataTypeUtils();
-		javaHelper = new JdtHelper();
-		javaHelper.setDataTypeUtils(dataTypeUtils);
-		javaHelper.setPackageHelper(packageHelper);
+		jdtHelper = new JdtHelper();
+		jdtHelper.setDataTypeUtils(dataTypeUtils);
+		jdtHelper.setPackageHelper(packageHelper);
+		umlHelper = new UmlHelper();
 		packageHelper.setReaderWriter(readerWriter);
 		interfaceGenerator = new InterfaceGenerator();
-		interfaceGenerator.setJdtHelper(javaHelper);
+		interfaceGenerator.setJdtHelper(jdtHelper);
 		interfaceGenerator.setMethodHelper(methodHelper);
 		interfaceGenerator.setPackageHelper(packageHelper);
+		interfaceGenerator.setUmlHelper(umlHelper);
 		simpleJavaTransformer = new SimpleJavaTransformer();
 		simpleJavaTransformer.setPackageHelper(packageHelper);
 		simpleJavaTransformer.setFileWriter(fileWriter);
