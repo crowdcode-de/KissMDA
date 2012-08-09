@@ -155,7 +155,8 @@ public class InterfaceGenerator {
 		// TODO Get all the relationships/associations of this class
 		EList<Association> associations = umlHelper.getAllAssociations(clazz);
 		for (Association association : associations) {
-			logger.info("Association: " + association.toString());
+			logger.info("Association for Class: " + clazz.getName() + " - "
+					+ association.toString());
 		}
 	}
 
