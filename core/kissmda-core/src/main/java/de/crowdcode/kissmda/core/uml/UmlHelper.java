@@ -18,7 +18,6 @@
  */
 package de.crowdcode.kissmda.core.uml;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -273,9 +272,8 @@ public class UmlHelper {
 		if (element instanceof org.eclipse.uml2.uml.Class) {
 			Class clazz = (Class) element;
 			for (int i = 0; i < clazz.getImplementedInterfaces().size(); i++) {
-				dependencies
-						.addAll((Collection<? extends Dependency>) getAllInterfaceAssociations(clazz
-								.getImplementedInterfaces().get(i)));
+				dependencies.addAll(getAllInterfaceAssociations(clazz
+						.getImplementedInterfaces().get(i)));
 			}
 		}
 
@@ -298,6 +296,7 @@ public class UmlHelper {
 	 *            The classifier the associations should be collected
 	 * @return An <code>EList</code> with all collected associations
 	 */
+	@SuppressWarnings("unchecked")
 	public EList<Association> getAllAssociations(Classifier classifier) {
 		EList<Association> associations = new UniqueEList<Association>();
 
@@ -362,8 +361,9 @@ public class UmlHelper {
 	 *            The interface to collect the associations from
 	 * @return An <code>EList</code> with all collected associations
 	 */
-	private EList<Association> getAllInterfaceAssociations(Interface iFace) {
-		EList<Association> associations = new UniqueEList<Association>();
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private EList getAllInterfaceAssociations(Interface iFace) {
+		EList associations = new UniqueEList();
 
 		associations.addAll(iFace.getAssociations());
 		if (iFace.getGeneralizations().size() > 0) {
