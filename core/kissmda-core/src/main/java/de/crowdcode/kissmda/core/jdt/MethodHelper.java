@@ -16,32 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.core.uml;
-
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
+package de.crowdcode.kissmda.core.jdt;
 
 /**
- * Unit test for Java Helper.
+ * Method Helper class for Java language.
  * 
  * @author Lofi Dewanto
+ * @since 1.0.0
  * @version 1.0.0
  */
-public class JavaHelperTest {
+public class MethodHelper {
 
-	private JavaHelper javaHelper;
-
-	@Before
-	public void setUp() throws Exception {
-		javaHelper = new JavaHelper();
+	public String getGetterName(String name) {
+		String getter = "get" + name.substring(0, 1).toUpperCase()
+				+ name.substring(1);
+		return getter;
 	}
 
-	@Test
-	public void testGetClassName() {
-		String name = javaHelper
-				.getClassName("de.crowdcode.kissmda.testapp.Person");
-		assertEquals("Person", name);
+	public String getSetterName(String name) {
+		String setter = "set" + name.substring(0, 1).toUpperCase()
+				+ name.substring(1);
+		return setter;
 	}
 }

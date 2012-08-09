@@ -16,12 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.core.uml;
+package de.crowdcode.kissmda.core.jdt;
 
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
 
 /**
  * Unit test for Data Type Utils.

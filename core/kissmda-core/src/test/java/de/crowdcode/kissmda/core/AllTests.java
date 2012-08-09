@@ -23,7 +23,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import de.crowdcode.kissmda.core.file.FileWriterTest;
-import de.crowdcode.kissmda.core.uml.MethodHelperTest;
+import de.crowdcode.kissmda.core.jdt.MethodHelperTest;
 import de.crowdcode.kissmda.core.uml.PackageHelperTest;
 import de.crowdcode.kissmda.core.uml.ReaderWriterTest;
 

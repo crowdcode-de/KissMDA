@@ -36,8 +36,8 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 
-import de.crowdcode.kissmda.core.uml.JavaHelper;
-import de.crowdcode.kissmda.core.uml.MethodHelper;
+import de.crowdcode.kissmda.core.jdt.JdtHelper;
+import de.crowdcode.kissmda.core.jdt.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -62,7 +62,7 @@ public class InterfaceGenerator {
 	private MethodHelper methodHelper;
 
 	@Inject
-	private JavaHelper javaHelper;
+	private JdtHelper jdtHelper;
 
 	@Inject
 	private PackageHelper packageHelper;
@@ -73,8 +73,8 @@ public class InterfaceGenerator {
 		this.methodHelper = methodHelper;
 	}
 
-	public void setJavaHelper(JavaHelper javaHelper) {
-		this.javaHelper = javaHelper;
+	public void setJdtHelper(JdtHelper javaHelper) {
+		this.jdtHelper = javaHelper;
 	}
 
 	public void setPackageHelper(PackageHelper packageHelper) {
@@ -118,9 +118,10 @@ public class InterfaceGenerator {
 			mdGetter.setName(ast.newSimpleName(getterName));
 			// Return type?
 			Type type = property.getType();
-			String typeName = type.getQualifiedName();
-			javaHelper.createReturnType(ast, td, mdGetter, type, typeName,
-					sourceDirectoryPackageName);
+			String umlTypeName = type.getName();
+			String umlQualifiedTypeName = type.getQualifiedName();
+			jdtHelper.createReturnType(ast, td, mdGetter, umlTypeName,
+					umlQualifiedTypeName, sourceDirectoryPackageName);
 
 			// Create setter method for each property
 			MethodDeclaration mdSetter = ast.newMethodDeclaration();
@@ -129,13 +130,15 @@ public class InterfaceGenerator {
 			String setterName = methodHelper.getSetterName(property.getName());
 			mdSetter.setName(ast.newSimpleName(setterName));
 			// Return type void
-			PrimitiveType primitiveType = javaHelper.getAstPrimitiveType(ast,
+			PrimitiveType primitiveType = jdtHelper.getAstPrimitiveType(ast,
 					"void");
 			mdSetter.setReturnType2(primitiveType);
 			td.bodyDeclarations().add(mdSetter);
 			// Params
-			javaHelper.createParameterTypes(ast, td, mdSetter, type, typeName,
-					sourceDirectoryPackageName, property);
+			String umlPropertyName = property.getName();
+			jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
+					umlQualifiedTypeName, umlPropertyName,
+					sourceDirectoryPackageName);
 		}
 	}
 
@@ -175,10 +178,11 @@ public class InterfaceGenerator {
 			md.setName(ast.newSimpleName(operation.getName()));
 			// Return type?
 			Type type = operation.getType();
-			String typeName = type.getQualifiedName();
-			logger.info("Type: " + typeName);
-			javaHelper.createReturnType(ast, td, md, type, typeName,
-					sourceDirectoryPackageName);
+			String umlTypeName = type.getName();
+			String umlQualifiedTypeName = type.getQualifiedName();
+			logger.info("Type: " + umlQualifiedTypeName);
+			jdtHelper.createReturnType(ast, td, md, umlTypeName,
+					umlQualifiedTypeName, sourceDirectoryPackageName);
 		}
 	}
 

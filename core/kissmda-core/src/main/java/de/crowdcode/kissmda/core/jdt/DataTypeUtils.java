@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.core.uml;
+package de.crowdcode.kissmda.core.jdt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 
 /**
- * Data Type Helper class for UML.
+ * Data Type Helper class for Java language with JDT.
  * 
  * @author Lofi Dewanto
  * @since 1.0.0

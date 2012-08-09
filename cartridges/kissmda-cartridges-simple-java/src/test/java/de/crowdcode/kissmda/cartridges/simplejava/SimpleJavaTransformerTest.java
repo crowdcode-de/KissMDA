@@ -30,9 +30,9 @@ import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.StandardContext;
 import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.file.FileWriter;
-import de.crowdcode.kissmda.core.uml.DataTypeUtils;
-import de.crowdcode.kissmda.core.uml.JavaHelper;
-import de.crowdcode.kissmda.core.uml.MethodHelper;
+import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
+import de.crowdcode.kissmda.core.jdt.JdtHelper;
+import de.crowdcode.kissmda.core.jdt.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 import de.crowdcode.kissmda.core.uml.ReaderWriter;
 
@@ -53,7 +53,7 @@ public class SimpleJavaTransformerTest {
 	private ReaderWriter readerWriter;
 	private FileWriter fileWriter;
 	private DataTypeUtils dataTypeUtils;
-	private JavaHelper javaHelper;
+	private JdtHelper javaHelper;
 	private InterfaceGenerator interfaceGenerator;
 
 	@Before
@@ -63,12 +63,12 @@ public class SimpleJavaTransformerTest {
 		methodHelper = new MethodHelper();
 		fileWriter = new FileWriter();
 		dataTypeUtils = new DataTypeUtils();
-		javaHelper = new JavaHelper();
+		javaHelper = new JdtHelper();
 		javaHelper.setDataTypeUtils(dataTypeUtils);
 		javaHelper.setPackageHelper(packageHelper);
 		packageHelper.setReaderWriter(readerWriter);
 		interfaceGenerator = new InterfaceGenerator();
-		interfaceGenerator.setJavaHelper(javaHelper);
+		interfaceGenerator.setJdtHelper(javaHelper);
 		interfaceGenerator.setMethodHelper(methodHelper);
 		interfaceGenerator.setPackageHelper(packageHelper);
 		simpleJavaTransformer = new SimpleJavaTransformer();

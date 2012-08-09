@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.core.uml;
+package de.crowdcode.kissmda.core.jdt;
 
 import javax.inject.Inject;
 
@@ -27,17 +27,17 @@ import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
+
+import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
- * Java Helper class for UML.
+ * Helper class for JDT.
  * 
  * @author Lofi Dewanto
  * @since 1.0.0
  * @version 1.0.0
  */
-public class JavaHelper {
+public class JdtHelper {
 
 	@Inject
 	private PackageHelper packageHelper;
@@ -55,15 +55,14 @@ public class JavaHelper {
 
 	@SuppressWarnings("unchecked")
 	public void createReturnType(AST ast, TypeDeclaration td,
-			MethodDeclaration md, Type type, String typeNameInput,
-			String sourceDirectoryPackageName) {
-		String typeName = packageHelper.removeUmlPrefixes(typeNameInput);
+			MethodDeclaration md, String umlTypeName,
+			String umlQualifiedTypeName, String sourceDirectoryPackageName) {
+		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
 		// Only void is primitive, everything else are simple type
 		if (typeName.equalsIgnoreCase("void")) {
-			PrimitiveType primitiveType = getAstPrimitiveType(ast,
-					type.getName());
+			PrimitiveType primitiveType = getAstPrimitiveType(ast, umlTypeName);
 			md.setReturnType2(primitiveType);
 			td.bodyDeclarations().add(md);
 		} else {
@@ -93,27 +92,27 @@ public class JavaHelper {
 
 	@SuppressWarnings("unchecked")
 	public void createParameterTypes(AST ast, TypeDeclaration td,
-			MethodDeclaration md, Type type, String typeNameInput,
-			String sourceDirectoryPackageName, Property property) {
-		String typeName = packageHelper.removeUmlPrefixes(typeNameInput);
+			MethodDeclaration md, String umlTypeName,
+			String umlQualifiedTypeName, String umlPropertyName,
+			String sourceDirectoryPackageName) {
+		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
 		// Only void is primitive, everything else are simple type
 		if (typeName.equalsIgnoreCase("void")) {
-			PrimitiveType primitiveType = getAstPrimitiveType(ast,
-					type.getName());
+			PrimitiveType primitiveType = getAstPrimitiveType(ast, umlTypeName);
 			SingleVariableDeclaration variableDeclaration = ast
 					.newSingleVariableDeclaration();
 			variableDeclaration.setType(ast.newPrimitiveType(primitiveType
 					.getPrimitiveTypeCode()));
-			variableDeclaration.setName(ast.newSimpleName(property.getName()));
+			variableDeclaration.setName(ast.newSimpleName(umlPropertyName));
 			md.parameters().add(variableDeclaration);
 		} else {
 			SimpleType tp = getAstSimpleType(ast, typeName);
 			SingleVariableDeclaration variableDeclaration = ast
 					.newSingleVariableDeclaration();
 			variableDeclaration.setType(tp);
-			variableDeclaration.setName(ast.newSimpleName(property.getName()));
+			variableDeclaration.setName(ast.newSimpleName(umlPropertyName));
 			md.parameters().add(variableDeclaration);
 		}
 	}
