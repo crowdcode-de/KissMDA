@@ -72,7 +72,7 @@ public class JdtHelper {
 		}
 	}
 
-	private SimpleType getAstSimpleType(AST ast, String typeName) {
+	public SimpleType getAstSimpleType(AST ast, String typeName) {
 		String javaType = dataTypeUtils.getJavaTypes().get(
 				typeName.toLowerCase());
 		SimpleType tp = null;
@@ -84,9 +84,9 @@ public class JdtHelper {
 		return tp;
 	}
 
-	public PrimitiveType getAstPrimitiveType(AST ast, String name) {
+	public PrimitiveType getAstPrimitiveType(AST ast, String typeName) {
 		Code typeCode = dataTypeUtils.getPrimitiveTypeCodes().get(
-				name.toLowerCase());
+				typeName.toLowerCase());
 		return ast.newPrimitiveType(typeCode);
 	}
 
