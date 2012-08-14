@@ -54,7 +54,7 @@ public class SimpleJavaTransformer implements Transformer {
 	private static final Logger logger = Logger
 			.getLogger(SimpleJavaTransformer.class.getName());
 
-	private static final String STEREOTYPE_INTERFACE = "Interface";
+	private static final String STEREOTYPE_ENTITY = "Entity";
 
 	private static final String STEREOTYPE_SOURCEDIRECTORY = "SourceDirectory";
 
@@ -115,7 +115,7 @@ public class SimpleJavaTransformer implements Transformer {
 						logger.info("SourceDirectory package name: "
 								+ sourceDirectoryPackageName);
 					}
-					if (stereotype.getName().equals(STEREOTYPE_INTERFACE)) {
+					if (stereotype.getName().equals(STEREOTYPE_ENTITY)) {
 						// Stereotype Interface
 						Class clazz = (Class) element;
 						logger.info("Class: " + clazz.getName() + " - "

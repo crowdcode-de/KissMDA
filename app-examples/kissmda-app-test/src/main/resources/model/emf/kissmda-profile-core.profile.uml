@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Profile xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_17_0_1_2_7e40267_1336479729046_679021_1682" name="kissmda-profile-core" metamodelReference="_17_0_1_2_7e40267_1336479729046_291557_1683">
-  <eAnnotations xmi:id="_GNEwYdr5EeGCA99SNr_isA" source="http://www.eclipse.org/uml2/2.0.0/UML">
-    <contents xmi:type="ecore:EPackage" xmi:id="_GNEwYtr5EeGCA99SNr_isA" name="kissmdaprofilecore" nsURI="http:///schemas/kissmdaprofilecore/_GDFt8dr5EeGCA99SNr_isA/0" nsPrefix="kissmdaprofilecore">
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_GNEwY9r5EeGCA99SNr_isA" name="Interface">
-        <eAnnotations xmi:id="_GNEwZNr5EeGCA99SNr_isA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_17_0_1_2_7e40267_1336479766687_497288_1684"/>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_GNEwZdr5EeGCA99SNr_isA" name="base_Class" ordered="false" lowerBound="1">
+  <eAnnotations xmi:id="_C8PKF-YjEeGEZqszJ1tuJA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_C8PKGOYjEeGEZqszJ1tuJA" name="kissmdaprofilecore" nsURI="http:///schemas/kissmdaprofilecore/_CxNl0OYjEeGEZqszJ1tuJA/0" nsPrefix="kissmdaprofilecore">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_C8PKGeYjEeGEZqszJ1tuJA" name="Entity">
+        <eAnnotations xmi:id="_C8PKGuYjEeGEZqszJ1tuJA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_17_0_1_2_7e40267_1336479766687_497288_1684"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_C8PKG-YjEeGEZqszJ1tuJA" name="base_Class" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Class"/>
         </eStructuralFeatures>
       </eClassifiers>
-      <eClassifiers xmi:type="ecore:EClass" xmi:id="_GNEwZ9r5EeGCA99SNr_isA" name="SourceDirectory">
-        <eAnnotations xmi:id="_GNEwaNr5EeGCA99SNr_isA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_17_0_1_2_7e40267_1340613045061_456585_1721"/>
-        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_GNEwadr5EeGCA99SNr_isA" name="base_Package" ordered="false" lowerBound="1">
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_C8PKHeYjEeGEZqszJ1tuJA" name="SourceDirectory">
+        <eAnnotations xmi:id="_C8PKHuYjEeGEZqszJ1tuJA" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_17_0_1_2_7e40267_1340613045061_456585_1721"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_C8PKH-YjEeGEZqszJ1tuJA" name="base_Package" ordered="false" lowerBound="1">
           <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/3.0.0/UML#//Package"/>
         </eStructuralFeatures>
       </eClassifiers>
@@ -26,7 +26,7 @@
   <packageImport xmi:id="_0javaPrimitiveTypeskissmda-profile-core">
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#_0"/>
   </packageImport>
-  <packagedElement xmi:type="uml:Stereotype" xmi:id="_17_0_1_2_7e40267_1336479766687_497288_1684" name="Interface">
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_17_0_1_2_7e40267_1336479766687_497288_1684" name="Entity">
     <ownedAttribute xmi:id="_17_0_1_2_7e40267_1336480459015_707349_1888" name="base_Class" visibility="private" association="_17_0_1_2_7e40267_1336480459015_320065_1887">
       <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Class"/>
     </ownedAttribute>
