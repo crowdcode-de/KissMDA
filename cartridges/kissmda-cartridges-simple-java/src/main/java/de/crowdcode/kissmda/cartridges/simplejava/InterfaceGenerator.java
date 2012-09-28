@@ -157,6 +157,10 @@ public class InterfaceGenerator {
 		for (Association association : associations) {
 			logger.info("Association for Class: " + clazz.getName() + " - "
 					+ association.toString());
+			EList<Property> memberEnds = association.getMemberEnds();
+			for (Property memberEnd : memberEnds) {
+				logger.info("Member end: " + memberEnd.getName());
+			}
 		}
 	}
 
