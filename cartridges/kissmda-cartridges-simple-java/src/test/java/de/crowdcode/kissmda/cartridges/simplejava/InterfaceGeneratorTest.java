@@ -19,9 +19,17 @@
 package de.crowdcode.kissmda.cartridges.simplejava;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.uml2.uml.Class;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.crowdcode.kissmda.core.uml.UmlHelper;
 
 /**
  * Test Interface Generator.
@@ -32,8 +40,15 @@ import org.junit.Test;
  */
 public class InterfaceGeneratorTest {
 
+	private InterfaceGenerator interfaceGenerator;
+
+	private UmlHelper umlHelper;
+
 	@Before
 	public void setUp() throws Exception {
+		interfaceGenerator = new InterfaceGenerator();
+		umlHelper = new UmlHelper();
+		interfaceGenerator.setUmlHelper(umlHelper);
 	}
 
 	@Test
@@ -41,8 +56,21 @@ public class InterfaceGeneratorTest {
 		assertTrue(true);
 	}
 
-	@Test
+	@SuppressWarnings("unchecked")
 	public void testGenerateAssociations() {
+		Class clazz = mock(Class.class);
+		when(clazz.getQualifiedName()).thenReturn(
+				"Data::de::crowdcode::test::Company");
+
+		AST ast = AST.newAST(AST.JLS3);
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		td.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+		td.setName(ast.newSimpleName("Company"));
+
+		interfaceGenerator.generateAssociations(clazz, ast, td);
+
 		assertTrue(true);
 	}
 }
