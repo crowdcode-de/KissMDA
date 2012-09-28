@@ -160,6 +160,11 @@ public class InterfaceGenerator {
 			for (Property memberEnd : memberEnds) {
 				logger.info("Member end: " + memberEnd.getName());
 				// TODO Generate getter for each member ends
+				// Return type: one - the class
+				// Return type: many - collection of the class
+				String getterMemberEndName = methodHelper
+						.getGetterName(memberEnd.getName());
+				logger.info("Member end Getter: " + getterMemberEndName);
 				// TODO Generate adder for member end which has *-relationship
 				// TODO Generate setter for member end which has 1-relationship
 			}
