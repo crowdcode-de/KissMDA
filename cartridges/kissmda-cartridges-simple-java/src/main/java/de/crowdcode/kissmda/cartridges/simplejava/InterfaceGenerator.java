@@ -151,7 +151,7 @@ public class InterfaceGenerator {
 		}
 	}
 
-	private void generateAssociations(Class clazz, AST ast, TypeDeclaration td) {
+	public void generateAssociations(Class clazz, AST ast, TypeDeclaration td) {
 		// TODO Get all the relationships/associations of this class
 		EList<Association> associations = umlHelper.getAllAssociations(clazz);
 		for (Association association : associations) {

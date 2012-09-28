@@ -18,19 +18,31 @@
  */
 package de.crowdcode.kissmda.cartridges.simplejava;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- * Test suite.
+ * Test Interface Generator.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
  * @since 1.0.0
  */
-@RunWith(Suite.class)
-@SuiteClasses({ SimpleJavaModuleTest.class, SimpleJavaTransformerTest.class,
-		InterfaceGeneratorTest.class })
-public class AllTests {
+public class InterfaceGeneratorTest {
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@Test
+	public void testGenerateInterface() {
+		assertTrue(true);
+	}
+
+	@Test
+	public void testGenerateAssociations() {
+		assertTrue(true);
+	}
 }
