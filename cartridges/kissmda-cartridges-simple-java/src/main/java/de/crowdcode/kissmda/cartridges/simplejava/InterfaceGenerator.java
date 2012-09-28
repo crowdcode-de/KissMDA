@@ -152,7 +152,6 @@ public class InterfaceGenerator {
 	}
 
 	public void generateAssociations(Class clazz, AST ast, TypeDeclaration td) {
-		// TODO Get all the relationships/associations of this class
 		EList<Association> associations = umlHelper.getAllAssociations(clazz);
 		for (Association association : associations) {
 			logger.info("Association for Class: " + clazz.getName() + " - "
@@ -160,6 +159,9 @@ public class InterfaceGenerator {
 			EList<Property> memberEnds = association.getMemberEnds();
 			for (Property memberEnd : memberEnds) {
 				logger.info("Member end: " + memberEnd.getName());
+				// TODO Generate getter for each member ends
+				// TODO Generate adder for member end which has *-relationship
+				// TODO Generate setter for member end which has 1-relationship
 			}
 		}
 	}
