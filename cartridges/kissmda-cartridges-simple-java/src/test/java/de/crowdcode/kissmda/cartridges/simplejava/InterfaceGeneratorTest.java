@@ -22,10 +22,14 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Interface;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,10 +61,18 @@ public class InterfaceGeneratorTest {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Test
 	public void testGenerateAssociations() {
 		Class clazz = mock(Class.class);
+
 		when(clazz.getQualifiedName()).thenReturn(
 				"Data::de::crowdcode::test::Company");
+
+		EList<Association> associations = new UniqueEList<Association>();
+		when(clazz.getAssociations()).thenReturn(associations);
+
+		EList<Interface> interfaces = new UniqueEList<Interface>();
+		when(clazz.getImplementedInterfaces()).thenReturn(interfaces);
 
 		AST ast = AST.newAST(AST.JLS3);
 		TypeDeclaration td = ast.newTypeDeclaration();
