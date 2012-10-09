@@ -151,6 +151,7 @@ public class InterfaceGenerator {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void generateAssociations(Class clazz, AST ast, TypeDeclaration td) {
 		EList<Association> associations = umlHelper.getAllAssociations(clazz);
 		for (Association association : associations) {
@@ -160,11 +161,23 @@ public class InterfaceGenerator {
 			for (Property memberEnd : memberEnds) {
 				logger.info("Member end: " + memberEnd.getName());
 				// TODO Generate getter for each member ends
-				// Return type: one - the class
-				// Return type: many - collection of the class
 				String getterMemberEndName = methodHelper
 						.getGetterName(memberEnd.getName());
 				logger.info("Member end Getter: " + getterMemberEndName);
+				MethodDeclaration mdGetter = ast.newMethodDeclaration();
+				mdGetter.modifiers()
+						.add(ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+				mdGetter.setName(ast.newSimpleName(getterMemberEndName));
+
+				// Return type: one relationship - the class
+				logger.info("Member getQualifiedName: "
+						+ memberEnd.getQualifiedName());
+				jdtHelper.createReturnType(ast, td, mdGetter,
+						memberEnd.getName(), memberEnd.getName(),
+						getterMemberEndName);
+
+				// Return type: many relationship - collection of the class
+
 				// TODO Generate adder for member end which has *-relationship
 				// TODO Generate setter for member end which has 1-relationship
 			}
