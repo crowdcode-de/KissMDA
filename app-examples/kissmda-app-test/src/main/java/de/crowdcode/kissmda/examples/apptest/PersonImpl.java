@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.examples.apptest;
 
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import de.crowdcode.kissmda.testapp.Address;
@@ -35,7 +36,7 @@ public class PersonImpl implements Person {
 	private static final Logger logger = Logger.getLogger(PersonImpl.class
 			.getName());
 	private String name;
-	private Address addresses;
+	private Collection<Address> addresses;
 	private Company company;
 
 	@Override
@@ -60,11 +61,6 @@ public class PersonImpl implements Person {
 	}
 
 	@Override
-	public Address getAddresses() {
-		return addresses;
-	}
-
-	@Override
 	public Company getCompany() {
 		return company;
 	}
@@ -75,12 +71,18 @@ public class PersonImpl implements Person {
 	}
 
 	@Override
-	public void setAddresses(Address addresses) {
-		this.addresses = addresses;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	@Override
-	public void setCompany(Company company) {
-		this.company = company;
+	public void addAddresses(Address address) {
+		addresses.add(address);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Collection getAddresses() {
+		return addresses;
 	}
 }

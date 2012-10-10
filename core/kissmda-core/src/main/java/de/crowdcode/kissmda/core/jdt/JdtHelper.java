@@ -80,7 +80,7 @@ public class JdtHelper {
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
 		// Create Collection
-		SimpleType tp = ast.newSimpleType(ast.newName("Collection"));
+		SimpleType tp = ast.newSimpleType(ast.newName("java.util.Collection"));
 		md.setReturnType2(tp);
 		td.bodyDeclarations().add(md);
 	}
