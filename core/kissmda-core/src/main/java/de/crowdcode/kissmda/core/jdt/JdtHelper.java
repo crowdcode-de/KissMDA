@@ -72,6 +72,19 @@ public class JdtHelper {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public void createReturnTypeAsCollection(AST ast, TypeDeclaration td,
+			MethodDeclaration md, String umlTypeName,
+			String umlQualifiedTypeName, String sourceDirectoryPackageName) {
+		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
+		typeName = packageHelper.getFullPackageName(typeName,
+				sourceDirectoryPackageName);
+		// Create Collection
+		SimpleType tp = ast.newSimpleType(ast.newName("Collection"));
+		md.setReturnType2(tp);
+		td.bodyDeclarations().add(md);
+	}
+
 	public SimpleType getAstSimpleType(AST ast, String typeName) {
 		String javaType = dataTypeUtils.getJavaTypes().get(
 				typeName.toLowerCase());

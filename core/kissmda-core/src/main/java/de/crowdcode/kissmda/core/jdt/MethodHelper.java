@@ -38,4 +38,16 @@ public class MethodHelper {
 				+ name.substring(1);
 		return setter;
 	}
+
+	public String getAdderName(String name) {
+		String setter = "add" + name.substring(0, 1).toUpperCase()
+				+ name.substring(1);
+		return setter;
+	}
+
+	public String getSingularName(String pluralName) {
+		// Remove the last two chars
+		String singular = pluralName.substring(0, pluralName.length() - 2);
+		return singular;
+	}
 }

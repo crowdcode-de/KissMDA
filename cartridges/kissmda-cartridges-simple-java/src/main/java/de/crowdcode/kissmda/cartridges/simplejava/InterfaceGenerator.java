@@ -108,7 +108,9 @@ public class InterfaceGenerator {
 		generatePackage(clazz, ast, cu);
 		TypeDeclaration td = generateClass(clazz, ast, cu);
 		generateMethods(clazz, ast, td);
-		generateAssociations(clazz, ast, td);
+		// TODO We don't need to analyze the associations because all the assocs
+		// are already in the properties
+		// generateAssociations(clazz, ast, td);
 		generateGettersSetters(clazz, ast, td);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
@@ -120,6 +122,7 @@ public class InterfaceGenerator {
 		// Create getter and setter
 		EList<Property> properties = clazz.getAllAttributes();
 		for (Property property : properties) {
+			// Create getter for each property
 			MethodDeclaration mdGetter = ast.newMethodDeclaration();
 			mdGetter.modifiers().add(
 					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
@@ -127,32 +130,61 @@ public class InterfaceGenerator {
 			mdGetter.setName(ast.newSimpleName(getterName));
 			// Return type?
 			Type type = property.getType();
+			logger.info("Class: " + clazz.getName() + " - " + "Property: "
+					+ property.getName() + " - " + "Property Upper: "
+					+ property.getUpper() + " - " + "Property Lower: "
+					+ property.getLower());
 			String umlTypeName = type.getName();
 			String umlQualifiedTypeName = type.getQualifiedName();
-			jdtHelper.createReturnType(ast, td, mdGetter, umlTypeName,
-					umlQualifiedTypeName, sourceDirectoryPackageName);
+			if (property.getUpper() >= 0) {
+				// Upper Cardinality 0..1
+				jdtHelper.createReturnType(ast, td, mdGetter, umlTypeName,
+						umlQualifiedTypeName, sourceDirectoryPackageName);
+			} else {
+				// TODO Upper Cardinality 0..*
+				// We need to add Collection<Type> as returnType
+				jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
+						umlTypeName, umlQualifiedTypeName,
+						sourceDirectoryPackageName);
+			}
 
 			// Create setter method for each property
 			MethodDeclaration mdSetter = ast.newMethodDeclaration();
 			mdSetter.modifiers().add(
 					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
-			String setterName = methodHelper.getSetterName(property.getName());
-			mdSetter.setName(ast.newSimpleName(setterName));
 			// Return type void
 			PrimitiveType primitiveType = jdtHelper.getAstPrimitiveType(ast,
 					"void");
 			mdSetter.setReturnType2(primitiveType);
 			td.bodyDeclarations().add(mdSetter);
-			// Params
 			String umlPropertyName = property.getName();
-			jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
-					umlQualifiedTypeName, umlPropertyName,
-					sourceDirectoryPackageName);
+
+			if (property.getUpper() >= 0) {
+				// Upper Cardinality 0..1 params
+				String setterName = methodHelper.getSetterName(property
+						.getName());
+				mdSetter.setName(ast.newSimpleName(setterName));
+				jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
+						umlQualifiedTypeName, umlPropertyName,
+						sourceDirectoryPackageName);
+			} else {
+				// TODO Upper Cardinality 0..* params
+				// We need to use addXxx instead of setXxx
+				String adderName = methodHelper
+						.getAdderName(property.getName());
+				umlPropertyName = methodHelper.getSingularName(umlPropertyName);
+				mdSetter.setName(ast.newSimpleName(adderName));
+				jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
+						umlQualifiedTypeName, umlPropertyName,
+						sourceDirectoryPackageName);
+			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void generateAssociations(Class clazz, AST ast, TypeDeclaration td) {
+		// TODO We don't need to analyze the associations because all the assocs
+		// are already in the properties
 		EList<Association> associations = umlHelper.getAllAssociations(clazz);
 		for (Association association : associations) {
 			logger.info("Association for Class: " + clazz.getName() + " - "
