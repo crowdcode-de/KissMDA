@@ -168,7 +168,7 @@ public class InterfaceGenerator {
 						umlQualifiedTypeName, umlPropertyName,
 						sourceDirectoryPackageName);
 			} else {
-				// TODO Upper Cardinality 0..* params
+				// Upper Cardinality 0..* params
 				// We need to use addXxx instead of setXxx
 				String adderName = methodHelper
 						.getAdderName(property.getName());

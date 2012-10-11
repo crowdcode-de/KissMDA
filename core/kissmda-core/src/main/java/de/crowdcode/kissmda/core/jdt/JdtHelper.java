@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.eclipse.jdt.core.dom.SimpleType;
@@ -80,8 +81,12 @@ public class JdtHelper {
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
 		// Create Collection
-		SimpleType tp = ast.newSimpleType(ast.newName("java.util.Collection"));
-		md.setReturnType2(tp);
+		SimpleType tp = getAstSimpleType(ast, typeName);
+		SimpleType collectionType = ast.newSimpleType(ast
+				.newName("java.util.Collection"));
+		ParameterizedType pt = ast.newParameterizedType(collectionType);
+		pt.typeArguments().add(tp);
+		md.setReturnType2(pt);
 		td.bodyDeclarations().add(md);
 	}
 
