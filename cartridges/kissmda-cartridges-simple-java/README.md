@@ -1,5 +1,7 @@
 KissMDA cartridge: kissmda-cartridges-simple-java
 =================================================
+This cartridge generates from Entity classes Java interfaces including their 
+attributes, methods and relationships.
 
 UML Profile
 -----------
