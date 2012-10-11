@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.crowdcode.kissmda.examples.apptest.components.CompanyImpl;
+import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.components.Company;
 
 /**
@@ -39,14 +40,26 @@ public class PersonImplTest {
 	@Before
 	public void setUp() {
 		person = new PersonImpl();
+		person.setName("Lofi");
 	}
 
 	@Test
 	public void testApp() {
 		Company company = new CompanyImpl();
 		company.setName("CrowdCode");
-		person.setName("Lofi");
+
+		Address address1 = new AddressImpl();
+		address1.setStreet("Jakarta");
+		address1.setPerson(person);
+		Address address2 = new AddressImpl();
+		address2.setStreet("Cologne");
+		address2.setStreet("Solingen");
+		address2.setPerson(person);
+
 		person.setCompany(company);
+		person.addAddresses(address1);
+		person.addAddresses(address2);
+
 		person.run();
 
 		assertEquals(0, person.calculateAge().intValue());

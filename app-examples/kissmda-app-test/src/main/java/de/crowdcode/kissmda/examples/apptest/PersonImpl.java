@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.examples.apptest;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
@@ -36,7 +37,7 @@ public class PersonImpl implements Person {
 	private static final Logger logger = Logger.getLogger(PersonImpl.class
 			.getName());
 	private String name;
-	private Collection<Address> addresses;
+	private final Collection<Address> addresses = new ArrayList<Address>();
 	private Company company;
 
 	@Override
@@ -53,6 +54,7 @@ public class PersonImpl implements Person {
 	public void run() {
 		logger.info("We are running the PersonImpl which implements the generated Person interface with: "
 				+ name + " - Company: " + company.getName());
+		logger.info("With following addresses: " + addresses.toString());
 	}
 
 	@Override
@@ -80,9 +82,8 @@ public class PersonImpl implements Person {
 		addresses.add(address);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Collection getAddresses() {
+	public Collection<Address> getAddresses() {
 		return addresses;
 	}
 }
