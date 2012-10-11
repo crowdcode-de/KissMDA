@@ -6,10 +6,10 @@ UML Profile
 Stereotypes
 -----------
 
-<<Entity>>
+**Entity**
 Applied on: class
 Produces Java interfaces with all the attributes, methods and relationships.
 
-<<SourceDirectory>>
+**SourceDirectory**
 Applied on: package
 Marks the source model which will be generated.
