@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Association;
@@ -33,7 +34,7 @@ import org.eclipse.uml2.uml.Interface;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.crowdcode.kissmda.core.uml.UmlHelper;
+import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
  * Test Interface Generator.
@@ -45,28 +46,22 @@ import de.crowdcode.kissmda.core.uml.UmlHelper;
 public class InterfaceGeneratorTest {
 
 	private InterfaceGenerator interfaceGenerator;
-
-	private UmlHelper umlHelper;
+	private PackageHelper packageHelper;
 
 	@Before
 	public void setUp() throws Exception {
+		packageHelper = new PackageHelper();
 		interfaceGenerator = new InterfaceGenerator();
-		umlHelper = new UmlHelper();
-		interfaceGenerator.setUmlHelper(umlHelper);
-	}
-
-	@Test
-	public void testGenerateInterface() {
-		assertTrue(true);
+		interfaceGenerator.setPackageHelper(packageHelper);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateAssociations() {
+	public void testGeneratePackage() {
 		Class clazz = mock(Class.class);
-
 		when(clazz.getQualifiedName()).thenReturn(
-				"Data::de::crowdcode::test::Company");
+				"Data::de::crowdcode::kissmda::testapp::components::Company");
+		when(clazz.getName()).thenReturn("Company");
 
 		EList<Association> associations = new UniqueEList<Association>();
 		when(clazz.getAssociations()).thenReturn(associations);
@@ -75,14 +70,41 @@ public class InterfaceGeneratorTest {
 		when(clazz.getImplementedInterfaces()).thenReturn(interfaces);
 
 		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
 		TypeDeclaration td = ast.newTypeDeclaration();
 		td.setInterface(true);
 		td.modifiers().add(
 				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		td.setName(ast.newSimpleName("Company"));
 
-		interfaceGenerator.generateAssociations(clazz, ast, td);
+		interfaceGenerator.generatePackage(clazz, ast, cu);
 
 		assertTrue(true);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void testGenerateClass() {
+		Class clazz = mock(Class.class);
+		when(clazz.getQualifiedName()).thenReturn(
+				"Data::de::crowdcode::kissmda::testapp::components::Company");
+		when(clazz.getName()).thenReturn("Company");
+
+		EList<Association> associations = new UniqueEList<Association>();
+		when(clazz.getAssociations()).thenReturn(associations);
+
+		EList<Interface> interfaces = new UniqueEList<Interface>();
+		when(clazz.getImplementedInterfaces()).thenReturn(interfaces);
+
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		td.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+		td.setName(ast.newSimpleName("Company"));
+
+		interfaceGenerator.generateClass(clazz, ast, cu);
+
+		assertTrue(td != null);
 	}
 }

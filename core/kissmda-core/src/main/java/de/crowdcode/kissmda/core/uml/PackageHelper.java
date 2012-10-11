@@ -37,6 +37,14 @@ import de.crowdcode.kissmda.core.Context;
  */
 public class PackageHelper {
 
+	private static final String JAVA_PRIMITIVE_TYPES = "JavaPrimitiveTypes::";
+
+	private static final String UML_PRIMITIVE_TYPES = "UMLPrimitiveTypes::";
+
+	private static final String MAGIC_DRAW_PROFILE_DATATYPES = "MagicDraw Profile::datatypes::";
+
+	private static final String FILE_PROTOCOL = "file:/";
+
 	private static final Logger logger = Logger.getLogger(PackageHelper.class
 			.getName());
 
@@ -51,7 +59,7 @@ public class PackageHelper {
 			throws URISyntaxException {
 		logger.info("Get from following sourceModel: "
 				+ context.getSourceModel());
-		String uriString = "file:/" + context.getSourceModel();
+		String uriString = FILE_PROTOCOL + context.getSourceModel();
 		logger.info("Get from following URI: " + uriString);
 		URI uri = URI.createURI(uriString);
 		readerWriter.registerSchema();
@@ -96,9 +104,9 @@ public class PackageHelper {
 
 	public String removeUmlPrefixes(final String fullQualifiedName) {
 		String result = fullQualifiedName.replace(
-				"MagicDraw Profile::datatypes::", "");
-		result = result.replace("UMLPrimitiveTypes::", "");
-		result = result.replace("JavaPrimitiveTypes::", "");
+				MAGIC_DRAW_PROFILE_DATATYPES, "");
+		result = result.replace(UML_PRIMITIVE_TYPES, "");
+		result = result.replace(JAVA_PRIMITIVE_TYPES, "");
 		return result;
 	}
 }

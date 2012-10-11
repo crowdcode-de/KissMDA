@@ -64,5 +64,6 @@ public class PersonImplTest {
 
 		assertEquals(0, person.calculateAge().intValue());
 		assertEquals(false, person.isInRetirement());
+		assertEquals(2, person.getAddresses().size());
 	}
 }

@@ -40,6 +40,10 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  */
 public class JdtHelper {
 
+	private static final String VOID = "void";
+
+	private static final String JAVA_UTIL_COLLECTION = "java.util.Collection";
+
 	@Inject
 	private PackageHelper packageHelper;
 
@@ -62,7 +66,7 @@ public class JdtHelper {
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
 		// Only void is primitive, everything else are simple type
-		if (typeName.equalsIgnoreCase("void")) {
+		if (typeName.equalsIgnoreCase(VOID)) {
 			PrimitiveType primitiveType = getAstPrimitiveType(ast, umlTypeName);
 			md.setReturnType2(primitiveType);
 			td.bodyDeclarations().add(md);
@@ -83,7 +87,7 @@ public class JdtHelper {
 		// Create Collection
 		SimpleType tp = getAstSimpleType(ast, typeName);
 		SimpleType collectionType = ast.newSimpleType(ast
-				.newName("java.util.Collection"));
+				.newName(JAVA_UTIL_COLLECTION));
 		ParameterizedType pt = ast.newParameterizedType(collectionType);
 		pt.typeArguments().add(tp);
 		md.setReturnType2(pt);
@@ -117,7 +121,7 @@ public class JdtHelper {
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
 		// Only void is primitive, everything else are simple type
-		if (typeName.equalsIgnoreCase("void")) {
+		if (typeName.equalsIgnoreCase(VOID)) {
 			PrimitiveType primitiveType = getAstPrimitiveType(ast, umlTypeName);
 			SingleVariableDeclaration variableDeclaration = ast
 					.newSingleVariableDeclaration();

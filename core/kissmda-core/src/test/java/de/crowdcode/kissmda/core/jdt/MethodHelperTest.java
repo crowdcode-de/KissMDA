@@ -23,8 +23,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.crowdcode.kissmda.core.jdt.MethodHelper;
-
 /**
  * Unit test for Method Helper.
  * 
@@ -50,5 +48,23 @@ public class MethodHelperTest {
 	public void testGetSetterName() {
 		String result = methodHelper.getSetterName("testfield");
 		assertEquals("setTestfield", result);
+	}
+
+	@Test
+	public void testAdderName() {
+		String result = methodHelper.getAdderName("testfield");
+		assertEquals("addTestfield", result);
+	}
+
+	@Test
+	public void testGetSingularName() {
+		String result1 = methodHelper.getSingularName("addresses");
+		assertEquals("address", result1);
+
+		String result2 = methodHelper.getSingularName("persons");
+		assertEquals("perso", result2);
+
+		String result3 = methodHelper.getSingularName("companies");
+		assertEquals("compani", result3);
 	}
 }

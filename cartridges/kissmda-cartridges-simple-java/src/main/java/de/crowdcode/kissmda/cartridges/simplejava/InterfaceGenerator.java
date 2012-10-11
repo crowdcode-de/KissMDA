@@ -31,7 +31,6 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Property;
@@ -40,7 +39,6 @@ import org.eclipse.uml2.uml.Type;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.jdt.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
-import de.crowdcode.kissmda.core.uml.UmlHelper;
 
 /**
  * Generate Interface from UML class.
@@ -69,9 +67,6 @@ public class InterfaceGenerator {
 	@Inject
 	private PackageHelper packageHelper;
 
-	@Inject
-	private UmlHelper umlHelper;
-
 	private String sourceDirectoryPackageName;
 
 	public void setMethodHelper(MethodHelper methodHelper) {
@@ -80,10 +75,6 @@ public class InterfaceGenerator {
 
 	public void setJdtHelper(JdtHelper javaHelper) {
 		this.jdtHelper = javaHelper;
-	}
-
-	public void setUmlHelper(UmlHelper umlHelper) {
-		this.umlHelper = umlHelper;
 	}
 
 	public void setPackageHelper(PackageHelper packageHelper) {
@@ -108,9 +99,6 @@ public class InterfaceGenerator {
 		generatePackage(clazz, ast, cu);
 		TypeDeclaration td = generateClass(clazz, ast, cu);
 		generateMethods(clazz, ast, td);
-		// TODO We don't need to analyze the associations because all the assocs
-		// are already in the properties
-		// generateAssociations(clazz, ast, td);
 		generateGettersSetters(clazz, ast, td);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
@@ -141,7 +129,7 @@ public class InterfaceGenerator {
 				jdtHelper.createReturnType(ast, td, mdGetter, umlTypeName,
 						umlQualifiedTypeName, sourceDirectoryPackageName);
 			} else {
-				// TODO Upper Cardinality 0..*
+				// Upper Cardinality 0..*
 				// We need to add Collection<Type> as returnType
 				jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
 						umlTypeName, umlQualifiedTypeName,
@@ -182,42 +170,7 @@ public class InterfaceGenerator {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void generateAssociations(Class clazz, AST ast, TypeDeclaration td) {
-		// TODO We don't need to analyze the associations because all the assocs
-		// are already in the properties
-		EList<Association> associations = umlHelper.getAllAssociations(clazz);
-		for (Association association : associations) {
-			logger.info("Association for Class: " + clazz.getName() + " - "
-					+ association.toString());
-			EList<Property> memberEnds = association.getMemberEnds();
-			for (Property memberEnd : memberEnds) {
-				logger.info("Member end: " + memberEnd.getName());
-				// TODO Generate getter for each member ends
-				String getterMemberEndName = methodHelper
-						.getGetterName(memberEnd.getName());
-				logger.info("Member end Getter: " + getterMemberEndName);
-				MethodDeclaration mdGetter = ast.newMethodDeclaration();
-				mdGetter.modifiers()
-						.add(ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
-				mdGetter.setName(ast.newSimpleName(getterMemberEndName));
-
-				// Return type: one relationship - the class
-				logger.info("Member getQualifiedName: "
-						+ memberEnd.getQualifiedName());
-				jdtHelper.createReturnType(ast, td, mdGetter,
-						memberEnd.getName(), memberEnd.getName(),
-						getterMemberEndName);
-
-				// Return type: many relationship - collection of the class
-
-				// TODO Generate adder for member end which has *-relationship
-				// TODO Generate setter for member end which has 1-relationship
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private TypeDeclaration generateClass(Class clazz, AST ast,
+	public TypeDeclaration generateClass(Class clazz, AST ast,
 			CompilationUnit cu) {
 		String className = getClassName(clazz);
 		TypeDeclaration td = ast.newTypeDeclaration();
@@ -229,7 +182,7 @@ public class InterfaceGenerator {
 		return td;
 	}
 
-	private void generatePackage(Class clazz, AST ast, CompilationUnit cu) {
+	public void generatePackage(Class clazz, AST ast, CompilationUnit cu) {
 		PackageDeclaration p1 = ast.newPackageDeclaration();
 		String fullPackageName = getFullPackageName(clazz);
 		p1.setName(ast.newName(fullPackageName));
