@@ -13,24 +13,6 @@
 		</requiredProperty>
 	</requiredProperties>
 	<fileSets>
-		<fileSet filtered="false" encoding="UTF-8" packaged="false">
-			<directory>.settings</directory>
-			<includes>
-				<include>*.*</include>
-			</includes>
-		</fileSet>
-		<fileSet filtered="false" encoding="UTF-8" packaged="false">
-			<directory></directory>
-			<includes>
-				<include>.classpath</include>
-			</includes>
-		</fileSet>
-		<fileSet filtered="true" encoding="UTF-8" packaged="false">
-			<directory></directory>
-			<includes>
-				<include>.project</include>
-			</includes>
-		</fileSet>
 		<fileSet filtered="true" encoding="UTF-8" packaged="true">
 			<directory>src/main/java</directory>
 			<includes>
@@ -65,12 +47,6 @@
 			<directory>src/test/java</directory>
 			<includes>
 				<include>**/*.java</include>
-			</includes>
-		</fileSet>
-		<fileSet filtered="true" encoding="UTF-8" packaged="false">
-			<directory>src/test/resources</directory>
-			<includes>
-				<include>**/*.properties_example</include>
 			</includes>
 		</fileSet>
 	</fileSets>
