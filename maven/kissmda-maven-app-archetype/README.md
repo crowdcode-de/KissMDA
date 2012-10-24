@@ -8,9 +8,9 @@ mvn archetype:generate
   -DarchetypeGroupId=de.crowdcode.kissmda.maven.archetype
   -DarchetypeArtifactId=kissmda-maven-app-archetype
   -DarchetypeVersion=1.0.0-SNAPSHOT
-  -DgroupId=<my-groupid>
-  -DartifactId=<my-artifactId>
+  -DgroupId="my-groupid"
+  -DartifactId="my-artifactId"
   
 whereas:
-<my-groupid> == my newly created KissMDA app Maven group
-<my-artifactId> == my newly creadted KissMDA app Maven artifact
+"my-groupid" == my newly created KissMDA app Maven group
+"my-artifactId" == my newly creadted KissMDA app Maven artifact
