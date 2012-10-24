@@ -4,7 +4,7 @@ This archetype helps you to begin your simple Java Maven project.
 
 To run the archetype:
 
-mvn archetype:generate                                  
+mvn archetype:generate
   -DarchetypeGroupId=de.crowdcode.kissmda.maven.archetype
   -DarchetypeArtifactId=kissmda-maven-app-archetype
   -DarchetypeVersion=1.0.0-SNAPSHOT
