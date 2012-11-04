@@ -13,30 +13,6 @@
 		</requiredProperty>
 	</requiredProperties>
 	<fileSets>
-		<fileSet filtered="false" encoding="UTF-8" packaged="false">
-			<directory>.settings</directory>
-			<includes>
-				<include>*.*</include>
-			</includes>
-		</fileSet>
-		<fileSet filtered="false" encoding="UTF-8" packaged="false">
-			<directory></directory>
-			<includes>
-				<include>.classpath</include>
-				</includes>
-		</fileSet>
-		<fileSet filtered="true" encoding="UTF-8" packaged="false">
-			<directory></directory>
-			<includes>
-				<include>.project</include>
-			</includes>
-		</fileSet>
-		<fileSet filtered="false" encoding="UTF-8" packaged="false">
-			<directory>src/main/assembly</directory>
-			<includes>
-				<include>*.*</include>
-			</includes>
-		</fileSet>
 		<fileSet filtered="true" encoding="UTF-8" packaged="true">
 			<directory>src/main/java</directory>
 			<includes>
@@ -46,25 +22,7 @@
 		<fileSet filtered="true" encoding="UTF-8" packaged="false">
 			<directory>src/main/resources</directory>
 			<includes>
-				<include>*.properties</include>
-			</includes>
-		</fileSet>
-		<fileSet filtered="false" encoding="UTF-8" packaged="false">
-			<directory>src/main/resources/model</directory>
-			<includes>
-				<include>*.mdzip</include>
-			</includes>
-		</fileSet>
-		<fileSet filtered="false" encoding="UTF-8" packaged="false">
-			<directory>src/main/resources/model/emf</directory>
-			<includes>
-				<include>*.*</include>
-			</includes>
-		</fileSet>
-		<fileSet filtered="false" encoding="UTF-8" packaged="false">
-			<directory>src/main/resources/model/profiles</directory>
-			<includes>
-				<include>*.*</include>
+				<include>*.properties_example</include>
 			</includes>
 		</fileSet>
 		<fileSet filtered="true" encoding="UTF-8" packaged="true">
@@ -77,12 +35,6 @@
 			<directory>src/test/resources</directory>
 			<includes>
 				<include>**/*.properties_example</include>
-			</includes>
-		</fileSet>
-		<fileSet filtered="false" encoding="UTF-8" packaged="false">
-			<directory>config</directory>
-			<includes>
-				<include>*.*</include>
 			</includes>
 		</fileSet>
 	</fileSets>
