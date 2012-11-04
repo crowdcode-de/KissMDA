@@ -18,24 +18,19 @@
  */
 package ${groupId};
 
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
+import com.google.inject.AbstractModule;
 
 /**
- * Unit test for simple app.
+ * Guice Module for SimpleJavaTransformer.
  * 
  * @author Lofi Dewanto
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
-public class AppTest {
+public class ${transformerName}Module extends AbstractModule {
 
-    /**
-     * Rigourous Test.
-     */
-    @Test
-    public void testApp() {
-      assertTrue(true);
-    }
+	@Override
+	protected void configure() {
+		// Nothing to do...
+	}
 }

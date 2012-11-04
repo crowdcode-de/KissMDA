@@ -18,22 +18,24 @@
  */
 package ${groupId};
 
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 /**
- * Hello world!
+ * Unit test for simple app.
  * 
- * @author L.Dewanto
- * @since 1.0
- * @version 1.0
+ * @author Lofi Dewanto
+ * @since 1.0.0
+ * @version 1.0.0
  */
-public class App {
+public class ${transformerName}TransformerTest {
 
     /**
-     * Main program.
-     * 
-     * @param args
-     *          arguments
+     * Rigourous Test.
      */
-    public static void main(String[] args) {
-      System.out.println("Hello World!");
+    @Test
+    public void testApp() {
+      assertTrue(true);
     }
 }
