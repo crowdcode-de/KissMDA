@@ -40,5 +40,23 @@
 				<include>**/*.properties_example</include>
 			</includes>
 		</fileSet>
+		<fileSet filtered="false" encoding="UTF-8" packaged="false">
+			<directory>src/test/resources/model</directory>
+			<includes>
+				<include>*.mdzip</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="false" encoding="UTF-8" packaged="false">
+			<directory>src/test/resources/model/emf</directory>
+			<includes>
+				<include>*.*</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="false" encoding="UTF-8" packaged="false">
+			<directory>src/test/resources/model/profiles</directory>
+			<includes>
+				<include>*.*</include>
+			</includes>
+		</fileSet>
 	</fileSets>
 </archetype-descriptor>
