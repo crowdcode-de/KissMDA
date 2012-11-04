@@ -13,10 +13,12 @@ mvn archetype:generate
   -DartifactId="my-artifactId"
   -DprojectName="my-project-name"
   -DprojectDescription="my-project-description"
+  -DtransformerName="the-transformer-classname"
 ```
 
-whereas:
+where:
 * **"my-groupid"** == my newly created KissMDA cartridge Maven group
 * **"my-artifactId"** == my newly creadted KissMDA cartridge Maven artifact
  * **"my-project-name"** == the name of my project
  * **"my-project-description"** == the description of my project
+ * **"the-transformer-classname"** == the name of the transformer class
