@@ -4,12 +4,12 @@ KissMDA - Keep It Simple Stupid, MDA!
 After working a while with MDA / MDSD technologies like AndroMDA, oAW, ... we feel like we need just another MDA tool!
 Why?
 
-1. We still like AndroMDA, yes the project is very much alive and it has already proven itself to be a strong Open Source 
+1. We still like [AndroMDA](http://www.andromda.org), yes the project is very much alive and it has already proven itself to be a strong Open Source 
 project, since AndroMDA has survived the come and go of its comitters. One problem we see is the complexity of the 
 project. Yes, you need to model the cartridge to build your own cartridge. In the beginning it looks like "eat
 your own dog food" but at the end it makes the things much more complex to build. 
 
-2. oAW has a different story. Until the version 4.3 it seems everything looks very smooth. After the project went 
+2. [oAW](http://www.openarchitectureware.org) has a different story. Until the version 4.3 it seems everything looks very smooth. After the project went 
 to Eclipse it seems that the project has no activity anymore. No news anymore from oAW 5 release. 
 It's really a pitty. The big problem of oAW is its Domain Specific Language (DSL) Xtend und Xpand. Since
 they depend on their own editor capabilities in Eclipse and because the project seems to be dead, you will 
@@ -31,7 +31,7 @@ We are independent from Eclipse.
 
 3. We use the best UML tool available 
 -------------------------------------
-At the moment we prefer MagicDraw as our UML tool. Important is that we use Eclipse UML2 API to access our UML model.
+At the moment we prefer [MagicDraw](http://www.nomagic.com/products/magicdraw.html) as our UML tool. Important is that we use Eclipse UML2 API to access our UML model.
 As long as your UML tool offers Eclipse UML2 API you can integrate it in KissMDA. 
 Just don't forget this: your UML model is your source code so treat it as a first class citizen just like your Java code.
 
@@ -47,11 +47,12 @@ the MDA application and the cartridge project with Maven archetypes. No other ch
 6. IoC / DI is everywhere
 --------------------------------------------
 We use DI (Dependency Injection) everywhere to make our code testable. 
-We choose Guice https://code.google.com/p/google-guice for our DI framework.
+We choose [Guice](https://code.google.com/p/google-guice) for our DI framework.
 
 
 We are still in the beginning of the project, so if you want to influence our direction, you are welcome to do so!
 
 For more information please check out our Wiki pages: https://github.com/crowdcode-de/KissMDA/wiki
 
-KissMDA team: Lofi, Ingo, Markus
+**KissMDA team    
+[Lofi](http://lofidewanto.blogspot.com), [Ingo](http://www.dueppe.com), Markus**
