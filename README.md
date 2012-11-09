@@ -18,7 +18,8 @@ definitely stuck with Eclipse 3.4! No development anymore in the future.
 3. [Acceleo](http://www.eclipse.org/acceleo) looks pretty nice. The project is active and alive. 
 The main problem is that it uses a DSL named MOFM2T (MTL) to generate artifacts. You can read the [getting started document
 of Acceleo](http://wiki.eclipse.org/Acceleo/Getting_Started) to understand how Acceleo generator works. Additionally everything in Acceleo is quite Eclipse centered.
-So you need the MTL editor from Eclipse, imagine if something happens just like oAW. 
+So you need the MTL editor from Eclipse, imagine if something happens just like oAW. You will stuck with an old Eclipse
+version!
 
 Our solution is KissMDA (Keep It Simple Stupid, MDA!).
 
