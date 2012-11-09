@@ -29,14 +29,26 @@ No DSL. OK, we still need a templating engine and it also depends on an Eclipse 
 We just use Java with its Java editor in Eclipse! Or if you like you can choose other Java IDE. 
 We are independent from Eclipse.
 
-3. We'll try not to use XML in our framework
+3. We use the best UML tool available 
+-------------------------------------
+At the moment we prefer MagicDraw as our UML tool. Important is that we use Eclipse UML2 API to access our UML model.
+As long as your UML tool offers Eclipse UML2 API you can integrate it in KissMDA. 
+Just don't forget this: your UML model is your source code so treat it as a first class citizen just like your Java code.
+
+4. We'll try not to use XML in our framework
 --------------------------------------------
 Instead we'll implement annotations as much as we need it.
 
-4. Maven will be the core part of KissMDA 
+5. Maven will be the core part of KissMDA 
 -----------------------------------------
 We'll generate the codes with a Maven plugin, we'll generate the skeleton of 
 the MDA application and the cartridge project with Maven archetypes. No other choice! Maven is our core!
+
+6. IoC / DI is everywhere
+--------------------------------------------
+We use DI (Dependency Injection) everywhere to make our code testable. 
+We choose Guice https://code.google.com/p/google-guice for our DI framework.
+
 
 We are still in the beginning of the project, so if you want to influence our direction, you are welcome to do so!
 
