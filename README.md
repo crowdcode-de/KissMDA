@@ -9,7 +9,9 @@ project, since AndroMDA has survived the come and go of its comitters. One probl
 project. Yes, you need to model the cartridge to build your own cartridge. In the beginning it looks like "eat
 your own dog food" but at the end it makes the things much more complex to build. Just take a look [how you can 
 build your own cartrige in AndroMDA](http://www.andromda.org/docs/andromda-documentation/steps-to-write-a-cartridge/index.html).
-You also need to use a lot of XML files to be able to [configure AndroMDA](http://www.andromda.org/docs/configuration.html).
+You also need to use a lot of XML files and elements to [configure your cartridge](http://www.andromda.org/docs/andromda-documentation/steps-to-write-a-cartridge/site9.html).
+As an application developer you have all those XML elements to be able [configure AndroMDA](http://www.andromda.org/docs/configuration.html) 
+which makes AndroMDA a configuration monster.
 
 2. [oAW](http://www.openarchitectureware.org) has a different story. Until the version 4.3 it seems everything looks very smooth. After the project went 
 to Eclipse it seems that the project has no activity anymore. No news anymore from oAW 5 release. 
