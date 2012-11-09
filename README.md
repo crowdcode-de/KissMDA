@@ -1,7 +1,5 @@
-KissMDA
-=======
-
-Keep It Simple Stupid, MDA!
+KissMDA - Keep It Simple Stupid, MDA!
+=====================================
 
 After working a while with MDA / MDSD technologies like AndroMDA, oAW, ... we feel like we need just another MDA tool!
 Why?
@@ -19,18 +17,26 @@ definitely stuck with Eclipse 3.4! No development anymore in the future.
 
 Our solution is KissMDA (Keep It Simple Stupid, MDA!).
 
-1. KissMDA is a pure Java API approach. No DSL. OK, we still need a templating engine and it also depends on an Eclipse
-plugin. Therefore we will choose the best templating engine available wisely. Nope! This is not true!
- * For generating Java code we will use Eclipse JDT. Check this out: http://stackoverflow.com/questions/121324/a-java-api-to-generate-java-source-files
- * For generating XML documents we will use Java DOM API, StAX API or just simple JAXB from already generated Java classes. Check this out for comparison: http://docs.oracle.com/javase/tutorial/jaxp/stax/why.html
- * For generating any other things we will use Java! Only Java!
+1. KissMDA is a pure Java API approach 
+--------------------------------------
+No DSL. OK, we still need a templating engine and it also depends on an Eclipse plugin. Therefore we will choose the best templating engine available wisely. Nope! This is not true!
+* For generating Java code we will use Eclipse JDT. Check this out: http://stackoverflow.com/questions/121324/a-java-api-to-generate-java-source-files
+* For generating XML documents we will use Java DOM API, StAX API or just simple JAXB from already generated Java classes. Check this out for comparison: http://docs.oracle.com/javase/tutorial/jaxp/stax/why.html
+* For generating any other things we will use Java! Only Java, no DSL!    
+     
+2. No need to have special Eclipse plugins
+------------------------------------------
+We just use Java with its Java editor in Eclipse! Or if you like you can choose other Java IDE. 
+We are independent from Eclipse.
 
-2. No need to have special Eclipse plugins, we just use Java with its Java editor in Eclipse!
+3. We'll try not to use XML in our framework
+--------------------------------------------
+Instead we'll implement annotations as much as we need it.
 
-3. We'll try not to use XML in our framework, instead we'll implement annotations as much as we need it.
-
-4. Maven will be the core part of KissMDA. We'll generate the codes with a Maven plugin, we'll generate the skeleton of 
-the MDA application and the cartridge project with Maven archetypes. No other choice!
+4. Maven will be the core part of KissMDA 
+-----------------------------------------
+We'll generate the codes with a Maven plugin, we'll generate the skeleton of 
+the MDA application and the cartridge project with Maven archetypes. No other choice! Maven is our core!
 
 We are still in the beginning of the project, so if you want to influence our direction, you are welcome to do so!
 
