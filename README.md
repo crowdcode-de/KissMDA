@@ -5,10 +5,11 @@ After working a while with MDA / MDSD technologies like AndroMDA, oAW, ... we fe
 Why?
 
 1. We still like [AndroMDA](http://www.andromda.org), yes the project is very much alive and it has already proven itself to be a strong Open Source 
-project, since AndroMDA has survived the come and go of its comitters. One problem we see is the complexity of the 
-project. Yes, you need to model the cartridge to build your own cartridge. In the beginning it looks like "eat
-your own dog food" but at the end it makes the things much more complex to build. Just take a look [how you can 
-build your own cartrige in AndroMDA](http://www.andromda.org/docs/andromda-documentation/steps-to-write-a-cartridge/index.html).
+project, since AndroMDA has survived the come and go of its comitters. AndroMDA is in our humble opinion the best 
+project in MDA / MDSD area sofar.
+One problem we see is the complexity of the project. Yes, you need to model the cartridge to build your own cartridge. 
+In the beginning it looks like "eat your own dog food" but at the end it makes the things much more complex to build. 
+Just take a look [how you can build your own cartrige in AndroMDA](http://www.andromda.org/docs/andromda-documentation/steps-to-write-a-cartridge/index.html).
 You also need to use a lot of XML files and elements to [configure your cartridge](http://www.andromda.org/docs/andromda-documentation/steps-to-write-a-cartridge/site9.html).
 As an application developer you have all those XML elements to be able [configure AndroMDA](http://www.andromda.org/docs/configuration.html) 
 which makes AndroMDA a configuration monster.
