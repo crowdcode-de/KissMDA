@@ -39,9 +39,9 @@ Just don't forget this: your UML model is your source code so treat it as a firs
 --------------------------------------------
 Instead we'll implement annotations as much as we need it.
 
-5. Maven will be the core part of KissMDA 
+5. Maven is the core part of KissMDA 
 -----------------------------------------
-We'll generate the codes with a Maven plugin, we'll generate the skeleton of 
+We use Maven standard project layout. We'll generate the codes with a Maven plugin, we'll generate the skeleton of 
 the MDA application and the cartridge project with Maven archetypes. No other choice! Maven is our core!
 
 6. IoC / DI is everywhere
