@@ -15,6 +15,11 @@ It's really a pitty. The big problem of oAW is its Domain Specific Language (DSL
 they depend on their own editor capabilities in Eclipse and because the project seems to be dead, you will 
 definitely stuck with Eclipse 3.4! No development anymore in the future.
 
+3. [Acceleo](http://www.eclipse.org/acceleo) looks pretty nice. The project is active and alive. 
+The main problem is that it uses a DSL named MOFM2T (MTL) to generate artifacts. You can read the [getting started document
+of Acceleo](http://wiki.eclipse.org/Acceleo/Getting_Started). Additionally everything in Acceleo is quite Eclipse centered.
+So you need the MTL editor from Eclipse, imagine if something happens just like oAW. 
+
 Our solution is KissMDA (Keep It Simple Stupid, MDA!).
 
 1. KissMDA is a pure Java API approach 
