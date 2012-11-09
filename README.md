@@ -25,7 +25,6 @@ plugin. Therefore we will choose the best templating engine available wisely. No
  * For generating XML documents we will use Java DOM API, StAX API or just simple JAXB from already generated Java classes. Check this out for comparison: http://docs.oracle.com/javase/tutorial/jaxp/stax/why.html
  * For generating any other things we will use Java! Only Java!
 
-
 2. No need to have special Eclipse plugins, we just use Java with its Java editor in Eclipse!
 
 3. We'll try not to use XML in our framework, instead we'll implement annotations as much as we need it.
