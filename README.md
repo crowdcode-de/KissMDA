@@ -30,7 +30,7 @@ Our solution is KissMDA (Keep It Simple Stupid, MDA!).
 
 1. KissMDA is a pure Java API approach 
 --------------------------------------
-No DSL. OK, we still need a templating engine and it also depends on an Eclipse plugin. Therefore we will choose the best templating engine available wisely. Nope! This is not true!
+[No DSL, no Polyglot Programming](http://lofidewanto.blogspot.de/2011/10/why-is-polyglot-programming-or-do-it.html). OK, we still need a templating engine and it also depends on an Eclipse plugin. Therefore we will choose the best templating engine available wisely. Nope! This is not true!
 * For generating Java code we will use Eclipse JDT. Check this out: http://stackoverflow.com/questions/121324/a-java-api-to-generate-java-source-files
 * For generating XML documents we will use Java DOM API, StAX API or just simple JAXB from already generated Java classes. Check this out for comparison: http://docs.oracle.com/javase/tutorial/jaxp/stax/why.html
 * For generating any other things we will use Java! Only Java, no DSL!    
