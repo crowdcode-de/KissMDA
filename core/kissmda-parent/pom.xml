@@ -204,7 +204,6 @@
 					<forkMode>always</forkMode>
 				</configuration>
 			</plugin>
-			<!-- Javadoc Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
