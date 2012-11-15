@@ -84,10 +84,12 @@
 		<system>CloudBees</system>
 		<url>https://buildhive.cloudbees.com/job/crowdcode-de</url>
 	</ciManagement>
+	
 	<issueManagement>
 		<system>GitHub Issues</system>
 		<url>https://github.com/crowdcode-de/KissMDA/issues</url>
 	</issueManagement>
+	
 	<licenses>
 		<license>
 			<name>Apache License 2.0</name>
