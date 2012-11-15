@@ -38,7 +38,7 @@
 	<inceptionYear>2012</inceptionYear>
 
 	<!-- =============================================================== -->
-	<!-- Project committers -->
+	<!-- Project committers                                              -->
 	<!-- =============================================================== -->
 	<developers>
 		<developer>
@@ -78,7 +78,7 @@
 	</developers>
 
 	<!-- =============================================================== -->
-	<!-- SCM etc. -->
+	<!-- SCM etc.                                                        -->
 	<!-- =============================================================== -->
 	<ciManagement>
 		<system>CloudBees</system>
@@ -116,7 +116,7 @@
 	</scm>
 
 	<!-- =============================================================== -->
-	<!-- Properties -->
+	<!-- Properties                                                      -->
 	<!-- =============================================================== -->
 	<properties>
 		<!-- Java Version -->
@@ -128,7 +128,7 @@
 	</properties>
 
 	<!-- =============================================================== -->
-	<!-- Dependency Management -->
+	<!-- Dependency Management                                           -->
 	<!-- =============================================================== -->
 	<dependencyManagement>
 		<dependencies>
@@ -136,7 +136,7 @@
 	</dependencyManagement>
 
 	<!-- =============================================================== -->
-	<!-- Build -->
+	<!-- Build                                                           -->
 	<!-- =============================================================== -->
 	<build>
 		<plugins>
@@ -188,23 +188,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.12</version>
-				<inherited>true</inherited>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<forkMode>always</forkMode>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
