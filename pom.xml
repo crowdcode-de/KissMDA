@@ -6,11 +6,8 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
 	<modules>
+	    <module>core/kissmda-parent</module>
 		<module>core/kissmda-profiles/kissmda-profile-core</module>
 		<module>core/kissmda-core</module>
 		<module>maven/kissmda-maven-plugin</module>
