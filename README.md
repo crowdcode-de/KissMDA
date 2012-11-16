@@ -66,5 +66,7 @@ We are still in the beginning of the project, so if you want to influence our di
 **For more information please check out our Wiki pages: https://github.com/crowdcode-de/KissMDA/wiki**   
 **For the latest news please check out our [KissMDA Google+](https://plus.google.com/u/0/b/118347092823913152560/118347092823913152560/posts)**
 
+Our current build status at BuildHive CloudBees: [![Build Status](https://buildhive.cloudbees.com/job/crowdcode-de/job/KissMDA/badge/icon)](https://buildhive.cloudbees.com/job/crowdcode-de/job/KissMDA/)
+
 **KissMDA team    
 [Lofi](http://lofidewanto.blogspot.com), [Ingo](http://www.dueppe.com), Markus**
