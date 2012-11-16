@@ -21,19 +21,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<parent>
-		<groupId>de.crowdcode.kissmda</groupId>
-		<artifactId>kissmda-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
-		<relativePath></relativePath>
-	</parent>
-	
 	<groupId>de.crowdcode.kissmda</groupId>
 	<artifactId>kissmda-modules</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>parents/kissmda-parent</module>
 		<module>core/kissmda-profiles/kissmda-profile-core</module>
 		<module>core/kissmda-core</module>
 		<module>maven/kissmda-maven-plugin</module>
