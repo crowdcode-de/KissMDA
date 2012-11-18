@@ -30,7 +30,7 @@ import org.junit.runners.Suite.SuiteClasses;
  * @since 1.0.0
  */
 @RunWith(Suite.class)
-@SuiteClasses({ SimpleJavaModuleTest.class, SimpleJavaTransformerTest.class,
+@SuiteClasses({ SimpleJavaModuleTest.class,
 		InterfaceGeneratorTest.class })
 public class AllTests {
 }
