@@ -56,7 +56,7 @@ public class FileWriterTest {
 
 		when(clazz.getName()).thenReturn("Company");
 		when(context.getTargetModel()).thenReturn(
-				"target/generated-sources/java");
+				"target/generated-test-sources/java");
 
 		fileWriter.createFile(context, packageName, clazz.getName(),
 				classContent);
