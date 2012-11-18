@@ -36,13 +36,14 @@
 
 	<properties>
 		<jukito.version>1.1</jukito.version>
-	</properties>
+        <junit.version>4.10</junit.version>
+    </properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

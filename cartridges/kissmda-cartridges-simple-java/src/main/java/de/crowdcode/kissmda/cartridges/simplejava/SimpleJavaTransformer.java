@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import de.crowdcode.kissmda.core.file.JavaFileWriter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
@@ -32,7 +33,6 @@ import org.eclipse.uml2.uml.Stereotype;
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
-import de.crowdcode.kissmda.core.file.FileWriter;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -64,7 +64,7 @@ public class SimpleJavaTransformer implements Transformer {
 	private PackageHelper packageHelper;
 
 	@Inject
-	private FileWriter fileWriter;
+	private JavaFileWriter javaFileWriter;
 
 	@Inject
 	private InterfaceGenerator interfaceGenerator;
@@ -75,8 +75,8 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private Context context;
 
-	public void setFileWriter(FileWriter fileWriter) {
-		this.fileWriter = fileWriter;
+	public void setJavaFileWriter(JavaFileWriter javaFileWriter) {
+		this.javaFileWriter = javaFileWriter;
 	}
 
 	public void setPackageHelper(PackageHelper packageHelper) {
@@ -170,7 +170,7 @@ public class SimpleJavaTransformer implements Transformer {
 			throws IOException {
 		String fullPackageName = packageHelper.getFullPackageName(clazz,
 				sourceDirectoryPackageName);
-		fileWriter.createFile(context, fullPackageName, clazz.getName(),
-				compilationUnit);
+		javaFileWriter.createJavaFile(context, fullPackageName, clazz.getName(),
+                compilationUnit);
 	}
 }

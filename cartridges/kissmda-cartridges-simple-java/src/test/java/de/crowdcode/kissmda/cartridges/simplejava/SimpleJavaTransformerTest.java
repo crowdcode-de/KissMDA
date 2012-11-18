@@ -73,7 +73,7 @@ public class SimpleJavaTransformerTest {
 		interfaceGenerator.setPackageHelper(packageHelper);
 		simpleJavaTransformer = new SimpleJavaTransformer();
 		simpleJavaTransformer.setPackageHelper(packageHelper);
-		simpleJavaTransformer.setFileWriter(fileWriter);
+		simpleJavaTransformer.setJavaFileWriter(fileWriter);
 		simpleJavaTransformer.setInterfaceGenerator(interfaceGenerator);
 		context = new StandardContext();
 	}

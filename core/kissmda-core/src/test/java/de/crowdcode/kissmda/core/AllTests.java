@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import de.crowdcode.kissmda.core.file.FileWriterTest;
+import de.crowdcode.kissmda.core.file.JavaFileWriterTest;
 import de.crowdcode.kissmda.core.jdt.MethodHelperTest;
 import de.crowdcode.kissmda.core.uml.PackageHelperTest;
 import de.crowdcode.kissmda.core.uml.ReaderWriterTest;
@@ -35,7 +35,7 @@ import de.crowdcode.kissmda.core.uml.ReaderWriterTest;
  * @since 1.0.0
  */
 @RunWith(Suite.class)
-@SuiteClasses({ FileWriterTest.class, MethodHelperTest.class,
+@SuiteClasses({ JavaFileWriterTest.class, MethodHelperTest.class,
 		PackageHelperTest.class, ReaderWriterTest.class })
 public class AllTests {
 }
