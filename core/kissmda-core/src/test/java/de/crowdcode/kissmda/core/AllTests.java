@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.core;
 
+import de.crowdcode.kissmda.core.file.FileWriterTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -35,7 +36,7 @@ import de.crowdcode.kissmda.core.uml.ReaderWriterTest;
  * @since 1.0.0
  */
 @RunWith(Suite.class)
-@SuiteClasses({ JavaFileWriterTest.class, MethodHelperTest.class,
+@SuiteClasses({ FileWriterTest.class, JavaFileWriterTest.class, MethodHelperTest.class,
 		PackageHelperTest.class, ReaderWriterTest.class })
 public class AllTests {
 }
