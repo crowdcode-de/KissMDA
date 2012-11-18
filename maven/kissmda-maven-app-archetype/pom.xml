@@ -25,6 +25,7 @@
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
+		<relativePath></relativePath>
 	</parent>
 	
 	<groupId>de.crowdcode.kissmda.maven.archetype</groupId>
