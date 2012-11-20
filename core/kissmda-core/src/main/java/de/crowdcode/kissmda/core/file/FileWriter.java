@@ -34,24 +34,24 @@ import de.crowdcode.kissmda.core.Context;
  */
 public class FileWriter {
 
+	public void createFile(final Context context, final String directory,
+			final String fileName, final String fileContent) throws IOException {
 
-    public void createFile(final Context context, final String directory,
-                           final String fileName, final String fileContent) throws IOException {
+		String directoryToBeCreated = context.getTargetModel() + File.separator
+				+ directory;
+		new File(directoryToBeCreated).mkdirs();
 
-        String directoryToBeCreated = context.getTargetModel() + File.separator + directory;
-        new File(directoryToBeCreated).mkdirs();
-
-        // Create the class file
-        Writer writer = null;
-        try {
-            File file = new File(directoryToBeCreated + File.separator + fileName);
-            writer = new BufferedWriter(new java.io.FileWriter(file));
-            writer.write(fileContent);
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
-        }
-    }
-
+		// Create the class file
+		Writer writer = null;
+		try {
+			File file = new File(directoryToBeCreated + File.separator
+					+ fileName);
+			writer = new BufferedWriter(new java.io.FileWriter(file));
+			writer.write(fileContent);
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
+	}
 }

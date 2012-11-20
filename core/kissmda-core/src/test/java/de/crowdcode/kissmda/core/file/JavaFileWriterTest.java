@@ -18,23 +18,19 @@
  */
 package de.crowdcode.kissmda.core.file;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.uml2.uml.Class;
 import org.junit.Before;
 import org.junit.Test;
-
-import de.crowdcode.kissmda.core.Context;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mock.*;
+import de.crowdcode.kissmda.core.Context;
 
 /**
  * Unit test for FileWriter class.
@@ -44,31 +40,35 @@ import static org.mockito.Mock.*;
  */
 public class JavaFileWriterTest {
 
-    @InjectMocks
+	@InjectMocks
 	private JavaFileWriter fileJavaWriter;
 
-    @Mock
-    private FileWriter fileWriter;
+	@Mock
+	private FileWriter fileWriter;
 
-    @Mock
-    private Context context;
+	@Mock
+	private Context context;
 
 	@Before
 	public void setUp() throws Exception {
 		fileJavaWriter = new JavaFileWriter();
-        MockitoAnnotations.initMocks(this);
-    }
-
+		MockitoAnnotations.initMocks(this);
+	}
 
 	@Test
 	public void testCreateFile() throws IOException {
 		String classContent = "Some arbitrary content";
 
-		when(context.getTargetModel()).thenReturn("target/generated-test-sources/java");
+		when(context.getTargetModel()).thenReturn(
+				"target/generated-test-sources/java");
 
-		fileJavaWriter.createJavaFile(context, "de.crowdcode.kissmda.test", "Company", classContent);
+		fileJavaWriter.createJavaFile(context, "de.crowdcode.kissmda.test",
+				"Company", classContent);
 
-        verify(fileWriter).createFile(context, "de/crowdcode/kissmda/test", "Company.java", classContent);
-
+		verify(fileWriter).createFile(
+				context,
+				"de" + File.separator + "crowdcode" + File.separator
+						+ "kissmda" + File.separator + "test", "Company.java",
+				classContent);
 	}
 }
