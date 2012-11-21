@@ -1,4 +1,4 @@
-kissmda-parent
+KissMDA parent
 ==============
 
 Parents Project for KissMDA.
