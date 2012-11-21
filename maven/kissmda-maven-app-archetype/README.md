@@ -6,7 +6,7 @@ To run the archetype:
 
 ```
 mvn archetype:generate 
-  -DarchetypeGroupId=de.crowdcode.kissmda.maven.archetype 
+  -DarchetypeGroupId=de.crowdcode.kissmda.maven 
   -DarchetypeArtifactId=kissmda-maven-app-archetype 
   -DarchetypeVersion=1.0.0-SNAPSHOT 
   -DgroupId="my-groupid" 
