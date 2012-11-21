@@ -32,7 +32,7 @@
 		<relativePath></relativePath>
 	</parent>
 	
-	<groupId>de.crowdcode.kissmda.examples</groupId>
+	<groupId>de.crowdcode.kissmda.app-examples</groupId>
 	<artifactId>kissmda-app-test</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -69,7 +69,7 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>de.crowdcode.kissmda.maven.plugin</groupId>
+				<groupId>de.crowdcode.kissmda.maven</groupId>
 				<artifactId>kissmda-maven-plugin</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 				<dependencies>
@@ -109,15 +109,9 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>
-											de.crowdcode.kissmda.maven.plugin
-										</groupId>
-										<artifactId>
-											kissmda-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.0.0-SNAPSHOT,)
-										</versionRange>
+										<groupId>de.crowdcode.kissmda.maven</groupId>
+										<artifactId>kissmda-maven-plugin</artifactId>
+										<versionRange>[1.0.0-SNAPSHOT,)</versionRange>
 										<goals>
 											<goal>generate</goal>
 										</goals>

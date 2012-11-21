@@ -28,7 +28,7 @@
 		<relativePath></relativePath>
 	</parent>
 
-	<groupId>de.crowdcode.kissmda.profile.core</groupId>
+	<groupId>de.crowdcode.kissmda.profiles</groupId>
 	<artifactId>kissmda-profile-core</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>

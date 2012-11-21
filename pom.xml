@@ -34,7 +34,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>core/kissmda-profiles/kissmda-profile-core</module>
+		<module>profiles/kissmda-profile-core</module>
 		<module>core/kissmda-core</module>
 		<module>maven/kissmda-maven-plugin</module>
 		<module>maven/kissmda-maven-app-archetype</module>

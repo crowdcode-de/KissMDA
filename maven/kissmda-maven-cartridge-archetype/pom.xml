@@ -28,11 +28,11 @@
 		<relativePath></relativePath>
 	</parent>
 	
-	<groupId>de.crowdcode.kissmda.maven.archetype</groupId>
+	<groupId>de.crowdcode.kissmda.maven</groupId>
 	<artifactId>kissmda-maven-cartridge-archetype</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>maven-archetype</packaging>
-	<name>Archetype - kissmda-cartridge-archetype-uml2</name>
+	<name>kissmda-cartridge-archetype-uml2</name>
 
 	<build>
 		<extensions>
