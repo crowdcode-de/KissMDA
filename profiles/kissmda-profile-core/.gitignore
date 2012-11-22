@@ -3,3 +3,7 @@
 /.settings
 .classpath
 .project
+.idea
+*.iml
+pom.xml.*
+release.properties
