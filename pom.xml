@@ -33,6 +33,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+	    <modules>kissmda-parent</modules>
 		<module>profiles/kissmda-profile-core</module>
 		<module>core/kissmda-core</module>
 		<module>maven/kissmda-maven-plugin</module>
