@@ -29,12 +29,14 @@
 	
 	<groupId>de.crowdcode.kissmda.app-examples</groupId>
 	<artifactId>kissmda-app-test</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>kissmda-app-test</name>
 		
     <properties>
         <junit.version>4.10</junit.version>
+        <kissmda.maven.plugin.version>1.1.0-SNAPSHOT</kissmda.maven.plugin.version>
+        <kissmda.cartridges.simple.java.version>1.1.0-SNAPSHOT</kissmda.cartridges.simple.java.version>
     </properties>
 
 	<dependencies>
@@ -70,12 +72,12 @@
 			<plugin>
 				<groupId>de.crowdcode.kissmda.maven</groupId>
 				<artifactId>kissmda-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<version>${kissmda.maven.plugin.version}</version>
 				<dependencies>
 					<dependency>
 						<groupId>de.crowdcode.kissmda.cartridges</groupId>
 						<artifactId>kissmda-cartridges-simple-java</artifactId>
-						<version>1.0.0</version>
+						<version>${kissmda.cartridges.simple.java.version}</version>
 					</dependency>
 				</dependencies>
 				<executions>
