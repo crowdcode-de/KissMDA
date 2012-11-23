@@ -27,11 +27,13 @@
 		<relativePath>kissmda-parent/pom.xml</relativePath>
 	</parent>
 	
-	<groupId>de.crowdcode.kissmda</groupId>
 	<artifactId>kissmda-modules</artifactId>
 	<version>1.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<!-- =============================================================== -->
+	<!-- Modules                                                         -->
+	<!-- =============================================================== -->
 	<modules>
 	    <module>kissmda-parent</module>
 		<module>profiles/kissmda-profile-core</module>
@@ -42,4 +44,27 @@
 		<module>cartridges/kissmda-cartridges-simple-java</module>
 		<module>app-examples/kissmda-app-test</module>
 	</modules>
+
+	<!-- =============================================================== -->
+	<!-- Profiles                                                        -->
+	<!-- =============================================================== -->
+	<profiles>
+		<!-- To deploy to Sonatype we don't always need to deploy -->
+		<!-- the kissmda-parent                                   -->
+		<profile>
+			<id>deploy-sonatype</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>profiles/kissmda-profile-core</module>
+				<module>core/kissmda-core</module>
+				<module>maven/kissmda-maven-plugin</module>
+				<module>maven/kissmda-maven-app-archetype</module>
+				<module>maven/kissmda-maven-cartridge-archetype</module>
+				<module>cartridges/kissmda-cartridges-simple-java</module>
+				<module>app-examples/kissmda-app-test</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
