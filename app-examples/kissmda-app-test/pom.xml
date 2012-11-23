@@ -20,10 +20,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <properties>
-        <junit.version>4.10</junit.version>
-    </properties>
-
     <parent>
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
@@ -33,9 +29,13 @@
 	
 	<groupId>de.crowdcode.kissmda.app-examples</groupId>
 	<artifactId>kissmda-app-test</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>kissmda-app-test</name>
+		
+    <properties>
+        <junit.version>4.10</junit.version>
+    </properties>
 
 	<dependencies>
 		<dependency>
@@ -70,7 +70,7 @@
 			<plugin>
 				<groupId>de.crowdcode.kissmda.maven</groupId>
 				<artifactId>kissmda-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.0-SNAPSHOT</version>
 				<dependencies>
 					<dependency>
 						<groupId>de.crowdcode.kissmda.cartridges</groupId>
