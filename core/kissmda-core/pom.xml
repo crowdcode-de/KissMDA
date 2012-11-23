@@ -24,7 +24,7 @@
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
 		<version>1.0.0</version>
-		<relativePath />
+		<relativePath>../../kissmda-parent/pom.xml</relativePath>
 	</parent>
 	
 	<groupId>de.crowdcode.kissmda.core</groupId>
