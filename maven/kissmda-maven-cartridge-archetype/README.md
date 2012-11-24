@@ -8,7 +8,7 @@ To run the archetype:
 mvn archetype:generate                                  
   -DarchetypeGroupId=de.crowdcode.kissmda.maven
   -DarchetypeArtifactId=kissmda-maven-cartridge-archetype
-  -DarchetypeVersion=1.0.0-SNAPSHOT
+  -DarchetypeVersion=1.0.0
   -DgroupId="my-groupid"
   -DartifactId="my-artifactId"
   -DprojectName="my-project-name"

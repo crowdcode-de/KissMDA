@@ -10,6 +10,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<junit.version>4.10</junit.version>
+        <kissmda.maven.plugin.version>1.0.0</kissmda.maven.plugin.version>
+        <kissmda.cartridges.simple.java.version>1.0.0</kissmda.cartridges.simple.java.version>
 	</properties>
 
 	<!-- Dependencies -->
@@ -17,7 +20,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -204,12 +207,12 @@
 			<plugin>
 				<groupId>de.crowdcode.kissmda.maven.plugin</groupId>
 				<artifactId>kissmda-maven-plugin</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>${kissmda.maven.plugin.version}</version>
 				<dependencies>
 					<dependency>
 						<groupId>de.crowdcode.kissmda.cartridges</groupId>
 						<artifactId>kissmda-cartridges-simple-java</artifactId>
-						<version>1.0.0-SNAPSHOT</version>
+						<version>${kissmda.cartridges.simple.java.version}</version>
 					</dependency>
 				</dependencies>
 				<executions>
