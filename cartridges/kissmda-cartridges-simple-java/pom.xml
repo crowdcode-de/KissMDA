@@ -36,7 +36,7 @@
 	<properties>
 		<jukito.version>1.1</jukito.version>
         <junit.version>4.10</junit.version>
-        <kissmda.core.version>1.1.0-SNAPSHOT</kissmda.core.version>
+        <kissmda.core.version>1.0.0</kissmda.core.version>
     </properties>
 
 	<dependencies>
