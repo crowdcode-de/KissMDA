@@ -205,7 +205,7 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>de.crowdcode.kissmda.maven.plugin</groupId>
+				<groupId>de.crowdcode.kissmda.maven</groupId>
 				<artifactId>kissmda-maven-plugin</artifactId>
 				<version>${kissmda.maven.plugin.version}</version>
 				<dependencies>
@@ -245,15 +245,9 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId>
-											de.crowdcode.kissmda.maven.plugin
-										</groupId>
-										<artifactId>
-											kissmda-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.0.0-SNAPSHOT,)
-										</versionRange>
+										<groupId>de.crowdcode.kissmda.maven</groupId>
+										<artifactId>kissmda-maven-plugin</artifactId>
+										<versionRange>[1.0.0-SNAPSHOT,)</versionRange>
 										<goals>
 											<goal>generate</goal>
 										</goals>
