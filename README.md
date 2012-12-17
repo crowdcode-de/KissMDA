@@ -26,7 +26,9 @@ of Acceleo](http://wiki.eclipse.org/Acceleo/Getting_Started) to understand how A
 So you need the MTL editor from Eclipse, imagine if something happens just like oAW. You will stuck with an old Eclipse
 version!
 
-Our solution is KissMDA (Keep It Simple Stupid, MDA!).
+There are some other MDA / MDSD tools available outside: [Taylor](http://taylor.sourceforge.net), [Topcased](http://www.topcased.org), [openMDX](http://www.openmdx.org). But all of them suffer the problems we mentioned above.
+
+*Our solution is KissMDA (Keep It Simple Stupid, MDA!)*.
 
 1. KissMDA is a pure Java API approach 
 --------------------------------------
