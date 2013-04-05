@@ -87,7 +87,8 @@ public class PersonImpl implements Person {
 	}
 
 	@Override
-	public void changeLastAddress() {
+	public void changeLastAddress(Address address, Boolean isLastOne) {
 		// TODO Auto-generated method stub
+
 	}
 }
