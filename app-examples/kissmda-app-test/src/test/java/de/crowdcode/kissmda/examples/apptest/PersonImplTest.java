@@ -66,4 +66,13 @@ public class PersonImplTest {
 		assertEquals(false, person.isInRetirement());
 		assertEquals(2, person.getAddresses().size());
 	}
+
+	@Test
+	public void testOperationWithParameters() {
+		Address addressLast = new AddressImpl();
+		addressLast.setStreet("Muenster");
+		addressLast.setPerson(person);
+
+		person.changeLastAddress(addressLast, true);
+	}
 }

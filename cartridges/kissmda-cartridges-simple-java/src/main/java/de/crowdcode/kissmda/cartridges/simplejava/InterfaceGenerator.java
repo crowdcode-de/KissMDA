@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -33,6 +34,8 @@ import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 
@@ -44,9 +47,8 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * Generate Interface from UML class.
  * 
  * <p>
- * Most important helper classes from kissmda-core which are used in this
- * Transformer: PackageHelper, MethodHelper, JavaHelper, FileWriter and
- * DataTypeUtils
+ * Most important helper classes from kissmda-core which are used in this Transformer: PackageHelper, MethodHelper,
+ * JavaHelper, FileWriter and DataTypeUtils
  * </p>
  * 
  * @author Lofi Dewanto
@@ -55,8 +57,7 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  */
 public class InterfaceGenerator {
 
-	private static final Logger logger = Logger
-			.getLogger(InterfaceGenerator.class.getName());
+	private static final Logger logger = Logger.getLogger(InterfaceGenerator.class.getName());
 
 	@Inject
 	private MethodHelper methodHelper;
@@ -82,15 +83,13 @@ public class InterfaceGenerator {
 	}
 
 	/**
-	 * Generate the Class Interface. This is the main generation part for this
-	 * SimpleJavaTransformer.
+	 * Generate the Class Interface. This is the main generation part for this SimpleJavaTransformer.
 	 * 
 	 * @param Class
 	 *            clazz the UML class
 	 * @return String the complete class with its content as a String
 	 */
-	public String generateInterface(Class clazz,
-			String sourceDirectoryPackageName) {
+	public String generateInterface(Class clazz, String sourceDirectoryPackageName) {
 		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
 
 		AST ast = AST.newAST(AST.JLS3);
@@ -112,71 +111,59 @@ public class InterfaceGenerator {
 		for (Property property : properties) {
 			// Create getter for each property
 			MethodDeclaration mdGetter = ast.newMethodDeclaration();
-			mdGetter.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+			mdGetter.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 			String getterName = methodHelper.getGetterName(property.getName());
 			mdGetter.setName(ast.newSimpleName(getterName));
 			// Return type?
 			Type type = property.getType();
-			logger.info("Class: " + clazz.getName() + " - " + "Property: "
-					+ property.getName() + " - " + "Property Upper: "
-					+ property.getUpper() + " - " + "Property Lower: "
-					+ property.getLower());
+			logger.info("Class: " + clazz.getName() + " - " + "Property: " + property.getName() + " - "
+					+ "Property Upper: " + property.getUpper() + " - " + "Property Lower: " + property.getLower());
 			String umlTypeName = type.getName();
 			String umlQualifiedTypeName = type.getQualifiedName();
 			if (property.getUpper() >= 0) {
 				// Upper Cardinality 0..1
-				jdtHelper.createReturnType(ast, td, mdGetter, umlTypeName,
-						umlQualifiedTypeName, sourceDirectoryPackageName);
+				jdtHelper.createReturnType(ast, td, mdGetter, umlTypeName, umlQualifiedTypeName,
+						sourceDirectoryPackageName);
 			} else {
 				// Upper Cardinality 0..*
 				// We need to add Collection<Type> as returnType
-				jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
-						umlTypeName, umlQualifiedTypeName,
+				jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter, umlTypeName, umlQualifiedTypeName,
 						sourceDirectoryPackageName);
 			}
 
 			// Create setter method for each property
 			MethodDeclaration mdSetter = ast.newMethodDeclaration();
-			mdSetter.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+			mdSetter.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 			// Return type void
-			PrimitiveType primitiveType = jdtHelper.getAstPrimitiveType(ast,
-					"void");
+			PrimitiveType primitiveType = jdtHelper.getAstPrimitiveType(ast, "void");
 			mdSetter.setReturnType2(primitiveType);
 			td.bodyDeclarations().add(mdSetter);
 			String umlPropertyName = property.getName();
 
 			if (property.getUpper() >= 0) {
 				// Upper Cardinality 0..1 params
-				String setterName = methodHelper.getSetterName(property
-						.getName());
+				String setterName = methodHelper.getSetterName(property.getName());
 				mdSetter.setName(ast.newSimpleName(setterName));
-				jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
-						umlQualifiedTypeName, umlPropertyName,
+				jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName, umlQualifiedTypeName, umlPropertyName,
 						sourceDirectoryPackageName);
 			} else {
 				// Upper Cardinality 0..* params
 				// We need to use addXxx instead of setXxx
-				String adderName = methodHelper
-						.getAdderName(property.getName());
+				String adderName = methodHelper.getAdderName(property.getName());
 				umlPropertyName = methodHelper.getSingularName(umlPropertyName);
 				mdSetter.setName(ast.newSimpleName(adderName));
-				jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
-						umlQualifiedTypeName, umlPropertyName,
+				jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName, umlQualifiedTypeName, umlPropertyName,
 						sourceDirectoryPackageName);
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public TypeDeclaration generateClass(Class clazz, AST ast,
-			CompilationUnit cu) {
+	public TypeDeclaration generateClass(Class clazz, AST ast, CompilationUnit cu) {
 		String className = getClassName(clazz);
 		TypeDeclaration td = ast.newTypeDeclaration();
 		td.setInterface(true);
-		td.modifiers().add(
-				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+		td.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		td.setName(ast.newSimpleName(className));
 		cu.types().add(td);
 		return td;
@@ -195,16 +182,27 @@ public class InterfaceGenerator {
 		EList<Operation> operations = clazz.getAllOperations();
 		for (Operation operation : operations) {
 			MethodDeclaration md = ast.newMethodDeclaration();
-			md.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+			md.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 			md.setName(ast.newSimpleName(operation.getName()));
+			// Parameters, exclude the return parameter
+			EList<Parameter> parameters = operation.getOwnedParameters();
+			for (Parameter parameter : parameters) {
+				if (parameter.getDirection().getValue() != ParameterDirectionKind.RETURN) {
+					logger.info("Parameter: " + parameter.getName());
+					Type type = parameter.getType();
+					String umlTypeName = type.getName();
+					String umlQualifiedTypeName = type.getQualifiedName();
+					String umlPropertyName = StringUtils.uncapitalize(parameter.getName());
+					jdtHelper.createParameterTypes(ast, td, md, umlTypeName, umlQualifiedTypeName, umlPropertyName,
+							sourceDirectoryPackageName);
+				}
+			}
 			// Return type?
 			Type type = operation.getType();
 			String umlTypeName = type.getName();
 			String umlQualifiedTypeName = type.getQualifiedName();
 			logger.info("Type: " + umlQualifiedTypeName);
-			jdtHelper.createReturnType(ast, td, md, umlTypeName,
-					umlQualifiedTypeName, sourceDirectoryPackageName);
+			jdtHelper.createReturnType(ast, td, md, umlTypeName, umlQualifiedTypeName, sourceDirectoryPackageName);
 		}
 	}
 
@@ -215,8 +213,7 @@ public class InterfaceGenerator {
 	}
 
 	private String getFullPackageName(Class clazz) {
-		String fullPackageName = packageHelper.getFullPackageName(clazz,
-				sourceDirectoryPackageName);
+		String fullPackageName = packageHelper.getFullPackageName(clazz, sourceDirectoryPackageName);
 		return fullPackageName;
 	}
 }
