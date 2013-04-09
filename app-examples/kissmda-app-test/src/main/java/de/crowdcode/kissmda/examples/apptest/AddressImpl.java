@@ -19,6 +19,7 @@
 package de.crowdcode.kissmda.examples.apptest;
 
 import de.crowdcode.kissmda.testapp.Address;
+import de.crowdcode.kissmda.testapp.AddressType;
 import de.crowdcode.kissmda.testapp.Person;
 
 /**
@@ -32,6 +33,7 @@ public class AddressImpl implements Address {
 	private Address oldAddress;
 	private String street;
 	private Person person;
+	private AddressType addressType;
 
 	@Override
 	public Address getOldAddress() {
@@ -71,5 +73,15 @@ public class AddressImpl implements Address {
 	public String toString() {
 		return "AddressImpl [oldAddress=" + oldAddress + ", street=" + street
 				+ ", person=" + person.getName() + "]";
+	}
+
+	@Override
+	public AddressType getAddressType() {
+		return addressType;
+	}
+
+	@Override
+	public void setAddressType(AddressType addressType) {
+		this.addressType = addressType;
 	}
 }

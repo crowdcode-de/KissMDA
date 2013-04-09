@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import de.crowdcode.kissmda.examples.apptest.components.CompanyImpl;
 import de.crowdcode.kissmda.testapp.Address;
+import de.crowdcode.kissmda.testapp.AddressType;
 import de.crowdcode.kissmda.testapp.components.Company;
 
 /**
@@ -50,10 +51,12 @@ public class PersonImplTest {
 
 		Address address1 = new AddressImpl();
 		address1.setStreet("Jakarta");
+		address1.setAddressType(AddressType.HOME);
 		address1.setPerson(person);
 		Address address2 = new AddressImpl();
 		address2.setStreet("Cologne");
 		address2.setStreet("Solingen");
+		address2.setAddressType(AddressType.OFFICE);
 		address2.setPerson(person);
 
 		person.setCompany(company);
