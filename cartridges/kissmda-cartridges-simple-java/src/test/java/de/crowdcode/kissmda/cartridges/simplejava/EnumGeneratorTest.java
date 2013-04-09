@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Association;
@@ -36,15 +37,15 @@ import org.junit.Test;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
- * Test Interface Generator.
+ * Test Enum Generator.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
  * @since 1.0.0
  */
-public class InterfaceGeneratorTest {
+public class EnumGeneratorTest {
 
-	private InterfaceGenerator interfaceGenerator;
+	private EnumGenerator enumGenerator;
 	private PackageHelper packageHelper;
 
 	private Class clazz;
@@ -52,8 +53,8 @@ public class InterfaceGeneratorTest {
 	@Before
 	public void setUp() throws Exception {
 		packageHelper = new PackageHelper();
-		interfaceGenerator = new InterfaceGenerator();
-		interfaceGenerator.setPackageHelper(packageHelper);
+		enumGenerator = new EnumGenerator();
+		enumGenerator.setPackageHelper(packageHelper);
 
 		setUpMocks();
 	}
@@ -83,7 +84,7 @@ public class InterfaceGeneratorTest {
 		td.modifiers().add(modifier);
 		td.setName(ast.newSimpleName("Company"));
 
-		interfaceGenerator.generatePackage(clazz, ast, cu);
+		enumGenerator.generatePackage(clazz, ast, cu);
 
 		// TODO idueppe - better check if the code is generated
 		assertTrue(true);
@@ -91,18 +92,16 @@ public class InterfaceGeneratorTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateClass() {
+	public void testGenerateEnum() {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
-		TypeDeclaration td = ast.newTypeDeclaration();
-		td.setInterface(true);
+		EnumDeclaration td = ast.newEnumDeclaration();
 
-		Modifier modifier = ast
-				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
-		td.modifiers().add(modifier);
+		td.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		td.setName(ast.newSimpleName("Company"));
 
-		interfaceGenerator.generateClass(clazz, ast, cu);
+		enumGenerator.generateEnum(clazz, ast, cu);
 
 		// TODO idueppe - better check if the code is generated
 		assertTrue(td != null);

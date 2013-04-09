@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Classifier;
 
 import de.crowdcode.kissmda.core.Context;
 
@@ -71,7 +71,7 @@ public class PackageHelper {
 		return outPackage;
 	}
 
-	public String getFullPackageName(Class clazz,
+	public String getFullPackageName(Classifier clazz,
 			String sourceDirectoryPackageName) {
 		// Get package until the beginning of SourceDirectory
 		logger.info("Qualified name: " + clazz.getQualifiedName());
@@ -103,8 +103,8 @@ public class PackageHelper {
 	}
 
 	public String removeUmlPrefixes(final String fullQualifiedName) {
-		String result = fullQualifiedName.replace(
-				MAGIC_DRAW_PROFILE_DATATYPES, "");
+		String result = fullQualifiedName.replace(MAGIC_DRAW_PROFILE_DATATYPES,
+				"");
 		result = result.replace(UML_PRIMITIVE_TYPES, "");
 		result = result.replace(JAVA_PRIMITIVE_TYPES, "");
 		return result;

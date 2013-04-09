@@ -24,15 +24,17 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import de.crowdcode.kissmda.core.file.JavaFileWriter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Element;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Stereotype;
 
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
+import de.crowdcode.kissmda.core.file.JavaFileWriter;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -56,6 +58,8 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private static final String STEREOTYPE_ENTITY = "Entity";
 
+	private static final String TYPE_ENUM = "Enumeration";
+
 	private static final String STEREOTYPE_SOURCEDIRECTORY = "SourceDirectory";
 
 	private String sourceDirectoryPackageName;
@@ -69,11 +73,18 @@ public class SimpleJavaTransformer implements Transformer {
 	@Inject
 	private InterfaceGenerator interfaceGenerator;
 
+	@Inject
+	private EnumGenerator enumGenerator;
+
+	private Context context;
+
 	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
 		this.interfaceGenerator = interfaceGenerator;
 	}
 
-	private Context context;
+	public void setEnumGenerator(EnumGenerator enumGenerator) {
+		this.enumGenerator = enumGenerator;
+	}
 
 	public void setJavaFileWriter(JavaFileWriter javaFileWriter) {
 		this.javaFileWriter = javaFileWriter;
@@ -103,9 +114,10 @@ public class SimpleJavaTransformer implements Transformer {
 			// Check the stereotype of the root package
 			checkStereotypeRootPackage(outPackage);
 
-			// Get all elements with defined stereotypes
-			EList<Element> list = outPackage.allOwnedElements();
-			for (Element element : list) {
+			// Get all elements with defined stereotypes and enums
+			EList<Element> elements = outPackage.allOwnedElements();
+			for (Element element : elements) {
+				// Stereotypes
 				EList<Stereotype> stereotypes = element.getAppliedStereotypes();
 				for (Stereotype stereotype : stereotypes) {
 					if (stereotype.getName().equals(STEREOTYPE_SOURCEDIRECTORY)) {
@@ -126,6 +138,16 @@ public class SimpleJavaTransformer implements Transformer {
 										sourceDirectoryPackageName);
 						generateClassFile(clazz, compilationUnit);
 					}
+				}
+
+				// Enums
+				if (element.eClass().getName().equals(TYPE_ENUM)) {
+					Enumeration clazz = (Enumeration) element;
+					logger.info("Enum: " + clazz.getName());
+					// Generate the enumeration for this class
+					String compilationUnit = enumGenerator.generateEnum(clazz,
+							sourceDirectoryPackageName);
+					generateClassFile(clazz, compilationUnit);
 				}
 			}
 		} catch (URISyntaxException e) {
@@ -166,11 +188,11 @@ public class SimpleJavaTransformer implements Transformer {
 	 * @throws IOException
 	 *             input or output error on file system
 	 */
-	private void generateClassFile(Class clazz, String compilationUnit)
+	private void generateClassFile(Classifier clazz, String compilationUnit)
 			throws IOException {
 		String fullPackageName = packageHelper.getFullPackageName(clazz,
 				sourceDirectoryPackageName);
-		javaFileWriter.createJavaFile(context, fullPackageName, clazz.getName(),
-                compilationUnit);
+		javaFileWriter.createJavaFile(context, fullPackageName,
+				clazz.getName(), compilationUnit);
 	}
 }
