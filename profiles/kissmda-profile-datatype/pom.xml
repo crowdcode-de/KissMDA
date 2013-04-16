@@ -19,30 +19,17 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
 		<version>1.0.0</version>
-		<relativePath>kissmda-parent/pom.xml</relativePath>
+		<relativePath>../../kissmda-parent/pom.xml</relativePath>
 	</parent>
-	
-	<artifactId>kissmda-modules</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
 
-	<!-- =============================================================== -->
-	<!-- Modules                                                         -->
-	<!-- =============================================================== -->
-	<modules>
-		<module>kissmda-parent</module>
-		<module>profiles/kissmda-profile-datatype</module>
-		<module>profiles/kissmda-profile-core</module>
-		<module>core/kissmda-core</module>
-		<module>maven/kissmda-maven-plugin</module>
-		<module>maven/kissmda-maven-app-archetype</module>
-		<module>maven/kissmda-maven-cartridge-archetype</module>
-		<module>cartridges/kissmda-cartridges-simple-java</module>
-		<module>app-examples/kissmda-app-test</module>
-	</modules>
+	<groupId>de.crowdcode.kissmda.profiles</groupId>
+	<artifactId>kissmda-profile-datatype</artifactId>
+	<version>1.1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>kissmda-profile-datatype</name>
 </project>
