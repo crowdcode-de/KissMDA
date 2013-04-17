@@ -87,15 +87,15 @@ public class AddressImpl implements Address {
 		this.addressType = addressType;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Collection getOldAddresses() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Collection getNewAddresses() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }
