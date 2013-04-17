@@ -18,6 +18,8 @@
  */
 package de.crowdcode.kissmda.examples.apptest;
 
+import java.util.Collection;
+
 import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.AddressType;
 import de.crowdcode.kissmda.testapp.Person;
@@ -83,5 +85,17 @@ public class AddressImpl implements Address {
 	@Override
 	public void setAddressType(AddressType addressType) {
 		this.addressType = addressType;
+	}
+
+	@Override
+	public Collection getOldAddresses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection getNewAddresses() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

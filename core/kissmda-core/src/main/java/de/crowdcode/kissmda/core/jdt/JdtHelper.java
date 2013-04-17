@@ -20,13 +20,16 @@ package de.crowdcode.kissmda.core.jdt;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import de.crowdcode.kissmda.core.uml.PackageHelper;
@@ -39,8 +42,6 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * @version 1.0.0
  */
 public class JdtHelper {
-
-	private static final String VOID = "void";
 
 	private static final String JAVA_UTIL_COLLECTION = "java.util.Collection";
 
@@ -65,16 +66,18 @@ public class JdtHelper {
 		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
-		// Only void is primitive, everything else are simple type
-		if (typeName.equalsIgnoreCase(VOID)) {
-			PrimitiveType primitiveType = getAstPrimitiveType(ast, umlTypeName);
-			md.setReturnType2(primitiveType);
-			td.bodyDeclarations().add(md);
+		// Check whether primitive or array type or simple type?
+		Type chosenType = null;
+		if (dataTypeUtils.isPrimitiveType(typeName)) {
+			chosenType = getAstPrimitiveType(ast, umlTypeName);
+		} else if (dataTypeUtils.isArrayType(typeName)) {
+			chosenType = getAstArrayType(ast, typeName);
 		} else {
-			SimpleType tp = getAstSimpleType(ast, typeName);
-			md.setReturnType2(tp);
-			td.bodyDeclarations().add(md);
+			chosenType = getAstSimpleType(ast, typeName);
 		}
+
+		md.setReturnType2(chosenType);
+		td.bodyDeclarations().add(md);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -109,7 +112,22 @@ public class JdtHelper {
 	public PrimitiveType getAstPrimitiveType(AST ast, String typeName) {
 		Code typeCode = dataTypeUtils.getPrimitiveTypeCodes().get(
 				typeName.toLowerCase());
-		return ast.newPrimitiveType(typeCode);
+		PrimitiveType primitiveType = ast.newPrimitiveType(typeCode);
+		return primitiveType;
+	}
+
+	public ArrayType getAstArrayType(AST ast, String typeName) {
+		Type componentType = null;
+		// Remove [] for componentType
+		typeName = StringUtils.remove(typeName, "[]");
+		if (dataTypeUtils.isPrimitiveType(typeName)) {
+			componentType = getAstPrimitiveType(ast, typeName);
+		} else {
+			componentType = getAstSimpleType(ast, typeName);
+		}
+
+		ArrayType arrayType = ast.newArrayType(componentType);
+		return arrayType;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -120,23 +138,21 @@ public class JdtHelper {
 		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
-		// Only void is primitive, everything else are simple type
-		if (typeName.equalsIgnoreCase(VOID)) {
-			PrimitiveType primitiveType = getAstPrimitiveType(ast, umlTypeName);
-			SingleVariableDeclaration variableDeclaration = ast
-					.newSingleVariableDeclaration();
-			variableDeclaration.setType(ast.newPrimitiveType(primitiveType
-					.getPrimitiveTypeCode()));
-			variableDeclaration.setName(ast.newSimpleName(umlPropertyName));
-			md.parameters().add(variableDeclaration);
+		// Check whether primitive or array type or simple type?
+		Type chosenType = null;
+		if (dataTypeUtils.isPrimitiveType(typeName)) {
+			chosenType = getAstPrimitiveType(ast, umlTypeName);
+		} else if (dataTypeUtils.isArrayType(typeName)) {
+			chosenType = getAstArrayType(ast, typeName);
 		} else {
-			SimpleType tp = getAstSimpleType(ast, typeName);
-			SingleVariableDeclaration variableDeclaration = ast
-					.newSingleVariableDeclaration();
-			variableDeclaration.setType(tp);
-			variableDeclaration.setName(ast.newSimpleName(umlPropertyName));
-			md.parameters().add(variableDeclaration);
+			chosenType = getAstSimpleType(ast, typeName);
 		}
+
+		SingleVariableDeclaration variableDeclaration = ast
+				.newSingleVariableDeclaration();
+		variableDeclaration.setType(chosenType);
+		variableDeclaration.setName(ast.newSimpleName(umlPropertyName));
+		md.parameters().add(variableDeclaration);
 	}
 
 	public String getClassName(final String fullClassName) {

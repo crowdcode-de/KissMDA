@@ -43,6 +43,10 @@ public class PackageHelper {
 
 	private static final String MAGIC_DRAW_PROFILE_DATATYPES = "MagicDraw Profile::datatypes::";
 
+	private static final String VALIDATION_PROFILE_OCL_LIBRARY = "Validation Profile::OCL Library::";
+
+	private static final String DATA_DATATYPE = "Data::datatype::";
+
 	private static final String FILE_PROTOCOL = "file:/";
 
 	private static final Logger logger = Logger.getLogger(PackageHelper.class
@@ -107,6 +111,8 @@ public class PackageHelper {
 				"");
 		result = result.replace(UML_PRIMITIVE_TYPES, "");
 		result = result.replace(JAVA_PRIMITIVE_TYPES, "");
+		result = result.replace(VALIDATION_PROFILE_OCL_LIBRARY, "");
+		result = result.replace(DATA_DATATYPE, "");
 		return result;
 	}
 }

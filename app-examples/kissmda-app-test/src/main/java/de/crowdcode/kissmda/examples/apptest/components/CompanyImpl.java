@@ -7,7 +7,7 @@ import de.crowdcode.kissmda.testapp.components.Company;
 public class CompanyImpl implements Company {
 
 	private String name;
-	private Double value;
+	private double value;
 	private Date created;
 
 	@Override
@@ -21,12 +21,12 @@ public class CompanyImpl implements Company {
 	}
 
 	@Override
-	public Double getValue() {
+	public double getValue() {
 		return value;
 	}
 
 	@Override
-	public void setValue(Double value) {
+	public void setValue(double value) {
 		this.value = value;
 	}
 

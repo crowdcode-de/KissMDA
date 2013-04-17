@@ -95,4 +95,18 @@ public class PackageHelperTest {
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
 		assertEquals("double", result);
 	}
+
+	@Test
+	public void testRemoveUmlPrefixes5() {
+		String fullQualifiedName = "Validation Profile::OCL Library::Collection";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("Collection", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes6() {
+		String fullQualifiedName = "Data::datatype::byte[]";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("byte[]", result);
+	}
 }

@@ -25,14 +25,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Answers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
  * Unit test for Java Helper.
@@ -43,17 +52,20 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class JdtHelperTest {
 
+	@InjectMocks
 	private JdtHelper jdtHelper;
 
-	@Mock
+	@SuppressWarnings("unused")
+	@Spy
+	private PackageHelper packageHelper;
+
+	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	private DataTypeUtils dataTypeUtils;
 
 	private final AST ast = AST.newAST(AST.JLS3);;
 
 	@Before
 	public void setUp() throws Exception {
-		jdtHelper = new JdtHelper();
-		jdtHelper.setDataTypeUtils(dataTypeUtils);
 	}
 
 	@Test
@@ -86,6 +98,17 @@ public class JdtHelperTest {
 	}
 
 	@Test
+	public void testGetAstSimpleTypeJavaTypeCollection() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		String typeName = "Collection";
+		SimpleType tp = jdtHelper.getAstSimpleType(ast, typeName);
+
+		assertEquals("java.util.Collection", tp.getName().toString());
+	}
+
+	@Test
 	public void testGetAstPrimitiveType() {
 		Map<String, Code> primitiveTypes = createPrimitiveTypeCodes();
 		when(dataTypeUtils.getPrimitiveTypeCodes()).thenReturn(primitiveTypes);
@@ -96,10 +119,40 @@ public class JdtHelperTest {
 		assertEquals("int", tp.toString());
 	}
 
+	@Test
+	public void testGetAstArrayTypePrimitive() {
+		Map<String, Code> primitiveTypes = createPrimitiveTypeCodes();
+		when(dataTypeUtils.getPrimitiveTypeCodes()).thenReturn(primitiveTypes);
+		when(dataTypeUtils.isPrimitiveType(Mockito.anyString())).thenReturn(
+				true);
+
+		String typeName = "byte[]";
+		ArrayType tp = jdtHelper.getAstArrayType(ast, typeName);
+
+		assertEquals("byte[]", tp.toString());
+	}
+
+	@Test
+	public void testCreateReturnType() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		TypeDeclaration td = ast.newTypeDeclaration();
+		MethodDeclaration md = ast.newMethodDeclaration();
+		String umlTypeName = "Collection";
+		String umlQualifiedTypeName = "Validation Profile::OCL Library::Collection";
+		String sourceDirectoryPackageName = "Data";
+		jdtHelper.createReturnType(ast, td, md, umlTypeName,
+				umlQualifiedTypeName, sourceDirectoryPackageName);
+
+		assertEquals("java.util.Collection", md.getReturnType2().toString());
+	}
+
 	private Map<String, String> createJavaTypes() {
 		Map<String, String> javaTypes = new HashMap<String, String>();
 		javaTypes.put("integer", "Integer");
 		javaTypes.put("short", "Short");
+		javaTypes.put("collection", "java.util.Collection");
 		return javaTypes;
 	}
 
@@ -107,6 +160,7 @@ public class JdtHelperTest {
 		Map<String, Code> primitiveTypeCodes = new HashMap<String, Code>();
 		primitiveTypeCodes.put("integer", PrimitiveType.INT);
 		primitiveTypeCodes.put("short", PrimitiveType.SHORT);
+		primitiveTypeCodes.put("byte", PrimitiveType.BYTE);
 		return primitiveTypeCodes;
 	}
 }

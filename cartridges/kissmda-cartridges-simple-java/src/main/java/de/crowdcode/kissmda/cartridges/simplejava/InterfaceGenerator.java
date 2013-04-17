@@ -206,12 +206,13 @@ public class InterfaceGenerator {
 			EList<Parameter> parameters = operation.getOwnedParameters();
 			for (Parameter parameter : parameters) {
 				if (parameter.getDirection().getValue() != ParameterDirectionKind.RETURN) {
-					logger.info("Parameter: " + parameter.getName());
 					Type type = parameter.getType();
 					String umlTypeName = type.getName();
 					String umlQualifiedTypeName = type.getQualifiedName();
 					String umlPropertyName = StringUtils.uncapitalize(parameter
 							.getName());
+					logger.info("Parameter: " + parameter.getName() + " - "
+							+ "Type: " + umlTypeName);
 					jdtHelper.createParameterTypes(ast, td, md, umlTypeName,
 							umlQualifiedTypeName, umlPropertyName,
 							sourceDirectoryPackageName);
@@ -221,7 +222,8 @@ public class InterfaceGenerator {
 			Type type = operation.getType();
 			String umlTypeName = type.getName();
 			String umlQualifiedTypeName = type.getQualifiedName();
-			logger.info("Type: " + umlQualifiedTypeName);
+			logger.info("UmlQualifiedTypeName: " + umlQualifiedTypeName + " - "
+					+ "umlTypeName: " + umlTypeName);
 			jdtHelper.createReturnType(ast, td, md, umlTypeName,
 					umlQualifiedTypeName, sourceDirectoryPackageName);
 		}

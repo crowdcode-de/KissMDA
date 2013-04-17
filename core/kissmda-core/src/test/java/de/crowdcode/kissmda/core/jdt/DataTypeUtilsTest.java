@@ -23,8 +23,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
-
 /**
  * Unit test for Data Type Utils.
  * 
@@ -44,5 +42,11 @@ public class DataTypeUtilsTest {
 	public void testIsPrimitiveType() {
 		boolean isPrimitiveType = dataTypeUtils.isPrimitiveType("integer");
 		assertTrue(isPrimitiveType);
+	}
+
+	@Test
+	public void testIsArrayType() {
+		boolean isArrayType = dataTypeUtils.isArrayType("datatype.byte[]");
+		assertTrue(isArrayType);
 	}
 }

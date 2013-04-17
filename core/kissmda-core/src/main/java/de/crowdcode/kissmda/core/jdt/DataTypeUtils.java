@@ -63,6 +63,7 @@ public class DataTypeUtils {
 			javaTypes.put("boolean", "Boolean");
 			javaTypes.put("string", "String");
 			javaTypes.put("date", "java.util.Date");
+			javaTypes.put("collection", "java.util.Collection");
 		}
 
 		return javaTypes;
@@ -72,6 +73,14 @@ public class DataTypeUtils {
 		Map<String, Code> primitiveTypeCodes = getPrimitiveTypeCodes();
 		Code primitiveTypeCode = primitiveTypeCodes.get(typeName);
 		if (primitiveTypeCode != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isArrayType(String typeName) {
+		if (typeName.contains("[]")) {
 			return true;
 		} else {
 			return false;

@@ -34,7 +34,8 @@ import de.crowdcode.kissmda.testapp.components.Company;
  */
 public class PersonImpl implements Person {
 
-	private static final Logger logger = Logger.getLogger(PersonImpl.class.getName());
+	private static final Logger logger = Logger.getLogger(PersonImpl.class
+			.getName());
 	private String name;
 	private final Collection<Address> addresses = new ArrayList<Address>();
 	private Company company;
@@ -50,10 +51,11 @@ public class PersonImpl implements Person {
 	}
 
 	@Override
-	public void run() {
-		logger.info("We are running the PersonImpl which implements the generated Person interface with: " + name
-				+ " - Company: " + company.getName());
+	public java.util.Date[] run(byte[] content) {
+		logger.info("We are running the PersonImpl which implements the generated Person interface with: "
+				+ name + " - Company: " + company.getName());
 		logger.info("With following addresses: " + addresses.toString());
+		return null;
 	}
 
 	@Override

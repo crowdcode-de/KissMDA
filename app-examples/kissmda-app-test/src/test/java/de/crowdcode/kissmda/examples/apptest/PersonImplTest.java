@@ -19,6 +19,9 @@
 package de.crowdcode.kissmda.examples.apptest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -63,8 +66,10 @@ public class PersonImplTest {
 		person.addAddresses(address1);
 		person.addAddresses(address2);
 
-		person.run();
+		byte[] content = null;
+		Date[] dateArray = person.run(content);
 
+		assertNull(dateArray);
 		assertEquals(0, person.calculateAge().intValue());
 		assertEquals(false, person.isInRetirement());
 		assertEquals(2, person.getAddresses().size());
