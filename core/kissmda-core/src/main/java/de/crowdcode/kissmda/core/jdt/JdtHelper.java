@@ -170,6 +170,8 @@ public class JdtHelper {
 			chosenType = getAstPrimitiveType(ast, umlTypeName);
 		} else if (dataTypeUtils.isArrayType(typeName)) {
 			chosenType = getAstArrayType(ast, typeName);
+		} else if (dataTypeUtils.isParameterizedType(typeName)) {
+			chosenType = getAstParameterizedType(ast, typeName);
 		} else {
 			chosenType = getAstSimpleType(ast, typeName);
 		}

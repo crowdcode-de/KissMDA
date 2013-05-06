@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -30,8 +31,11 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.TemplateParameter;
+import org.eclipse.uml2.uml.TemplateSignature;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Answers;
 
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
@@ -92,6 +96,31 @@ public class InterfaceGeneratorTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testGenerateClass() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		interfaceGenerator.generateClass(clazz, ast, cu);
+
+		// TODO idueppe - better check if the code is generated
+		assertTrue(td != null);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateClassWithTemplate() {
+		TemplateSignature templateSignature = mock(TemplateSignature.class);
+		EList<TemplateParameter> templateParameters = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		when(clazz.getOwnedTemplateSignature()).thenReturn(templateSignature);
+		when(templateSignature.getParameters()).thenReturn(templateParameters);
+
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 		TypeDeclaration td = ast.newTypeDeclaration();

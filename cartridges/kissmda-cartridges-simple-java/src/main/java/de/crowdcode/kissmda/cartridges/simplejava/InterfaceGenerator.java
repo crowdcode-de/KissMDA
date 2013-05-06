@@ -32,11 +32,14 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.TemplateParameter;
+import org.eclipse.uml2.uml.TemplateSignature;
 import org.eclipse.uml2.uml.Type;
 
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
@@ -182,7 +185,24 @@ public class InterfaceGenerator {
 		td.modifiers().add(
 				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		td.setName(ast.newSimpleName(className));
+
+		// Add type params
+		TemplateSignature templateSignature = clazz.getOwnedTemplateSignature();
+		if (templateSignature != null) {
+			EList<TemplateParameter> templateParameters = templateSignature
+					.getParameters();
+			for (TemplateParameter templateParameter : templateParameters) {
+				Classifier classifier = (Classifier) templateParameter
+						.getOwnedParameteredElement();
+				String typeName = classifier.getLabel();
+				TypeParameter typeParameter = ast.newTypeParameter();
+				typeParameter.setName(ast.newSimpleName(typeName));
+				td.typeParameters().add(typeParameter);
+			}
+		}
+
 		cu.types().add(td);
+
 		return td;
 	}
 
