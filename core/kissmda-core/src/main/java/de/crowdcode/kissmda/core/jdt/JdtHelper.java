@@ -72,6 +72,8 @@ public class JdtHelper {
 			chosenType = getAstPrimitiveType(ast, umlTypeName);
 		} else if (dataTypeUtils.isArrayType(typeName)) {
 			chosenType = getAstArrayType(ast, typeName);
+		} else if (dataTypeUtils.isParameterizedType(typeName)) {
+			chosenType = getAstParameterizedType(ast, typeName);
 		} else {
 			chosenType = getAstSimpleType(ast, typeName);
 		}
@@ -128,6 +130,30 @@ public class JdtHelper {
 
 		ArrayType arrayType = ast.newArrayType(componentType);
 		return arrayType;
+	}
+
+	@SuppressWarnings("unchecked")
+	public ParameterizedType getAstParameterizedType(AST ast, String typeName) {
+		// Get the component type and parameters <Type, Type, ...>
+		String componentTypeName = StringUtils.substringBefore(typeName, "<");
+		Type componentType = getAstSimpleType(ast, componentTypeName);
+		ParameterizedType parameterizedType = ast
+				.newParameterizedType(componentType);
+
+		String paramTypeNames = StringUtils.substringAfter(typeName, "<");
+		// Result: String, Integer, Boolean>
+		String[] parametersAsString = StringUtils.split(paramTypeNames, ",");
+		for (int index = 0; index < parametersAsString.length; index++) {
+			String paramTypeName = parametersAsString[index];
+			paramTypeName = StringUtils.remove(paramTypeName, ",");
+			paramTypeName = StringUtils.remove(paramTypeName, ">");
+			paramTypeName = StringUtils.trim(paramTypeName);
+			Type paramType = getAstSimpleType(ast, paramTypeName);
+			// Add the type arguments
+			parameterizedType.typeArguments().add(paramType);
+		}
+
+		return parameterizedType;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -27,6 +27,7 @@ import java.util.Map;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.eclipse.jdt.core.dom.SimpleType;
@@ -130,6 +131,39 @@ public class JdtHelperTest {
 		ArrayType tp = jdtHelper.getAstArrayType(ast, typeName);
 
 		assertEquals("byte[]", tp.toString());
+	}
+
+	@Test
+	public void testGetAstParameterizedType() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		String typeName = "Collection<String>";
+		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
+
+		assertEquals("java.util.Collection<String>", tp.toString());
+	}
+
+	@Test
+	public void testGetAstParameterizedTypesWithEmptySpace() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		String typeName = "de.test.Attribute<String, Integer, Boolean>";
+		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
+
+		assertEquals("de.test.Attribute<String,Integer,Boolean>", tp.toString());
+	}
+
+	@Test
+	public void testGetAstParameterizedTypesWithoutEmptySpace() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		String typeName = "de.test.Attribute<String,Integer,Boolean>";
+		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
+
+		assertEquals("de.test.Attribute<String,Integer,Boolean>", tp.toString());
 	}
 
 	@Test
