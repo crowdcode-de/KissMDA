@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.core.jdt;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -48,5 +49,19 @@ public class DataTypeUtilsTest {
 	public void testIsArrayType() {
 		boolean isArrayType = dataTypeUtils.isArrayType("datatype.byte[]");
 		assertTrue(isArrayType);
+	}
+
+	@Test
+	public void testIsParameterizedType() {
+		boolean isParameterizedType = dataTypeUtils
+				.isParameterizedType("datatype.Collection<String>");
+		assertTrue(isParameterizedType);
+	}
+
+	@Test
+	public void testIsNotParameterizedType() {
+		boolean isParameterizedType = dataTypeUtils
+				.isParameterizedType("datatype.Collection<String");
+		assertFalse(isParameterizedType);
 	}
 }

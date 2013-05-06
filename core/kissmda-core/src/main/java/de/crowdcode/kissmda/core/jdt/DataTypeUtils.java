@@ -86,4 +86,12 @@ public class DataTypeUtils {
 			return false;
 		}
 	}
+
+	public boolean isParameterizedType(String typeName) {
+		if (typeName.contains("<") && typeName.contains(">")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
