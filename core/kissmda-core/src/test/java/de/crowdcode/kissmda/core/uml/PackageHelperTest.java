@@ -69,6 +69,50 @@ public class PackageHelperTest {
 	}
 
 	@Test
+	public void testGetFullPackageNameWithStringNonData() {
+		String sourceDirectoryPackageName = "MyModel";
+		String umlPackageNameWithClass = "MyModel::de.crowdcode.test.Company";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("de.crowdcode.test.Company", result);
+	}
+
+	@Test
+	public void testGetFullPackageNameWithStringAlreadyOk() {
+		String sourceDirectoryPackageName = "Data";
+		String umlPackageNameWithClass = "de.crowdcode.test.Company";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("de.crowdcode.test.Company", result);
+	}
+
+	@Test
+	public void testGetFullPackageNameWithStringAlreadyOkWithoutSourceDirectoryPackageName() {
+		String sourceDirectoryPackageName = "";
+		String umlPackageNameWithClass = "de.crowdcode.test.Company";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("de.crowdcode.test.Company", result);
+	}
+
+	@Test
+	public void testGetFullPackageNameWithGenerics() {
+		String sourceDirectoryPackageName = "Data";
+		String umlPackageNameWithClass = "T";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("T", result);
+	}
+
+	@Test
 	public void testRemoveUmlPrefixes1() {
 		String fullQualifiedName = "UMLPrimitiveTypes::Boolean";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
@@ -80,6 +124,13 @@ public class PackageHelperTest {
 		String fullQualifiedName = "Data::de.crowdcode.test.Company";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
 		assertEquals("Data::de.crowdcode.test.Company", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes9() {
+		String fullQualifiedName = "MyModel::de.crowdcode.test.Company";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("MyModel::de.crowdcode.test.Company", result);
 	}
 
 	@Test
@@ -108,5 +159,26 @@ public class PackageHelperTest {
 		String fullQualifiedName = "Data::datatype::byte[]";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
 		assertEquals("byte[]", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes7() {
+		String fullQualifiedName = "Data::datatype-bindings::Collection<String>";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("Collection<String>", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes8() {
+		String fullQualifiedName = "T";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("T", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes10() {
+		String fullQualifiedName = "MyModel::datatype-bindings::Collection<String>";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("Collection<String>", result);
 	}
 }

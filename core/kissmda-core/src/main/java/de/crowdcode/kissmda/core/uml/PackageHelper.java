@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.uml2.uml.Classifier;
 
@@ -37,6 +38,8 @@ import de.crowdcode.kissmda.core.Context;
  */
 public class PackageHelper {
 
+	private static final String FILE_PROTOCOL = "file:/";
+
 	private static final String JAVA_PRIMITIVE_TYPES = "JavaPrimitiveTypes::";
 
 	private static final String UML_PRIMITIVE_TYPES = "UMLPrimitiveTypes::";
@@ -45,9 +48,9 @@ public class PackageHelper {
 
 	private static final String VALIDATION_PROFILE_OCL_LIBRARY = "Validation Profile::OCL Library::";
 
-	private static final String DATA_DATATYPE = "Data::datatype::";
+	private static final String DATA_DATATYPE = "datatype::";
 
-	private static final String FILE_PROTOCOL = "file:/";
+	private static final String DATA_DATATYPE_BINDINGS = "datatype-bindings::";
 
 	private static final Logger logger = Logger.getLogger(PackageHelper.class
 			.getName());
@@ -107,12 +110,21 @@ public class PackageHelper {
 	}
 
 	public String removeUmlPrefixes(final String fullQualifiedName) {
+		// MagicDraw specific stuffs...
 		String result = fullQualifiedName.replace(MAGIC_DRAW_PROFILE_DATATYPES,
 				"");
 		result = result.replace(UML_PRIMITIVE_TYPES, "");
 		result = result.replace(JAVA_PRIMITIVE_TYPES, "");
 		result = result.replace(VALIDATION_PROFILE_OCL_LIBRARY, "");
-		result = result.replace(DATA_DATATYPE, "");
+
+		// Name dataype and dataype-bindings
+		if (StringUtils.contains(result, DATA_DATATYPE)) {
+			result = StringUtils.substringAfter(result, DATA_DATATYPE);
+		}
+		if (StringUtils.contains(result, DATA_DATATYPE_BINDINGS)) {
+			result = StringUtils.substringAfter(result, DATA_DATATYPE_BINDINGS);
+		}
+
 		return result;
 	}
 }

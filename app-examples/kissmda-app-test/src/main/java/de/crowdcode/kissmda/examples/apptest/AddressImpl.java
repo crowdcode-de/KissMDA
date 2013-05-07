@@ -93,9 +93,8 @@ public class AddressImpl implements Address {
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public Collection getNewAddresses() {
+	public Collection<String> getNewAddresses() {
 		return null;
 	}
 }
