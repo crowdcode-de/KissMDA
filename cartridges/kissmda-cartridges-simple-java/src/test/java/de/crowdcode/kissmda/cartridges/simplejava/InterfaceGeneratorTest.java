@@ -18,7 +18,7 @@
  */
 package de.crowdcode.kissmda.cartridges.simplejava;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -89,8 +89,7 @@ public class InterfaceGeneratorTest {
 
 		interfaceGenerator.generatePackage(clazz, ast, cu);
 
-		// TODO idueppe - better check if the code is generated
-		assertTrue(true);
+		assertEquals("public interface Company {\n}\n", td.toString());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -106,10 +105,10 @@ public class InterfaceGeneratorTest {
 		td.modifiers().add(modifier);
 		td.setName(ast.newSimpleName("Company"));
 
-		interfaceGenerator.generateClass(clazz, ast, cu);
+		TypeDeclaration typeDeclaration = interfaceGenerator.generateClass(
+				clazz, ast, cu);
 
-		// TODO idueppe - better check if the code is generated
-		assertTrue(td != null);
+		assertEquals(typeDeclaration.toString(), td.toString());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -131,9 +130,9 @@ public class InterfaceGeneratorTest {
 		td.modifiers().add(modifier);
 		td.setName(ast.newSimpleName("Company"));
 
-		interfaceGenerator.generateClass(clazz, ast, cu);
+		TypeDeclaration typeDeclaration = interfaceGenerator.generateClass(
+				clazz, ast, cu);
 
-		// TODO idueppe - better check if the code is generated
-		assertTrue(td != null);
+		assertEquals(typeDeclaration.toString(), td.toString());
 	}
 }
