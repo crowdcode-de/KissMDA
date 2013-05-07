@@ -29,6 +29,7 @@ import org.junit.Test;
 import de.crowdcode.kissmda.examples.apptest.components.CompanyImpl;
 import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.AddressType;
+import de.crowdcode.kissmda.testapp.CompanyAttribute;
 import de.crowdcode.kissmda.testapp.components.Company;
 
 /**
@@ -52,6 +53,11 @@ public class PersonImplTest {
 		Company company = new CompanyImpl();
 		company.setName("CrowdCode");
 
+		CompanyAttribute<String, Integer> companyAttribute = new CompanyAttributeImpl();
+		companyAttribute.setName("Lofi");
+		companyAttribute.add("Test Element", 23);
+		company.setCompanyAttribute(companyAttribute);
+
 		Address address1 = new AddressImpl();
 		address1.setStreet("Jakarta");
 		address1.setAddressType(AddressType.HOME);
@@ -73,6 +79,8 @@ public class PersonImplTest {
 		assertEquals(0, person.calculateAge().intValue());
 		assertEquals(false, person.isInRetirement());
 		assertEquals(2, person.getAddresses().size());
+		assertEquals("Lofi - Test Element - 23", person.getCompany()
+				.getCompanyAttribute().getName());
 	}
 
 	@Test
