@@ -58,6 +58,8 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private static final String STEREOTYPE_ENTITY = "Entity";
 
+	private static final String STEREOTYPE_SERVICE = "Service";
+
 	private static final String TYPE_ENUM = "Enumeration";
 
 	private static final String STEREOTYPE_SOURCEDIRECTORY = "SourceDirectory";
@@ -127,7 +129,8 @@ public class SimpleJavaTransformer implements Transformer {
 						logger.info("SourceDirectory package name: "
 								+ sourceDirectoryPackageName);
 					}
-					if (stereotype.getName().equals(STEREOTYPE_ENTITY)) {
+					if (stereotype.getName().equals(STEREOTYPE_ENTITY)
+							|| stereotype.getName().equals(STEREOTYPE_SERVICE)) {
 						// Stereotype Interface
 						Class clazz = (Class) element;
 						logger.info("Class: " + clazz.getName() + " - "
