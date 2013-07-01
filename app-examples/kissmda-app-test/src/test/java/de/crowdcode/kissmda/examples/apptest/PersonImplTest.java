@@ -30,6 +30,7 @@ import de.crowdcode.kissmda.examples.apptest.components.CompanyImpl;
 import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.AddressType;
 import de.crowdcode.kissmda.testapp.CompanyAttribute;
+import de.crowdcode.kissmda.testapp.Person;
 import de.crowdcode.kissmda.testapp.components.Company;
 
 /**
@@ -40,7 +41,7 @@ import de.crowdcode.kissmda.testapp.components.Company;
  */
 public class PersonImplTest {
 
-	private PersonImpl person;
+	private Person person;
 
 	@Before
 	public void setUp() {
