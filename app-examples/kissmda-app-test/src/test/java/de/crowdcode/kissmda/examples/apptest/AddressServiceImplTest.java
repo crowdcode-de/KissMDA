@@ -71,5 +71,4 @@ public class AddressServiceImplTest {
 
 		assertEquals(person, address.getPerson());
 	}
-
 }
