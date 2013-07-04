@@ -11,8 +11,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<junit.version>4.10</junit.version>
-        <kissmda.maven.plugin.version>1.0.0</kissmda.maven.plugin.version>
-        <kissmda.cartridges.simple.java.version>1.0.0</kissmda.cartridges.simple.java.version>
+        <kissmda.maven.plugin.version>1.1.0-SNAPSHOT</kissmda.maven.plugin.version>
+        <kissmda.cartridges.simple.java.version>1.1.0-SNAPSHOT</kissmda.cartridges.simple.java.version>
 	</properties>
 
 	<!-- Dependencies -->
