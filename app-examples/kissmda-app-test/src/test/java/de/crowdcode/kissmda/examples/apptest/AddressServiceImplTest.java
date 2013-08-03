@@ -29,6 +29,8 @@ import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.AddressService;
 import de.crowdcode.kissmda.testapp.AddressType;
 import de.crowdcode.kissmda.testapp.Person;
+import de.crowdcode.kissmda.testapp.PrivateAddressService;
+import de.crowdcode.kissmda.testapp.PrivateCompany;
 import de.crowdcode.kissmda.testapp.components.Company;
 import de.crowdcode.kissmda.testapp.components.CompanyAttribute;
 
@@ -44,16 +46,58 @@ public class AddressServiceImplTest {
 
 	private AddressService addressService;
 
+	private PrivateAddressService privateAddressService;
+
 	@Before
 	public void setUp() throws Exception {
 		person = new PersonImpl();
 		person.setName("Lofi");
 
 		addressService = new AddressServiceImpl();
+		privateAddressService = new PrivateAddressServiceImpl();
 	}
 
 	@Test
 	public void testCreateAddressFromPerson() {
+		Address address = prepareAddressAndCompany();
+		assertEquals(null, address.getPerson());
+
+		addressService.createAddressFromPerson(address, person);
+
+		assertEquals(person, address.getPerson());
+	}
+
+	@Test
+	public void testCreateAddressFromPersonWithPrivateAddressService() {
+		Address address = prepareAddressAndCompany();
+		assertEquals(null, address.getPerson());
+
+		privateAddressService.createAddressFromPerson(address, person);
+
+		assertEquals(person, address.getPerson());
+	}
+
+	@Test
+	public void testCreatePrivateAddressFromPerson() {
+		Address address = prepareAddressAndCompany();
+		assertEquals(null, address.getPerson());
+
+		privateAddressService.createPrivateAddressFromPerson(address, person);
+
+		assertEquals(person, address.getPerson());
+	}
+
+	@Test
+	public void testGetPrivateCompanyByPerson() {
+		Address address = prepareAddressAndCompany();
+		PrivateCompany privateCompany = new PrivateCompanyImpl();
+		Company company = privateAddressService.getPrivateCompanyByPerson(
+				address.getPerson(), privateCompany);
+
+		assertEquals(company.getName(), privateCompany.getName());
+	}
+
+	private Address prepareAddressAndCompany() {
 		Company company = new CompanyImpl();
 		company.setName("CrowdCode");
 
@@ -66,10 +110,6 @@ public class AddressServiceImplTest {
 		address.setStreet("Jakarta");
 		address.setAddressType(AddressType.HOME);
 
-		assertEquals(null, address.getPerson());
-
-		addressService.createAddressFromPerson(address, person);
-
-		assertEquals(person, address.getPerson());
+		return address;
 	}
 }
