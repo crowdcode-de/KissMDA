@@ -27,9 +27,12 @@ import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.TemplateParameter;
 import org.eclipse.uml2.uml.TemplateSignature;
@@ -71,6 +74,8 @@ public class InterfaceGeneratorTest {
 				.thenReturn(new UniqueEList<Association>());
 		when(clazz.getImplementedInterfaces()).thenReturn(
 				new UniqueEList<Interface>());
+		when(clazz.getGeneralizations()).thenReturn(
+				new UniqueEList<Generalization>());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -104,6 +109,36 @@ public class InterfaceGeneratorTest {
 				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
 		td.modifiers().add(modifier);
 		td.setName(ast.newSimpleName("Company"));
+
+		TypeDeclaration typeDeclaration = interfaceGenerator.generateClass(
+				clazz, ast, cu);
+
+		assertEquals(typeDeclaration.toString(), td.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateClassWithInheritance() {
+		EList<Generalization> generalizations = new UniqueEList<Generalization>();
+		Generalization generalization = mock(Generalization.class);
+		Class clazzGeneralization = mock(Class.class);
+		generalizations.add(generalization);
+		when(generalization.getGeneral()).thenReturn(clazzGeneralization);
+		when(clazzGeneralization.getName()).thenReturn("SuperCompany");
+		when(clazz.getGeneralizations()).thenReturn(generalizations);
+
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+		SimpleName simpleName = ast.newSimpleName("SuperCompany");
+		SimpleType simpleType = ast.newSimpleType(simpleName);
+		td.superInterfaceTypes().add(simpleType);
 
 		TypeDeclaration typeDeclaration = interfaceGenerator.generateClass(
 				clazz, ast, cu);
