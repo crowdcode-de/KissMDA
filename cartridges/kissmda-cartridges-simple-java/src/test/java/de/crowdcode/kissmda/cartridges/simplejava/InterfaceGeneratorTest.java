@@ -27,7 +27,7 @@ import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Association;
@@ -40,6 +40,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Answers;
 
+import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -53,6 +54,7 @@ public class InterfaceGeneratorTest {
 
 	private InterfaceGenerator interfaceGenerator;
 	private PackageHelper packageHelper;
+	private JdtHelper jdtHelper;
 
 	private Class clazz;
 
@@ -60,7 +62,10 @@ public class InterfaceGeneratorTest {
 	public void setUp() throws Exception {
 		packageHelper = new PackageHelper();
 		interfaceGenerator = new InterfaceGenerator();
+		jdtHelper = new JdtHelper();
+		jdtHelper.setPackageHelper(packageHelper);
 		interfaceGenerator.setPackageHelper(packageHelper);
+		interfaceGenerator.setJdtHelper(jdtHelper);
 
 		setUpMocks();
 	}
@@ -124,7 +129,8 @@ public class InterfaceGeneratorTest {
 		Class clazzGeneralization = mock(Class.class);
 		generalizations.add(generalization);
 		when(generalization.getGeneral()).thenReturn(clazzGeneralization);
-		when(clazzGeneralization.getName()).thenReturn("SuperCompany");
+		when(clazzGeneralization.getQualifiedName()).thenReturn(
+				"de::test::SuperCompany");
 		when(clazz.getGeneralizations()).thenReturn(generalizations);
 
 		AST ast = AST.newAST(AST.JLS3);
@@ -136,8 +142,8 @@ public class InterfaceGeneratorTest {
 				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
 		td.modifiers().add(modifier);
 		td.setName(ast.newSimpleName("Company"));
-		SimpleName simpleName = ast.newSimpleName("SuperCompany");
-		SimpleType simpleType = ast.newSimpleType(simpleName);
+		Name name = ast.newName("de.test.SuperCompany");
+		SimpleType simpleType = ast.newSimpleType(name);
 		td.superInterfaceTypes().add(simpleType);
 
 		TypeDeclaration typeDeclaration = interfaceGenerator.generateClass(

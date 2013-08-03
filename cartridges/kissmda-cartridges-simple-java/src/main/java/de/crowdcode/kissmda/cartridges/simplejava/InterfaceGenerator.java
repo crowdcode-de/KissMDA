@@ -29,9 +29,9 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
-import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
@@ -193,9 +193,11 @@ public class InterfaceGenerator {
 		EList<Generalization> generalizations = clazz.getGeneralizations();
 		for (Generalization generalization : generalizations) {
 			Classifier interfaceClassifier = generalization.getGeneral();
-			String interfaceName = interfaceClassifier.getName();
-			SimpleName simpleName = ast.newSimpleName(interfaceName);
-			SimpleType simpleType = ast.newSimpleType(simpleName);
+			String fullQualifiedInterfaceName = interfaceClassifier
+					.getQualifiedName();
+			Name name = jdtHelper.createFullQualifiedTypeAsName(ast,
+					fullQualifiedInterfaceName, sourceDirectoryPackageName);
+			SimpleType simpleType = ast.newSimpleType(name);
 			td.superInterfaceTypes().add(simpleType);
 		}
 

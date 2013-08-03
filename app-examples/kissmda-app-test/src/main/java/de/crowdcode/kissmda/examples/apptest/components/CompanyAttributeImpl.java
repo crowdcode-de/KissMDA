@@ -18,56 +18,31 @@
  */
 package de.crowdcode.kissmda.examples.apptest.components;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import de.crowdcode.kissmda.testapp.components.Company;
 import de.crowdcode.kissmda.testapp.components.CompanyAttribute;
 
-public class CompanyImpl implements Company {
+public class CompanyAttributeImpl implements CompanyAttribute<String, Integer> {
 
 	private String name;
-	private double value;
-	private Date created;
-	private CompanyAttribute<String, Integer> companyAttribute;
+	private final Collection<String> elementStringCollection = new ArrayList<String>();
+	private final Collection<Integer> elementIntegerCollection = new ArrayList<Integer>();
 
 	@Override
-	public String getName() {
-		return name;
+	public void add(String element1, Integer element2) {
+		elementStringCollection.add(element1);
+		elementIntegerCollection.add(element2);
 	}
 
 	@Override
-	public void setName(String name) {
+	public java.lang.String getName() {
+		return name + " - " + elementStringCollection.iterator().next() + " - "
+				+ elementIntegerCollection.iterator().next();
+	}
+
+	@Override
+	public void setName(java.lang.String name) {
 		this.name = name;
-	}
-
-	@Override
-	public double getValue() {
-		return value;
-	}
-
-	@Override
-	public void setValue(double value) {
-		this.value = value;
-	}
-
-	@Override
-	public Date getCreated() {
-		return created;
-	}
-
-	@Override
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	@Override
-	public CompanyAttribute<String, Integer> getCompanyAttribute() {
-		return companyAttribute;
-	}
-
-	@Override
-	public void setCompanyAttribute(
-			CompanyAttribute<String, Integer> companyAttribute) {
-		this.companyAttribute = companyAttribute;
 	}
 }

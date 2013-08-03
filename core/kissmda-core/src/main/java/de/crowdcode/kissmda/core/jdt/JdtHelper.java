@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
@@ -57,6 +58,17 @@ public class JdtHelper {
 
 	public void setPackageHelper(PackageHelper packageHelper) {
 		this.packageHelper = packageHelper;
+	}
+
+	public Name createFullQualifiedTypeAsName(AST ast,
+			String fullQualifiedUmlTypeName, String sourceDirectoryPackageName) {
+		String typeName = packageHelper
+				.removeUmlPrefixes(fullQualifiedUmlTypeName);
+		typeName = packageHelper.getFullPackageName(typeName,
+				sourceDirectoryPackageName);
+		Name name = ast.newName(typeName);
+
+		return name;
 	}
 
 	@SuppressWarnings("unchecked")

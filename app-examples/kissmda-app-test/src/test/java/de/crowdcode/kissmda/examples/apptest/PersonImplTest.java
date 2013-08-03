@@ -26,12 +26,13 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.crowdcode.kissmda.examples.apptest.components.CompanyAttributeImpl;
 import de.crowdcode.kissmda.examples.apptest.components.CompanyImpl;
 import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.AddressType;
-import de.crowdcode.kissmda.testapp.CompanyAttribute;
 import de.crowdcode.kissmda.testapp.Person;
 import de.crowdcode.kissmda.testapp.components.Company;
+import de.crowdcode.kissmda.testapp.components.CompanyAttribute;
 
 /**
  * Unit test for PersonImpl class.

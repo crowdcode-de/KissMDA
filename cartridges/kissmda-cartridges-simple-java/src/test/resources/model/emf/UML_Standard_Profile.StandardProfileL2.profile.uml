@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Profile xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_9_0_be00301_1108050582343_527400_10847" name="StandardProfileL2" metamodelReference="_16_8beta_62a020a_1256807644324_268622_346">
-  <eAnnotations xmi:id="_u15u-fxpEeKVAN5sQGV2rQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
-    <contents xmi:type="ecore:EPackage" xmi:id="_u15u-vxpEeKVAN5sQGV2rQ" name="StandardProfileL2" nsURI="http:///schemas/StandardProfileL2/_uoNRMPxpEeKVAN5sQGV2rQ/0" nsPrefix="StandardProfileL2"/>
+  <eAnnotations xmi:id="_iRlG6vyJEeKhjNq3eLpQzg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_iRlG6_yJEeKhjNq3eLpQzg" name="StandardProfileL2" nsURI="http:///schemas/StandardProfileL2/_iFGvcPyJEeKhjNq3eLpQzg/0" nsPrefix="StandardProfileL2"/>
   </eAnnotations>
-  <eAnnotations xmi:id="_u7NszfxpEeKVAN5sQGV2rQ" source="MagicDraw">
-    <details xmi:id="_u7NszvxpEeKVAN5sQGV2rQ" key="md_id" value="_9_0_be00301_1108050582343_527400_10847"/>
+  <eAnnotations xmi:id="_iVvzhPyJEeKhjNq3eLpQzg" source="MagicDraw">
+    <details xmi:id="_iVvzhfyJEeKhjNq3eLpQzg" key="md_id" value="_9_0_be00301_1108050582343_527400_10847"/>
   </eAnnotations>
   <packageImport xmi:id="_16_8beta_62a020a_1256807644324_268622_346">
-    <eAnnotations xmi:id="_u7R-NPxpEeKVAN5sQGV2rQ" source="MagicDraw">
-      <details xmi:id="_u7R-NfxpEeKVAN5sQGV2rQ" key="md_id" value="_16_8beta_62a020a_1256807644324_268622_346"/>
+    <eAnnotations xmi:id="_iV0E8PyJEeKhjNq3eLpQzg" source="MagicDraw">
+      <details xmi:id="_iV0E8fyJEeKhjNq3eLpQzg" key="md_id" value="_16_8beta_62a020a_1256807644324_268622_346"/>
     </eAnnotations>
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_METAMODELS/UML.metamodel.uml#_0"/>
   </packageImport>

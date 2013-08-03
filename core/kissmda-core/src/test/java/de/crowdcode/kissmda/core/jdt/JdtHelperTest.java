@@ -27,6 +27,7 @@ import java.util.Map;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
@@ -164,6 +165,16 @@ public class JdtHelperTest {
 		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
 
 		assertEquals("de.test.Attribute<String,Integer,Boolean>", tp.toString());
+	}
+
+	@Test
+	public void testCreateFullQualifiedTypeAsName() {
+		String sourceDirectoryPackageName = "Data";
+		String umlQualifiedTypeName = "Data::de::test::SuperCompany";
+		Name name = jdtHelper.createFullQualifiedTypeAsName(ast,
+				umlQualifiedTypeName, sourceDirectoryPackageName);
+
+		assertEquals(name.getFullyQualifiedName(), "de.test.SuperCompany");
 	}
 
 	@Test
