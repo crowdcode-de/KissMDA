@@ -31,9 +31,12 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
@@ -185,6 +188,16 @@ public class InterfaceGenerator {
 		td.modifiers().add(
 				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		td.setName(ast.newSimpleName(className));
+
+		// Check and add inheritance
+		EList<Generalization> generalizations = clazz.getGeneralizations();
+		for (Generalization generalization : generalizations) {
+			Classifier interfaceClassifier = generalization.getGeneral();
+			String interfaceName = interfaceClassifier.getName();
+			SimpleName simpleName = ast.newSimpleName(interfaceName);
+			SimpleType simpleType = ast.newSimpleType(simpleName);
+			td.superInterfaceTypes().add(simpleType);
+		}
 
 		// Add type params
 		TemplateSignature templateSignature = clazz.getOwnedTemplateSignature();
