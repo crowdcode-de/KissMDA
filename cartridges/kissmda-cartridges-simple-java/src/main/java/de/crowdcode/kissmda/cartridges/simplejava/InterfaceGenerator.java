@@ -117,8 +117,9 @@ public class InterfaceGenerator {
 	@SuppressWarnings("unchecked")
 	private void generateGettersSetters(Classifier clazz, AST ast,
 			TypeDeclaration td) {
-		// Create getter and setter
-		EList<Property> properties = clazz.getAllAttributes();
+		// Create getter and setter for all attributes
+		// Without inheritance
+		EList<Property> properties = clazz.getAttributes();
 		for (Property property : properties) {
 			// Create getter for each property
 			MethodDeclaration mdGetter = ast.newMethodDeclaration();
@@ -189,19 +190,19 @@ public class InterfaceGenerator {
 				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		td.setName(ast.newSimpleName(className));
 
-		// Check and add inheritance
-		EList<Generalization> generalizations = clazz.getGeneralizations();
-		for (Generalization generalization : generalizations) {
-			Classifier interfaceClassifier = generalization.getGeneral();
-			String fullQualifiedInterfaceName = interfaceClassifier
-					.getQualifiedName();
-			Name name = jdtHelper.createFullQualifiedTypeAsName(ast,
-					fullQualifiedInterfaceName, sourceDirectoryPackageName);
-			SimpleType simpleType = ast.newSimpleType(name);
-			td.superInterfaceTypes().add(simpleType);
-		}
+		// Add inheritance
+		generateClassInheritance(clazz, ast, td);
+		// Add template params
+		generateClassTemplateParams(clazz, ast, td);
 
-		// Add type params
+		cu.types().add(td);
+
+		return td;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void generateClassTemplateParams(Classifier clazz, AST ast,
+			TypeDeclaration td) {
 		TemplateSignature templateSignature = clazz.getOwnedTemplateSignature();
 		if (templateSignature != null) {
 			EList<TemplateParameter> templateParameters = templateSignature
@@ -215,10 +216,23 @@ public class InterfaceGenerator {
 				td.typeParameters().add(typeParameter);
 			}
 		}
+	}
 
-		cu.types().add(td);
-
-		return td;
+	@SuppressWarnings("unchecked")
+	private void generateClassInheritance(Classifier clazz, AST ast,
+			TypeDeclaration td) {
+		EList<Generalization> generalizations = clazz.getGeneralizations();
+		if (generalizations != null) {
+			for (Generalization generalization : generalizations) {
+				Classifier interfaceClassifier = generalization.getGeneral();
+				String fullQualifiedInterfaceName = interfaceClassifier
+						.getQualifiedName();
+				Name name = jdtHelper.createFullQualifiedTypeAsName(ast,
+						fullQualifiedInterfaceName, sourceDirectoryPackageName);
+				SimpleType simpleType = ast.newSimpleType(name);
+				td.superInterfaceTypes().add(simpleType);
+			}
+		}
 	}
 
 	public void generatePackage(Classifier clazz, AST ast, CompilationUnit cu) {
@@ -231,7 +245,8 @@ public class InterfaceGenerator {
 	@SuppressWarnings("unchecked")
 	private void generateMethods(Classifier clazz, AST ast, TypeDeclaration td) {
 		// Get all methods for this clazz
-		EList<Operation> operations = clazz.getAllOperations();
+		// Only for this class without inheritance
+		EList<Operation> operations = clazz.getOperations();
 		for (Operation operation : operations) {
 			MethodDeclaration md = ast.newMethodDeclaration();
 			md.modifiers().add(
