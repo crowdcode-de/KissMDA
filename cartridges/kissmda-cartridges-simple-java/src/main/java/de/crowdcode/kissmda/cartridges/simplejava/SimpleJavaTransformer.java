@@ -60,6 +60,12 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private static final String STEREOTYPE_SERVICE = "Service";
 
+	private static final String STEREOTYPE_EXCEPTION = "Exception";
+
+	private static final String STEREOTYPE_APPLICATIONEXCEPTION = "ApplicationException";
+
+	private static final String STEREOTYPE_UNEXPECTEDEXCEPTION = "UnexpectedException";
+
 	private static final String TYPE_ENUM = "Enumeration";
 
 	private static final String STEREOTYPE_SOURCEDIRECTORY = "SourceDirectory";
@@ -131,26 +137,14 @@ public class SimpleJavaTransformer implements Transformer {
 					}
 					if (stereotype.getName().equals(STEREOTYPE_ENTITY)
 							|| stereotype.getName().equals(STEREOTYPE_SERVICE)) {
-						// Stereotype Interface
-						Class clazz = (Class) element;
-						logger.info("Class: " + clazz.getName() + " - "
-								+ "Stereotype: " + stereotype.getName());
-						// Generate the interface for this class
-						String compilationUnit = interfaceGenerator
-								.generateInterface(clazz,
-										sourceDirectoryPackageName);
-						generateClassFile(clazz, compilationUnit);
+						generateInterfaceForEntityAndService(element,
+								stereotype);
 					}
 				}
 
 				// Enums
 				if (element.eClass().getName().equals(TYPE_ENUM)) {
-					Enumeration clazz = (Enumeration) element;
-					logger.info("Enum: " + clazz.getName());
-					// Generate the enumeration for this class
-					String compilationUnit = enumGenerator.generateEnum(clazz,
-							sourceDirectoryPackageName);
-					generateClassFile(clazz, compilationUnit);
+					generateEnum(element);
 				}
 			}
 		} catch (URISyntaxException e) {
@@ -158,6 +152,27 @@ public class SimpleJavaTransformer implements Transformer {
 		} catch (IOException e) {
 			throw new TransformerException(e);
 		}
+	}
+
+	private void generateEnum(Element element) throws IOException {
+		Enumeration clazz = (Enumeration) element;
+		logger.info("Enum: " + clazz.getName());
+		// Generate the enumeration for this class
+		String compilationUnit = enumGenerator.generateEnum(clazz,
+				sourceDirectoryPackageName);
+		generateClassFile(clazz, compilationUnit);
+	}
+
+	private void generateInterfaceForEntityAndService(Element element,
+			Stereotype stereotype) throws IOException {
+		// Stereotype Interface
+		Class clazz = (Class) element;
+		logger.info("Class: " + clazz.getName() + " - " + "Stereotype: "
+				+ stereotype.getName());
+		// Generate the interface for this class
+		String compilationUnit = interfaceGenerator.generateInterface(clazz,
+				sourceDirectoryPackageName);
+		generateClassFile(clazz, compilationUnit);
 	}
 
 	private void checkStereotypeRootPackage(

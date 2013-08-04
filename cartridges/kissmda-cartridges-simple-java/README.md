@@ -20,3 +20,15 @@ Stereotypes
 **SourceDirectory**
 * Applied on: package
 * Marks the source model which will be generated.
+
+**Exception**
+* Applied on: class
+* Produces java checked exception objects. This will produce the same thing as a classifier stereotyped with <<ApplicationException>>.
+
+**ApplicationException**
+* Applied on: class
+* Produces java application exception objects. Application exceptions are exceptions that are checked exceptions. These are exceptions that client should be able to catch in order to decide whether or not to take some special action.
+
+**UnexpectedException**
+* Applied on: class
+* Produces java unexpected exception objects. Unexpected exceptions are unchecked runtime exceptions. These are exceptions that clients shouldn't worry about catching but are thrown when some "unexpected" error in the application flow occurs.
