@@ -19,16 +19,24 @@
 package de.crowdcode.kissmda.core;
 
 /**
- * Exception for Transformer.
+ * Unchecked Exception for Transformer.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
  */
-public class TransformerException extends Exception {
+public class TransformerException extends RuntimeException {
 
 	private static final long serialVersionUID = -3787213637103531618L;
 
-	public TransformerException(Exception e) {
-		super(e);
+	public TransformerException(Exception cause) {
+		super(cause);
+	}
+
+	public TransformerException(String message) {
+		super(message);
+	}
+
+	public TransformerException(String message, Exception cause) {
+		super(message, cause);
 	}
 }

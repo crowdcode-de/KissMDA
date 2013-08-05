@@ -26,9 +26,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.Name;
-import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
@@ -50,9 +47,9 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class InterfaceGeneratorTest {
+public class ExceptionGeneratorTest {
 
-	private InterfaceGenerator interfaceGenerator;
+	private ExceptionGenerator exceptionGenerator;
 	private PackageHelper packageHelper;
 	private JdtHelper jdtHelper;
 
@@ -61,20 +58,20 @@ public class InterfaceGeneratorTest {
 	@Before
 	public void setUp() throws Exception {
 		packageHelper = new PackageHelper();
-		interfaceGenerator = new InterfaceGenerator();
+		exceptionGenerator = new ExceptionGenerator();
 		jdtHelper = new JdtHelper();
 		jdtHelper.setPackageHelper(packageHelper);
-		interfaceGenerator.setPackageHelper(packageHelper);
-		interfaceGenerator.setJdtHelper(jdtHelper);
+		exceptionGenerator.setPackageHelper(packageHelper);
+		exceptionGenerator.setJdtHelper(jdtHelper);
 
 		setUpMocks();
 	}
 
 	public void setUpMocks() throws Exception {
-		String fullQualifiedName = "de::crowdcode::kissmda::testapp::components::Company";
+		String fullQualifiedName = "de::crowdcode::kissmda::testapp::components::CompanyException";
 		clazz = mock(Class.class);
 		when(clazz.getQualifiedName()).thenReturn(fullQualifiedName);
-		when(clazz.getName()).thenReturn("Company");
+		when(clazz.getName()).thenReturn("CompanyException");
 		when(clazz.getAssociations())
 				.thenReturn(new UniqueEList<Association>());
 		when(clazz.getImplementedInterfaces()).thenReturn(
@@ -88,65 +85,48 @@ public class InterfaceGeneratorTest {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 
-		interfaceGenerator.generatePackage(clazz, ast, cu);
+		exceptionGenerator.generatePackage(clazz, ast, cu);
 
 		assertEquals("package de.crowdcode.kissmda.testapp.components;\n",
 				cu.toString());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateClass() {
+	public void testGenerateClassCheckedExceptionWithNoInheritance() {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
-		TypeDeclaration td = ast.newTypeDeclaration();
-		td.setInterface(true);
 
-		Modifier modifier = ast
-				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
-		td.modifiers().add(modifier);
-		td.setName(ast.newSimpleName("Company"));
-
-		TypeDeclaration typeDeclaration = interfaceGenerator.generateClass(
+		TypeDeclaration typeDeclaration = exceptionGenerator.generateClass(
 				clazz, ast, cu);
 
-		assertEquals(typeDeclaration.toString(), td.toString());
+		assertEquals(typeDeclaration.toString(),
+				"public class CompanyException extends Exception {\n}\n");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateClassWithInheritance() {
+	public void testGenerateClassCheckedExceptionWithInheritance() {
 		EList<Generalization> generalizations = new UniqueEList<Generalization>();
 		Generalization generalization = mock(Generalization.class);
 		Class clazzGeneralization = mock(Class.class);
 		generalizations.add(generalization);
 		when(generalization.getGeneral()).thenReturn(clazzGeneralization);
 		when(clazzGeneralization.getQualifiedName()).thenReturn(
-				"de::test::SuperCompany");
+				"de::test::SuperCompanyException");
 		when(clazz.getGeneralizations()).thenReturn(generalizations);
 
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
-		TypeDeclaration td = ast.newTypeDeclaration();
-		td.setInterface(true);
 
-		Modifier modifier = ast
-				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
-		td.modifiers().add(modifier);
-		td.setName(ast.newSimpleName("Company"));
-		Name name = ast.newName("de.test.SuperCompany");
-		SimpleType simpleType = ast.newSimpleType(name);
-		td.superInterfaceTypes().add(simpleType);
-
-		TypeDeclaration typeDeclaration = interfaceGenerator.generateClass(
+		TypeDeclaration typeDeclaration = exceptionGenerator.generateClass(
 				clazz, ast, cu);
 
-		assertEquals(typeDeclaration.toString(), td.toString());
+		assertEquals(typeDeclaration.toString(),
+				"public class CompanyException extends de.test.SuperCompanyException {\n}\n");
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateClassWithTemplate() {
+	public void testGenerateClassCheckedExceptionWithTemplate() {
 		TemplateSignature templateSignature = mock(TemplateSignature.class);
 		EList<TemplateParameter> templateParameters = mock(EList.class,
 				Answers.RETURNS_DEEP_STUBS.get());
@@ -155,17 +135,66 @@ public class InterfaceGeneratorTest {
 
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
-		TypeDeclaration td = ast.newTypeDeclaration();
-		td.setInterface(true);
 
-		Modifier modifier = ast
-				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
-		td.modifiers().add(modifier);
-		td.setName(ast.newSimpleName("Company"));
-
-		TypeDeclaration typeDeclaration = interfaceGenerator.generateClass(
+		TypeDeclaration typeDeclaration = exceptionGenerator.generateClass(
 				clazz, ast, cu);
 
-		assertEquals(typeDeclaration.toString(), td.toString());
+		assertEquals(typeDeclaration.toString(),
+				"public class CompanyException extends Exception {\n}\n");
+	}
+
+	@Test
+	public void testGenerateClassUncheckedExceptionWithNoInheritance() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+
+		exceptionGenerator.setCheckedException(false);
+		TypeDeclaration typeDeclaration = exceptionGenerator.generateClass(
+				clazz, ast, cu);
+
+		assertEquals(typeDeclaration.toString(),
+				"public class CompanyException extends RuntimeException {\n}\n");
+	}
+
+	@Test
+	public void testGenerateClassUncheckedExceptionWithInheritance() {
+		EList<Generalization> generalizations = new UniqueEList<Generalization>();
+		Generalization generalization = mock(Generalization.class);
+		Class clazzGeneralization = mock(Class.class);
+		generalizations.add(generalization);
+		when(generalization.getGeneral()).thenReturn(clazzGeneralization);
+		when(clazzGeneralization.getQualifiedName()).thenReturn(
+				"de::test::SuperCompanyException");
+		when(clazz.getGeneralizations()).thenReturn(generalizations);
+
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+
+		exceptionGenerator.setCheckedException(false);
+		TypeDeclaration typeDeclaration = exceptionGenerator.generateClass(
+				clazz, ast, cu);
+
+		assertEquals(typeDeclaration.toString(),
+				"public class CompanyException extends de.test.SuperCompanyException {\n}\n");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateClassUncheckedExceptionWithTemplate() {
+		TemplateSignature templateSignature = mock(TemplateSignature.class);
+		EList<TemplateParameter> templateParameters = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		when(clazz.getOwnedTemplateSignature()).thenReturn(templateSignature);
+		when(templateSignature.getParameters()).thenReturn(templateParameters);
+
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+
+		exceptionGenerator.setCheckedException(false);
+		TypeDeclaration typeDeclaration = exceptionGenerator.generateClass(
+				clazz, ast, cu);
+
+		assertEquals(typeDeclaration.toString(),
+				"public class CompanyException extends RuntimeException {\n}\n");
 	}
 }

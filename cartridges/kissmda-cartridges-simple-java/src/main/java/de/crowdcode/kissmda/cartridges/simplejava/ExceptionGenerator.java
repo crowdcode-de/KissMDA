@@ -43,6 +43,7 @@ import org.eclipse.uml2.uml.TemplateParameter;
 import org.eclipse.uml2.uml.TemplateSignature;
 import org.eclipse.uml2.uml.Type;
 
+import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.jdt.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
@@ -76,6 +77,12 @@ public class ExceptionGenerator {
 
 	private String sourceDirectoryPackageName;
 
+	private boolean isCheckedException = true;
+
+	public void setCheckedException(boolean isCheckedException) {
+		this.isCheckedException = isCheckedException;
+	}
+
 	public void setMethodHelper(MethodHelper methodHelper) {
 		this.methodHelper = methodHelper;
 	}
@@ -94,10 +101,35 @@ public class ExceptionGenerator {
 	 * @param Class
 	 *            clazz the UML class
 	 * @return String the complete class with its content as a String
+	 * @throws TransformerException
 	 */
-	public String generateException(Classifier clazz,
+	public String generateCheckedException(Classifier clazz,
 			String sourceDirectoryPackageName) {
 		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
+		this.isCheckedException = true;
+
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+
+		generatePackage(clazz, ast, cu);
+		TypeDeclaration td = generateClass(clazz, ast, cu);
+		generateMethods(clazz, ast, td);
+
+		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
+		return cu.toString();
+	}
+
+	/**
+	 * Generate the Class RuntimeException.
+	 * 
+	 * @param Class
+	 *            clazz the UML class
+	 * @return String the complete class with its content as a String
+	 */
+	public String generateUncheckedException(Classifier clazz,
+			String sourceDirectoryPackageName) {
+		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
+		this.isCheckedException = false;
 
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
@@ -115,7 +147,7 @@ public class ExceptionGenerator {
 			CompilationUnit cu) {
 		String className = getClassName(clazz);
 		TypeDeclaration td = ast.newTypeDeclaration();
-		td.setInterface(true);
+		td.setInterface(false);
 		td.modifiers().add(
 				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		td.setName(ast.newSimpleName(className));
@@ -148,19 +180,38 @@ public class ExceptionGenerator {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void generateClassInheritance(Classifier clazz, AST ast,
 			TypeDeclaration td) {
 		EList<Generalization> generalizations = clazz.getGeneralizations();
 		if (generalizations != null) {
-			for (Generalization generalization : generalizations) {
-				Classifier interfaceClassifier = generalization.getGeneral();
-				String fullQualifiedInterfaceName = interfaceClassifier
-						.getQualifiedName();
-				Name name = jdtHelper.createFullQualifiedTypeAsName(ast,
-						fullQualifiedInterfaceName, sourceDirectoryPackageName);
-				SimpleType simpleType = ast.newSimpleType(name);
-				td.superInterfaceTypes().add(simpleType);
+			if (!generalizations.isEmpty()) {
+				if (generalizations.size() == 1) {
+					// Java only supports one Generatlization
+					for (Generalization generalization : generalizations) {
+						Classifier interfaceClassifier = generalization
+								.getGeneral();
+						String fullQualifiedInterfaceName = interfaceClassifier
+								.getQualifiedName();
+						Name name = jdtHelper.createFullQualifiedTypeAsName(
+								ast, fullQualifiedInterfaceName,
+								sourceDirectoryPackageName);
+						SimpleType simpleType = ast.newSimpleType(name);
+						td.setSuperclassType(simpleType);
+					}
+				} else {
+					throw new TransformerException(
+							"Java only supports single inheritance!");
+				}
+			} else {
+				// Empty, we extend from java.lang.Exception or
+				// java.lang.RuntimeException
+				String exceptionToBeInherited = "Exception";
+				if (!isCheckedException) {
+					exceptionToBeInherited = "RuntimeException";
+				}
+				SimpleType simpleType = ast.newSimpleType(ast
+						.newSimpleName(exceptionToBeInherited));
+				td.setSuperclassType(simpleType);
 			}
 		}
 	}

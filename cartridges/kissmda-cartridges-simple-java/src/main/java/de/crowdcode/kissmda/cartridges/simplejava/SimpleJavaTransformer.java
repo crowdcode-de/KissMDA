@@ -82,12 +82,19 @@ public class SimpleJavaTransformer implements Transformer {
 	private InterfaceGenerator interfaceGenerator;
 
 	@Inject
+	private ExceptionGenerator exceptionGenerator;
+
+	@Inject
 	private EnumGenerator enumGenerator;
 
 	private Context context;
 
 	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
 		this.interfaceGenerator = interfaceGenerator;
+	}
+
+	public void setExceptionGenerator(ExceptionGenerator exceptionGenerator) {
+		this.exceptionGenerator = exceptionGenerator;
 	}
 
 	public void setEnumGenerator(EnumGenerator enumGenerator) {
@@ -140,6 +147,15 @@ public class SimpleJavaTransformer implements Transformer {
 						generateInterfaceForEntityAndService(element,
 								stereotype);
 					}
+					if (stereotype.getName().equals(STEREOTYPE_EXCEPTION)
+							|| stereotype.getName().equals(
+									STEREOTYPE_APPLICATIONEXCEPTION)) {
+						generateCheckedException(element, stereotype);
+					}
+					if (stereotype.getName().equals(
+							STEREOTYPE_UNEXPECTEDEXCEPTION)) {
+						generateUncheckedException(element, stereotype);
+					}
 				}
 
 				// Enums
@@ -172,6 +188,30 @@ public class SimpleJavaTransformer implements Transformer {
 		// Generate the interface for this class
 		String compilationUnit = interfaceGenerator.generateInterface(clazz,
 				sourceDirectoryPackageName);
+		generateClassFile(clazz, compilationUnit);
+	}
+
+	private void generateCheckedException(Element element, Stereotype stereotype)
+			throws IOException {
+		// Stereotype Interface
+		Class clazz = (Class) element;
+		logger.info("Class: " + clazz.getName() + " - " + "Stereotype: "
+				+ stereotype.getName());
+		// Generate the exception for this class
+		String compilationUnit = exceptionGenerator.generateCheckedException(
+				clazz, sourceDirectoryPackageName);
+		generateClassFile(clazz, compilationUnit);
+	}
+
+	private void generateUncheckedException(Element element,
+			Stereotype stereotype) throws IOException {
+		// Stereotype Interface
+		Class clazz = (Class) element;
+		logger.info("Class: " + clazz.getName() + " - " + "Stereotype: "
+				+ stereotype.getName());
+		// Generate the exception for this class
+		String compilationUnit = exceptionGenerator.generateUncheckedException(
+				clazz, sourceDirectoryPackageName);
 		generateClassFile(clazz, compilationUnit);
 	}
 

@@ -23,7 +23,7 @@ Stereotypes
 
 **Exception**
 * Applied on: class
-* Produces java checked exception objects. This will produce the same thing as a classifier stereotyped with <<ApplicationException>>.
+* Produces java checked exception objects. This will produce the same thing as a classifier stereotyped with ApplicationException stereotype.
 
 **ApplicationException**
 * Applied on: class
