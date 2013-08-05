@@ -19,8 +19,11 @@
 package de.crowdcode.kissmda.cartridges.simplejava;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
@@ -37,6 +40,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Answers;
 
+import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
@@ -48,6 +52,9 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * @since 1.0.0
  */
 public class ExceptionGeneratorTest {
+
+	private static final Logger logger = Logger
+			.getLogger(ExceptionGeneratorTest.class.getName());
 
 	private ExceptionGenerator exceptionGenerator;
 	private PackageHelper packageHelper;
@@ -154,6 +161,36 @@ public class ExceptionGeneratorTest {
 
 		assertEquals(typeDeclaration.toString(),
 				"public class CompanyException extends RuntimeException {\n}\n");
+	}
+
+	@Test
+	public void testGenerateClassUncheckedExceptionWithMultipleInheritance() {
+		EList<Generalization> generalizations = new UniqueEList<Generalization>();
+		Generalization generalization1 = mock(Generalization.class);
+		Generalization generalization2 = mock(Generalization.class);
+		Class clazzGeneralization1 = mock(Class.class);
+		Class clazzGeneralization2 = mock(Class.class);
+		generalizations.add(generalization1);
+		generalizations.add(generalization2);
+		when(generalization1.getGeneral()).thenReturn(clazzGeneralization1);
+		when(clazzGeneralization1.getQualifiedName()).thenReturn(
+				"de::test::SuperCompanyException");
+		when(generalization2.getGeneral()).thenReturn(clazzGeneralization2);
+		when(clazzGeneralization2.getQualifiedName()).thenReturn(
+				"de::test::SuperDuperCompanyException");
+		when(clazz.getGeneralizations()).thenReturn(generalizations);
+
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+
+		exceptionGenerator.setCheckedException(false);
+		try {
+			exceptionGenerator.generateClass(clazz, ast, cu);
+			assertTrue(false);
+		} catch (TransformerException e) {
+			logger.info("Error: " + e.getMessage());
+			assertTrue(true);
+		}
 	}
 
 	@Test

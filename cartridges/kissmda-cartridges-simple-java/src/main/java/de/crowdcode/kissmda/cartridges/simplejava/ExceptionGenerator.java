@@ -200,7 +200,8 @@ public class ExceptionGenerator {
 					}
 				} else {
 					throw new TransformerException(
-							"Java only supports single inheritance!");
+							"Java only supports single inheritance! Wrong modeling in class: "
+									+ clazz.getQualifiedName());
 				}
 			} else {
 				// Empty, we extend from java.lang.Exception or
