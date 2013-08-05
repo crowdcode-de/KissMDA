@@ -123,8 +123,6 @@ public class InterfaceGenerator {
 		for (Property property : properties) {
 			// Create getter for each property
 			MethodDeclaration mdGetter = ast.newMethodDeclaration();
-			mdGetter.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 			String getterName = methodHelper.getGetterName(property.getName());
 			mdGetter.setName(ast.newSimpleName(getterName));
 			// Return type?
@@ -149,8 +147,6 @@ public class InterfaceGenerator {
 
 			// Create setter method for each property
 			MethodDeclaration mdSetter = ast.newMethodDeclaration();
-			mdSetter.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 			// Return type void
 			PrimitiveType primitiveType = jdtHelper.getAstPrimitiveType(ast,
 					"void");
@@ -242,15 +238,12 @@ public class InterfaceGenerator {
 		cu.setPackage(p1);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void generateMethods(Classifier clazz, AST ast, TypeDeclaration td) {
 		// Get all methods for this clazz
 		// Only for this class without inheritance
 		EList<Operation> operations = clazz.getOperations();
 		for (Operation operation : operations) {
 			MethodDeclaration md = ast.newMethodDeclaration();
-			md.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 			md.setName(ast.newSimpleName(operation.getName()));
 			// Parameters, exclude the return parameter
 			EList<Parameter> parameters = operation.getOwnedParameters();
