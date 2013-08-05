@@ -28,7 +28,7 @@ public class TransformerException extends RuntimeException {
 
 	private static final long serialVersionUID = -3787213637103531618L;
 
-	public TransformerException(Exception cause) {
+	public TransformerException(Throwable cause) {
 		super(cause);
 	}
 
@@ -36,7 +36,7 @@ public class TransformerException extends RuntimeException {
 		super(message);
 	}
 
-	public TransformerException(String message, Exception cause) {
+	public TransformerException(String message, Throwable cause) {
 		super(message, cause);
 	}
 }
