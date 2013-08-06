@@ -60,6 +60,17 @@ public class JdtHelper {
 		this.packageHelper = packageHelper;
 	}
 
+	/**
+	 * Create a fully qualified type as JDT Name.
+	 * 
+	 * @param ast
+	 *            AST tree
+	 * @param fullQualifiedUmlTypeName
+	 *            UML qualified type name
+	 * @param sourceDirectoryPackageName
+	 *            source directory of UML
+	 * @return JDT Name
+	 */
 	public Name createFullQualifiedTypeAsName(AST ast,
 			String fullQualifiedUmlTypeName, String sourceDirectoryPackageName) {
 		String typeName = packageHelper
@@ -71,6 +82,17 @@ public class JdtHelper {
 		return name;
 	}
 
+	/**
+	 * Create a fully qualified type as String.
+	 * 
+	 * @param ast
+	 *            AST tree
+	 * @param fullQualifiedUmlTypeName
+	 *            UML qualified type name
+	 * @param sourceDirectoryPackageName
+	 *            source directory of UML
+	 * @return the type name fully qualified
+	 */
 	public String createFullQualifiedTypeAsString(AST ast,
 			String fullQualifiedUmlTypeName, String sourceDirectoryPackageName) {
 		String typeName = packageHelper
@@ -81,6 +103,22 @@ public class JdtHelper {
 		return typeName;
 	}
 
+	/**
+	 * Create return type for JDT MethodDeclaration.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param td
+	 *            JDT type declaration
+	 * @param md
+	 *            JDT method declaration
+	 * @param umlTypeName
+	 *            UML type name
+	 * @param umlQualifiedTypeName
+	 *            UML qualified type name
+	 * @param sourceDirectoryPackageName
+	 *            source directory of UML
+	 */
 	@SuppressWarnings("unchecked")
 	public void createReturnType(AST ast, TypeDeclaration td,
 			MethodDeclaration md, String umlTypeName,
@@ -104,6 +142,22 @@ public class JdtHelper {
 		td.bodyDeclarations().add(md);
 	}
 
+	/**
+	 * Create return type for JDT MethodDeclaration as Java Collection.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param td
+	 *            JDT type declaration
+	 * @param md
+	 *            JDT method declaration
+	 * @param umlTypeName
+	 *            UML type name
+	 * @param umlQualifiedTypeName
+	 *            UML qualified type name
+	 * @param sourceDirectoryPackageName
+	 *            source directory of UML
+	 */
 	@SuppressWarnings("unchecked")
 	public void createReturnTypeAsCollection(AST ast, TypeDeclaration td,
 			MethodDeclaration md, String umlTypeName,
@@ -121,6 +175,15 @@ public class JdtHelper {
 		td.bodyDeclarations().add(md);
 	}
 
+	/**
+	 * Get JDT SimpleType for the given type name.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param typeName
+	 *            input type name
+	 * @return JDT SimpleType
+	 */
 	public SimpleType getAstSimpleType(AST ast, String typeName) {
 		String javaType = dataTypeUtils.getJavaTypes().get(
 				typeName.toLowerCase());
@@ -133,6 +196,15 @@ public class JdtHelper {
 		return tp;
 	}
 
+	/**
+	 * Get JDT PrimitiveType for the given type name.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param typeName
+	 *            input type name
+	 * @return JDT PrimitiveType
+	 */
 	public PrimitiveType getAstPrimitiveType(AST ast, String typeName) {
 		Code typeCode = dataTypeUtils.getPrimitiveTypeCodes().get(
 				typeName.toLowerCase());
@@ -140,6 +212,15 @@ public class JdtHelper {
 		return primitiveType;
 	}
 
+	/**
+	 * Get JDT ArrayType for the given type name.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param typeName
+	 *            input type name
+	 * @return JDT ArrayType
+	 */
 	public ArrayType getAstArrayType(AST ast, String typeName) {
 		Type componentType = null;
 		// Remove [] for componentType
@@ -154,6 +235,15 @@ public class JdtHelper {
 		return arrayType;
 	}
 
+	/**
+	 * Get JDT ParameterizedType for the given type name.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param typeName
+	 *            input type name
+	 * @return JDT ParameterizedType
+	 */
 	@SuppressWarnings("unchecked")
 	public ParameterizedType getAstParameterizedType(AST ast, String typeName) {
 		// Get the component type and parameters <Type, Type, ...>
@@ -178,6 +268,24 @@ public class JdtHelper {
 		return parameterizedType;
 	}
 
+	/**
+	 * Create parameter types for MethodDeclaration.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param td
+	 *            JDT TypeDeclaration
+	 * @param md
+	 *            JDT MethodDeclaration
+	 * @param umlTypeName
+	 *            UML type name
+	 * @param umlQualifiedTypeName
+	 *            UML fully qualified type name
+	 * @param umlPropertyName
+	 *            UML property name
+	 * @param sourceDirectoryPackageName
+	 *            UML source directory start
+	 */
 	@SuppressWarnings("unchecked")
 	public void createParameterTypes(AST ast, TypeDeclaration td,
 			MethodDeclaration md, String umlTypeName,
@@ -205,6 +313,13 @@ public class JdtHelper {
 		md.parameters().add(variableDeclaration);
 	}
 
+	/**
+	 * Get the class name as String.
+	 * 
+	 * @param fullClassName
+	 *            given full qualified class name
+	 * @return just the class name
+	 */
 	public String getClassName(final String fullClassName) {
 		int lastIndexPoint = fullClassName.lastIndexOf(".");
 		String resultClassName = fullClassName.substring(lastIndexPoint + 1,
