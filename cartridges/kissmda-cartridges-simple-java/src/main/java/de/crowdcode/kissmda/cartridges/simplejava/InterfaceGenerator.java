@@ -32,6 +32,7 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
@@ -298,6 +299,7 @@ public class InterfaceGenerator {
 	 * @param td
 	 *            TypeDeclaration JDT
 	 */
+	@SuppressWarnings("unchecked")
 	public void generateMethods(Classifier clazz, AST ast, TypeDeclaration td) {
 		// Get all methods for this clazz
 		// Only for this class without inheritance
@@ -305,6 +307,7 @@ public class InterfaceGenerator {
 		for (Operation operation : operations) {
 			MethodDeclaration md = ast.newMethodDeclaration();
 			md.setName(ast.newSimpleName(operation.getName()));
+
 			// Parameters, exclude the return parameter
 			EList<Parameter> parameters = operation.getOwnedParameters();
 			for (Parameter parameter : parameters) {
@@ -321,7 +324,8 @@ public class InterfaceGenerator {
 							sourceDirectoryPackageName);
 				}
 			}
-			// Return type?
+
+			// Return type
 			Type type = operation.getType();
 			String umlTypeName = type.getName();
 			String umlQualifiedTypeName = type.getQualifiedName();
@@ -329,6 +333,18 @@ public class InterfaceGenerator {
 					+ "umlTypeName: " + umlTypeName);
 			jdtHelper.createReturnType(ast, td, md, umlTypeName,
 					umlQualifiedTypeName, sourceDirectoryPackageName);
+
+			// Throws Exception
+			EList<Type> raisedExceptions = operation.getRaisedExceptions();
+			for (Type raisedExceptionType : raisedExceptions) {
+				String umlExceptionQualifiedTypeName = raisedExceptionType
+						.getQualifiedName();
+				String name = jdtHelper.createFullQualifiedTypeAsString(ast,
+						umlExceptionQualifiedTypeName,
+						sourceDirectoryPackageName);
+				SimpleName simpleName = ast.newSimpleName(name);
+				md.thrownExceptions().add(simpleName);
+			}
 		}
 	}
 

@@ -28,6 +28,9 @@ public interface Transformer {
 
 	/**
 	 * Transform from one model to another model or text.
+	 * 
+	 * @param context
+	 *            the context of the Transformer
 	 */
-	public void transform(Context context) throws TransformerException;
+	void transform(Context context) throws TransformerException;
 }

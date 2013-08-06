@@ -18,6 +18,19 @@ public class JavaFileWriter {
 	@Inject
 	private FileWriter fileWriter;
 
+	/**
+	 * Create a Java file.
+	 * 
+	 * @param context
+	 *            Context of the Transformer
+	 * @param packageName
+	 *            Java package name
+	 * @param className
+	 *            Java class name
+	 * @param classContent
+	 *            the content of the class file
+	 * @throws IOException
+	 */
 	public void createJavaFile(final Context context, final String packageName,
 			final String className, final String classContent)
 			throws IOException {

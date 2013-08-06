@@ -34,6 +34,19 @@ import de.crowdcode.kissmda.core.Context;
  */
 public class FileWriter {
 
+	/**
+	 * Create a file.
+	 * 
+	 * @param context
+	 *            Context of the Transformer
+	 * @param directory
+	 *            target directory
+	 * @param fileName
+	 *            the target filename
+	 * @param fileContent
+	 *            the target content
+	 * @throws IOException
+	 */
 	public void createFile(final Context context, final String directory,
 			final String fileName, final String fileContent) throws IOException {
 

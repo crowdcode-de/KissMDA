@@ -71,6 +71,16 @@ public class JdtHelper {
 		return name;
 	}
 
+	public String createFullQualifiedTypeAsString(AST ast,
+			String fullQualifiedUmlTypeName, String sourceDirectoryPackageName) {
+		String typeName = packageHelper
+				.removeUmlPrefixes(fullQualifiedUmlTypeName);
+		typeName = packageHelper.getFullPackageName(typeName,
+				sourceDirectoryPackageName);
+
+		return typeName;
+	}
+
 	@SuppressWarnings("unchecked")
 	public void createReturnType(AST ast, TypeDeclaration td,
 			MethodDeclaration md, String umlTypeName,

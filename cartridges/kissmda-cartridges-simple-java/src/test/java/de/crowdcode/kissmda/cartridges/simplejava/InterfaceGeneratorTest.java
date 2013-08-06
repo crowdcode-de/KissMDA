@@ -168,4 +168,19 @@ public class InterfaceGeneratorTest {
 
 		assertEquals(typeDeclaration.toString(), td.toString());
 	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateMethods() {
+		AST ast = AST.newAST(AST.JLS3);
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		interfaceGenerator.generateMethods(clazz, ast, td);
+	}
 }

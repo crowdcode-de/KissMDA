@@ -27,24 +27,52 @@ package de.crowdcode.kissmda.core.jdt;
  */
 public class MethodHelper {
 
+	/**
+	 * Get the getter name.
+	 * 
+	 * @param name
+	 *            input name
+	 * @return getter name
+	 */
 	public String getGetterName(String name) {
 		String getter = "get" + name.substring(0, 1).toUpperCase()
 				+ name.substring(1);
 		return getter;
 	}
 
+	/**
+	 * Get the setter name.
+	 * 
+	 * @param name
+	 *            input name
+	 * @return setter name
+	 */
 	public String getSetterName(String name) {
 		String setter = "set" + name.substring(0, 1).toUpperCase()
 				+ name.substring(1);
 		return setter;
 	}
 
+	/**
+	 * Get the adder name.
+	 * 
+	 * @param name
+	 *            input name
+	 * @return adder name
+	 */
 	public String getAdderName(String name) {
 		String setter = "add" + name.substring(0, 1).toUpperCase()
 				+ name.substring(1);
 		return setter;
 	}
 
+	/**
+	 * Get the singular name of the plural name.
+	 * 
+	 * @param pluralName
+	 *            input plural name
+	 * @return singular name
+	 */
 	public String getSingularName(String pluralName) {
 		// Remove the last two chars
 		String singular = pluralName.substring(0, pluralName.length() - 2);

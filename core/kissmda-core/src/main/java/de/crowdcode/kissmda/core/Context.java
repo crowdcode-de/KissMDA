@@ -31,26 +31,26 @@ public interface Context {
 	 * 
 	 * @return source as String
 	 */
-	public String getSourceModel();
+	String getSourceModel();
 
 	/**
 	 * Get the target model.
 	 * 
 	 * @return target as String
 	 */
-	public String getTargetModel();
+	String getTargetModel();
 
 	/**
 	 * Set source model.
 	 * 
 	 * @param sourceModel
 	 */
-	public void setSourceModel(String sourceModel);
+	void setSourceModel(String sourceModel);
 
 	/**
 	 * Set target model.
 	 * 
 	 * @param targetModel
 	 */
-	public void setTargetModel(String targetModel);
+	void setTargetModel(String targetModel);
 }

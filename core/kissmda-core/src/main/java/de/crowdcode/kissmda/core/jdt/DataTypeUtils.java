@@ -37,6 +37,11 @@ public class DataTypeUtils {
 
 	private static Map<String, String> javaTypes = null;
 
+	/**
+	 * Get the primitive type codes.
+	 * 
+	 * @return Map of key and code
+	 */
 	public Map<String, Code> getPrimitiveTypeCodes() {
 		if (primitiveTypeCodes == null) {
 			primitiveTypeCodes = new HashMap<String, Code>();
@@ -53,6 +58,11 @@ public class DataTypeUtils {
 		return primitiveTypeCodes;
 	}
 
+	/**
+	 * Get the Java types.
+	 * 
+	 * @return Map of type key and Java type
+	 */
 	public Map<String, String> getJavaTypes() {
 		if (javaTypes == null) {
 			javaTypes = new HashMap<String, String>();
@@ -69,6 +79,13 @@ public class DataTypeUtils {
 		return javaTypes;
 	}
 
+	/**
+	 * Check whether the type name is a primitive type.
+	 * 
+	 * @param typeName
+	 *            to be checked
+	 * @return true or false
+	 */
 	public boolean isPrimitiveType(String typeName) {
 		Map<String, Code> primitiveTypeCodes = getPrimitiveTypeCodes();
 		Code primitiveTypeCode = primitiveTypeCodes.get(typeName);
@@ -79,6 +96,13 @@ public class DataTypeUtils {
 		}
 	}
 
+	/**
+	 * Checked whether the type name is an array type.
+	 * 
+	 * @param typeName
+	 *            to be checked
+	 * @return true or false
+	 */
 	public boolean isArrayType(String typeName) {
 		if (typeName.contains("[]")) {
 			return true;
@@ -87,6 +111,13 @@ public class DataTypeUtils {
 		}
 	}
 
+	/**
+	 * Checked whether the type name is a parameterized type.
+	 * 
+	 * @param typeName
+	 *            to be checked
+	 * @return true or false
+	 */
 	public boolean isParameterizedType(String typeName) {
 		if (typeName.contains("<") && typeName.contains(">")) {
 			return true;

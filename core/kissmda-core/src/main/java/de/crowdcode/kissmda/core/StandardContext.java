@@ -28,21 +28,33 @@ public class StandardContext implements Context {
 	private String sourceModel;
 	private String targetModel;
 
+	/**
+	 * {@link Context #setSourceModel(String)}
+	 */
 	@Override
 	public String getSourceModel() {
 		return sourceModel;
 	}
 
+	/**
+	 * {@link Context #getTargetModel()}
+	 */
 	@Override
 	public String getTargetModel() {
 		return targetModel;
 	}
 
+	/**
+	 * {@link Context #setSourceModel(String)}
+	 */
 	@Override
 	public void setSourceModel(String sourceModel) {
 		this.sourceModel = sourceModel;
 	}
 
+	/**
+	 * {@link Context #setTargetModel(String)}
+	 */
 	@Override
 	public void setTargetModel(String targetModel) {
 		this.targetModel = targetModel;
