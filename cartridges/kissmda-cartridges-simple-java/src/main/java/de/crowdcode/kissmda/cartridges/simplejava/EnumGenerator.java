@@ -87,6 +87,17 @@ public class EnumGenerator {
 		return cu.toString();
 	}
 
+	/**
+	 * Generate the Enum from UML.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param cu
+	 *            the generated Java compilation unit
+	 * @return EnumDeclaration
+	 */
 	@SuppressWarnings("unchecked")
 	public EnumDeclaration generateEnum(Classifier clazz, AST ast,
 			CompilationUnit cu) {
@@ -99,6 +110,16 @@ public class EnumGenerator {
 		return ed;
 	}
 
+	/**
+	 * Generate the Java package from UML package.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param cu
+	 *            the generated Java compilation unit
+	 */
 	public void generatePackage(Classifier clazz, AST ast, CompilationUnit cu) {
 		PackageDeclaration p1 = ast.newPackageDeclaration();
 		String fullPackageName = getFullPackageName(clazz);
@@ -106,6 +127,16 @@ public class EnumGenerator {
 		cu.setPackage(p1);
 	}
 
+	/**
+	 * Generate Enumeration constants.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param ed
+	 *            Enumeration declaration for Java JDT
+	 */
 	@SuppressWarnings("unchecked")
 	private void generateConstants(Classifier clazz, AST ast, EnumDeclaration ed) {
 		// Get all properties for this enumeration

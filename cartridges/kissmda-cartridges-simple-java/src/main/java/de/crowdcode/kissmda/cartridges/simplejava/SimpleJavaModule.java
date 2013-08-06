@@ -29,6 +29,9 @@ import com.google.inject.AbstractModule;
  */
 public class SimpleJavaModule extends AbstractModule {
 
+	/**
+	 * Configure the Guice module.
+	 */
 	@Override
 	protected void configure() {
 		// Nothing to do...

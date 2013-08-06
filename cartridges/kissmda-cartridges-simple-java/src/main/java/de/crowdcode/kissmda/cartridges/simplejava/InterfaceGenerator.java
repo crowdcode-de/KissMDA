@@ -114,6 +114,16 @@ public class InterfaceGenerator {
 		return cu.toString();
 	}
 
+	/**
+	 * Generate the Getters and Setters methods.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param td
+	 *            TypeDeclaration Java JDT
+	 */
 	@SuppressWarnings("unchecked")
 	private void generateGettersSetters(Classifier clazz, AST ast,
 			TypeDeclaration td) {
@@ -176,6 +186,17 @@ public class InterfaceGenerator {
 		}
 	}
 
+	/**
+	 * Generate the Interface.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param cu
+	 *            the generated Java compilation unit
+	 * @return TypeDeclaration JDT
+	 */
 	@SuppressWarnings("unchecked")
 	public TypeDeclaration generateClass(Classifier clazz, AST ast,
 			CompilationUnit cu) {
@@ -196,8 +217,18 @@ public class InterfaceGenerator {
 		return td;
 	}
 
+	/**
+	 * Generate the Generics for this Interface.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param td
+	 *            TypeDeclaration JDT
+	 */
 	@SuppressWarnings("unchecked")
-	private void generateClassTemplateParams(Classifier clazz, AST ast,
+	public void generateClassTemplateParams(Classifier clazz, AST ast,
 			TypeDeclaration td) {
 		TemplateSignature templateSignature = clazz.getOwnedTemplateSignature();
 		if (templateSignature != null) {
@@ -214,6 +245,16 @@ public class InterfaceGenerator {
 		}
 	}
 
+	/**
+	 * Generate the inheritance for the Interface "extends".
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param td
+	 *            TypeDeclaration JDT
+	 */
 	@SuppressWarnings("unchecked")
 	private void generateClassInheritance(Classifier clazz, AST ast,
 			TypeDeclaration td) {
@@ -231,6 +272,16 @@ public class InterfaceGenerator {
 		}
 	}
 
+	/**
+	 * Generate the Java package from UML package.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param cu
+	 *            the generated Java compilation unit
+	 */
 	public void generatePackage(Classifier clazz, AST ast, CompilationUnit cu) {
 		PackageDeclaration p1 = ast.newPackageDeclaration();
 		String fullPackageName = getFullPackageName(clazz);
@@ -238,7 +289,17 @@ public class InterfaceGenerator {
 		cu.setPackage(p1);
 	}
 
-	private void generateMethods(Classifier clazz, AST ast, TypeDeclaration td) {
+	/**
+	 * Generaate the Java methods from UML.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param td
+	 *            TypeDeclaration JDT
+	 */
+	public void generateMethods(Classifier clazz, AST ast, TypeDeclaration td) {
 		// Get all methods for this clazz
 		// Only for this class without inheritance
 		EList<Operation> operations = clazz.getOperations();

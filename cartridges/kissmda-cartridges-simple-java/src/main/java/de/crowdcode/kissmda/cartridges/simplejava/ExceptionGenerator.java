@@ -23,30 +23,18 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
-import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Generalization;
-import org.eclipse.uml2.uml.Operation;
-import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.ParameterDirectionKind;
-import org.eclipse.uml2.uml.TemplateParameter;
-import org.eclipse.uml2.uml.TemplateSignature;
-import org.eclipse.uml2.uml.Type;
 
 import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
-import de.crowdcode.kissmda.core.jdt.MethodHelper;
-import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
  * Generate Exception from UML class.
@@ -67,32 +55,25 @@ public class ExceptionGenerator {
 			.getLogger(ExceptionGenerator.class.getName());
 
 	@Inject
-	private MethodHelper methodHelper;
+	private InterfaceGenerator interfaceGenerator;
 
 	@Inject
 	private JdtHelper jdtHelper;
-
-	@Inject
-	private PackageHelper packageHelper;
 
 	private String sourceDirectoryPackageName;
 
 	private boolean isCheckedException = true;
 
+	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
+		this.interfaceGenerator = interfaceGenerator;
+	}
+
 	public void setCheckedException(boolean isCheckedException) {
 		this.isCheckedException = isCheckedException;
 	}
 
-	public void setMethodHelper(MethodHelper methodHelper) {
-		this.methodHelper = methodHelper;
-	}
-
 	public void setJdtHelper(JdtHelper javaHelper) {
 		this.jdtHelper = javaHelper;
-	}
-
-	public void setPackageHelper(PackageHelper packageHelper) {
-		this.packageHelper = packageHelper;
 	}
 
 	/**
@@ -114,6 +95,7 @@ public class ExceptionGenerator {
 		generatePackage(clazz, ast, cu);
 		TypeDeclaration td = generateClass(clazz, ast, cu);
 		generateMethods(clazz, ast, td);
+		generateConstructors(clazz, ast, td);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		return cu.toString();
@@ -137,11 +119,23 @@ public class ExceptionGenerator {
 		generatePackage(clazz, ast, cu);
 		TypeDeclaration td = generateClass(clazz, ast, cu);
 		generateMethods(clazz, ast, td);
+		generateConstructors(clazz, ast, td);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		return cu.toString();
 	}
 
+	/**
+	 * Generate the Exception Class.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param cu
+	 *            the generated Java compilation unit
+	 * @return TypeDeclaration JDT
+	 */
 	@SuppressWarnings("unchecked")
 	public TypeDeclaration generateClass(Classifier clazz, AST ast,
 			CompilationUnit cu) {
@@ -162,24 +156,25 @@ public class ExceptionGenerator {
 		return td;
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * {@link InterfaceGenerator #generateClassTemplateParams(Classifier, AST, TypeDeclaration)}
+	 */
 	private void generateClassTemplateParams(Classifier clazz, AST ast,
 			TypeDeclaration td) {
-		TemplateSignature templateSignature = clazz.getOwnedTemplateSignature();
-		if (templateSignature != null) {
-			EList<TemplateParameter> templateParameters = templateSignature
-					.getParameters();
-			for (TemplateParameter templateParameter : templateParameters) {
-				Classifier classifier = (Classifier) templateParameter
-						.getOwnedParameteredElement();
-				String typeName = classifier.getLabel();
-				TypeParameter typeParameter = ast.newTypeParameter();
-				typeParameter.setName(ast.newSimpleName(typeName));
-				td.typeParameters().add(typeParameter);
-			}
-		}
+		interfaceGenerator.generateClassTemplateParams(clazz, ast, td);
 	}
 
+	/**
+	 * Generate the inheritance for the Exception Class "extends". Important:
+	 * Java only supports single inheritance!
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param td
+	 *            TypeDeclaration JDT
+	 */
 	private void generateClassInheritance(Classifier clazz, AST ast,
 			TypeDeclaration td) {
 		EList<Generalization> generalizations = clazz.getGeneralizations();
@@ -217,58 +212,38 @@ public class ExceptionGenerator {
 		}
 	}
 
-	public void generatePackage(Classifier clazz, AST ast, CompilationUnit cu) {
-		PackageDeclaration p1 = ast.newPackageDeclaration();
-		String fullPackageName = getFullPackageName(clazz);
-		p1.setName(ast.newName(fullPackageName));
-		cu.setPackage(p1);
+	/**
+	 * {@link InterfaceGenerator #generatePackage(Classifier, AST, CompilationUnit)}
+	 */
+	private void generatePackage(Classifier clazz, AST ast, CompilationUnit cu) {
+		interfaceGenerator.generatePackage(clazz, ast, cu);
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * {@link InterfaceGenerator #generateMethods(Classifier, AST, TypeDeclaration)}
+	 */
 	private void generateMethods(Classifier clazz, AST ast, TypeDeclaration td) {
-		// Get all methods for this clazz
-		// Only for this class without inheritance
-		EList<Operation> operations = clazz.getOperations();
-		for (Operation operation : operations) {
-			MethodDeclaration md = ast.newMethodDeclaration();
-			md.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
-			md.setName(ast.newSimpleName(operation.getName()));
-			// Parameters, exclude the return parameter
-			EList<Parameter> parameters = operation.getOwnedParameters();
-			for (Parameter parameter : parameters) {
-				if (parameter.getDirection().getValue() != ParameterDirectionKind.RETURN) {
-					Type type = parameter.getType();
-					String umlTypeName = type.getName();
-					String umlQualifiedTypeName = type.getQualifiedName();
-					String umlPropertyName = StringUtils.uncapitalize(parameter
-							.getName());
-					logger.info("Parameter: " + parameter.getName() + " - "
-							+ "Type: " + umlTypeName);
-					jdtHelper.createParameterTypes(ast, td, md, umlTypeName,
-							umlQualifiedTypeName, umlPropertyName,
-							sourceDirectoryPackageName);
-				}
-			}
-			// Return type?
-			Type type = operation.getType();
-			String umlTypeName = type.getName();
-			String umlQualifiedTypeName = type.getQualifiedName();
-			logger.info("UmlQualifiedTypeName: " + umlQualifiedTypeName + " - "
-					+ "umlTypeName: " + umlTypeName);
-			jdtHelper.createReturnType(ast, td, md, umlTypeName,
-					umlQualifiedTypeName, sourceDirectoryPackageName);
-		}
+		interfaceGenerator.generateMethods(clazz, ast, td);
+	}
+
+	/**
+	 * Generate the constructors for Exception.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param td
+	 *            TypeDeclaration JDT
+	 */
+	private void generateConstructors(Classifier clazz, AST ast,
+			TypeDeclaration td) {
+		// TODO Auto-generated method stub
+
 	}
 
 	private String getClassName(Classifier clazz) {
 		String className = clazz.getName();
 		return className;
-	}
-
-	private String getFullPackageName(Classifier clazz) {
-		String fullPackageName = packageHelper.getFullPackageName(clazz,
-				sourceDirectoryPackageName);
-		return fullPackageName;
 	}
 }

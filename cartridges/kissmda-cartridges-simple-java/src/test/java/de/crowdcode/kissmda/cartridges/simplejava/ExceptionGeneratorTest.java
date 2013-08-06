@@ -56,6 +56,7 @@ public class ExceptionGeneratorTest {
 	private static final Logger logger = Logger
 			.getLogger(ExceptionGeneratorTest.class.getName());
 
+	private InterfaceGenerator interfaceGenerator;
 	private ExceptionGenerator exceptionGenerator;
 	private PackageHelper packageHelper;
 	private JdtHelper jdtHelper;
@@ -65,11 +66,13 @@ public class ExceptionGeneratorTest {
 	@Before
 	public void setUp() throws Exception {
 		packageHelper = new PackageHelper();
+		interfaceGenerator = new InterfaceGenerator();
 		exceptionGenerator = new ExceptionGenerator();
 		jdtHelper = new JdtHelper();
 		jdtHelper.setPackageHelper(packageHelper);
-		exceptionGenerator.setPackageHelper(packageHelper);
+		interfaceGenerator.setPackageHelper(packageHelper);
 		exceptionGenerator.setJdtHelper(jdtHelper);
+		exceptionGenerator.setInterfaceGenerator(interfaceGenerator);
 
 		setUpMocks();
 	}
@@ -85,17 +88,6 @@ public class ExceptionGeneratorTest {
 				new UniqueEList<Interface>());
 		when(clazz.getGeneralizations()).thenReturn(
 				new UniqueEList<Generalization>());
-	}
-
-	@Test
-	public void testGeneratePackage() {
-		AST ast = AST.newAST(AST.JLS3);
-		CompilationUnit cu = ast.newCompilationUnit();
-
-		exceptionGenerator.generatePackage(clazz, ast, cu);
-
-		assertEquals("package de.crowdcode.kissmda.testapp.components;\n",
-				cu.toString());
 	}
 
 	@Test
