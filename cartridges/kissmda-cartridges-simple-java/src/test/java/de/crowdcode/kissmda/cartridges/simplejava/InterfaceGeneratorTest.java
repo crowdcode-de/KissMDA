@@ -22,6 +22,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Iterator;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
@@ -34,12 +36,15 @@ import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.TemplateParameter;
 import org.eclipse.uml2.uml.TemplateSignature;
+import org.eclipse.uml2.uml.Type;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Answers;
 
+import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
@@ -55,15 +60,18 @@ public class InterfaceGeneratorTest {
 	private InterfaceGenerator interfaceGenerator;
 	private PackageHelper packageHelper;
 	private JdtHelper jdtHelper;
+	private DataTypeUtils dataTypeUtils;
 
 	private Class clazz;
 
 	@Before
 	public void setUp() throws Exception {
+		dataTypeUtils = new DataTypeUtils();
 		packageHelper = new PackageHelper();
 		interfaceGenerator = new InterfaceGenerator();
 		jdtHelper = new JdtHelper();
 		jdtHelper.setPackageHelper(packageHelper);
+		jdtHelper.setDataTypeUtils(dataTypeUtils);
 		interfaceGenerator.setPackageHelper(packageHelper);
 		interfaceGenerator.setJdtHelper(jdtHelper);
 
@@ -173,6 +181,7 @@ public class InterfaceGeneratorTest {
 	@Test
 	public void testGenerateMethods() {
 		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
 		TypeDeclaration td = ast.newTypeDeclaration();
 		td.setInterface(true);
 
@@ -181,6 +190,24 @@ public class InterfaceGeneratorTest {
 		td.modifiers().add(modifier);
 		td.setName(ast.newSimpleName("Company"));
 
+		EList<Operation> operations = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Operation operation = mock(Operation.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Type type = mock(Type.class, Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Operation> iterator = mock(Iterator.class);
+		when(clazz.getOperations()).thenReturn(operations);
+		when(operations.iterator()).thenReturn(iterator);
+		when(iterator.hasNext()).thenReturn(true, false);
+		when(iterator.next()).thenReturn(operation);
+		when(operation.getName()).thenReturn("calculateMe");
+		when(operation.getType()).thenReturn(type);
+		when(type.getQualifiedName()).thenReturn("de::test::Calculator");
+
 		interfaceGenerator.generateMethods(clazz, ast, td);
+
+		assertEquals(
+				"public interface Company {\n  de.test.Calculator calculateMe();\n}\n",
+				td.toString());
 	}
 }
