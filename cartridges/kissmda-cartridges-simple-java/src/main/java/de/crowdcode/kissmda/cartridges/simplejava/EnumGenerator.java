@@ -42,8 +42,7 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * 
  * <p>
  * Most important helper classes from kissmda-core which are used in this
- * Transformer: PackageHelper, MethodHelper, JavaHelper, FileWriter and
- * DataTypeUtils
+ * Transformer: PackageHelper.
  * </p>
  * 
  * @author Lofi Dewanto

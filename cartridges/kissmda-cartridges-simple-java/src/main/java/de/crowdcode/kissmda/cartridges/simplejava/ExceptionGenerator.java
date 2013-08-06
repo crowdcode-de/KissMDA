@@ -41,8 +41,7 @@ import de.crowdcode.kissmda.core.jdt.JdtHelper;
  * 
  * <p>
  * Most important helper classes from kissmda-core which are used in this
- * Transformer: PackageHelper, MethodHelper, JavaHelper, FileWriter and
- * DataTypeUtils
+ * Transformer: InterfaceGenerator, JdtHelper.
  * </p>
  * 
  * @author Lofi Dewanto
