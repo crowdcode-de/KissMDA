@@ -32,7 +32,6 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
-import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
@@ -342,8 +341,8 @@ public class InterfaceGenerator {
 				String name = jdtHelper.createFullQualifiedTypeAsString(ast,
 						umlExceptionQualifiedTypeName,
 						sourceDirectoryPackageName);
-				SimpleName simpleName = ast.newSimpleName(name);
-				md.thrownExceptions().add(simpleName);
+				Name typeName = ast.newName(name);
+				md.thrownExceptions().add(typeName);
 			}
 		}
 	}

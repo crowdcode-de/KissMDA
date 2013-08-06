@@ -194,20 +194,33 @@ public class InterfaceGeneratorTest {
 				Answers.RETURNS_DEEP_STUBS.get());
 		Operation operation = mock(Operation.class,
 				Answers.RETURNS_DEEP_STUBS.get());
-		Type type = mock(Type.class, Answers.RETURNS_DEEP_STUBS.get());
-		Iterator<Operation> iterator = mock(Iterator.class);
+		Type operationType = mock(Type.class, Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Operation> iteratorOperation = mock(Iterator.class);
+		EList<Type> raisedExceptions = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Type> iteratorException = mock(Iterator.class);
+		Type exceptionType = mock(Type.class, Answers.RETURNS_DEEP_STUBS.get());
+
 		when(clazz.getOperations()).thenReturn(operations);
-		when(operations.iterator()).thenReturn(iterator);
-		when(iterator.hasNext()).thenReturn(true, false);
-		when(iterator.next()).thenReturn(operation);
+		when(operations.iterator()).thenReturn(iteratorOperation);
+		when(iteratorOperation.hasNext()).thenReturn(true, false);
+		when(iteratorOperation.next()).thenReturn(operation);
 		when(operation.getName()).thenReturn("calculateMe");
-		when(operation.getType()).thenReturn(type);
-		when(type.getQualifiedName()).thenReturn("de::test::Calculator");
+		when(operation.getType()).thenReturn(operationType);
+		when(operation.getRaisedExceptions()).thenReturn(raisedExceptions);
+		when(raisedExceptions.iterator()).thenReturn(iteratorException);
+		when(iteratorException.hasNext()).thenReturn(true, false);
+		when(iteratorException.next()).thenReturn(exceptionType);
+
+		when(exceptionType.getQualifiedName()).thenReturn(
+				"de::test::CalculatorException");
+		when(operationType.getQualifiedName()).thenReturn(
+				"de::test::Calculator");
 
 		interfaceGenerator.generateMethods(clazz, ast, td);
 
 		assertEquals(
-				"public interface Company {\n  de.test.Calculator calculateMe();\n}\n",
+				"public interface Company {\n  de.test.Calculator calculateMe() throws de.test.CalculatorException ;\n}\n",
 				td.toString());
 	}
 }
