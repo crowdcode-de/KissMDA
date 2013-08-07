@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
@@ -149,6 +150,9 @@ public class ExceptionGenerator {
 				.newVariableDeclarationFragment();
 		SimpleName variableName = ast.newSimpleName("serialVersionUID");
 		fragment.setName(variableName);
+		NumberLiteral initializer = ast.newNumberLiteral();
+		initializer.setToken("1L");
+		fragment.setInitializer(initializer);
 
 		FieldDeclaration fieldDeclaration = ast.newFieldDeclaration(fragment);
 		fieldDeclaration.modifiers().add(

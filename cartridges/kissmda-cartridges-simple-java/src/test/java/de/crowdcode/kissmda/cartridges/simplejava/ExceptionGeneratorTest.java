@@ -236,7 +236,7 @@ public class ExceptionGeneratorTest {
 		exceptionGenerator.generateSerialVersionUID(clazz, ast, td);
 
 		assertEquals(
-				"class Company {\n  private static final long serialVersionUID;\n}\n",
+				"class Company {\n  private static final long serialVersionUID=1L;\n}\n",
 				td.toString());
 	}
 }
