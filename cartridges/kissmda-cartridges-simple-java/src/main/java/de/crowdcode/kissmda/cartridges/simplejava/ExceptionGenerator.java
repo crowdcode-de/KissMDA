@@ -26,10 +26,14 @@ import javax.inject.Inject;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Generalization;
 
@@ -87,16 +91,7 @@ public class ExceptionGenerator {
 			String sourceDirectoryPackageName) {
 		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
 		this.isCheckedException = true;
-
-		AST ast = AST.newAST(AST.JLS3);
-		CompilationUnit cu = ast.newCompilationUnit();
-
-		generatePackage(clazz, ast, cu);
-		TypeDeclaration td = generateClass(clazz, ast, cu);
-		generateMethods(clazz, ast, td);
-		generateConstructors(clazz, ast, td);
-
-		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
+		CompilationUnit cu = generateException(clazz);
 		return cu.toString();
 	}
 
@@ -111,17 +106,60 @@ public class ExceptionGenerator {
 			String sourceDirectoryPackageName) {
 		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
 		this.isCheckedException = false;
+		CompilationUnit cu = generateException(clazz);
+		return cu.toString();
+	}
 
+	/**
+	 * Generate general Exception. This will be called by Unchecked and Checked
+	 * Exception generation.
+	 * 
+	 * @param clazz
+	 *            UML class
+	 * @return JDT compilation unit
+	 */
+	private CompilationUnit generateException(Classifier clazz) {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 
 		generatePackage(clazz, ast, cu);
 		TypeDeclaration td = generateClass(clazz, ast, cu);
+		generateSerialVersionUID(clazz, ast, td);
 		generateMethods(clazz, ast, td);
 		generateConstructors(clazz, ast, td);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
-		return cu.toString();
+		return cu;
+	}
+
+	/**
+	 * Generate the serial version UID for the Exception class.
+	 * 
+	 * @param clazz
+	 *            UML class
+	 * @param ast
+	 *            JDT AST tree
+	 * @param td
+	 *            JDT type declaration (Class)
+	 */
+	@SuppressWarnings("unchecked")
+	public void generateSerialVersionUID(Classifier clazz, AST ast,
+			TypeDeclaration td) {
+		VariableDeclarationFragment fragment = ast
+				.newVariableDeclarationFragment();
+		SimpleName variableName = ast.newSimpleName("serialVersionUID");
+		fragment.setName(variableName);
+
+		FieldDeclaration fieldDeclaration = ast.newFieldDeclaration(fragment);
+		fieldDeclaration.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PRIVATE_KEYWORD));
+		fieldDeclaration.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.STATIC_KEYWORD));
+		fieldDeclaration.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
+		fieldDeclaration.setType(ast.newPrimitiveType(PrimitiveType.LONG));
+
+		td.bodyDeclarations().add(fieldDeclaration);
 	}
 
 	/**

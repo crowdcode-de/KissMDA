@@ -226,4 +226,17 @@ public class ExceptionGeneratorTest {
 		assertEquals(typeDeclaration.toString(),
 				"public class CompanyException extends RuntimeException {\n}\n");
 	}
+
+	@Test
+	public void testGenerateSerialVersionUID() {
+		AST ast = AST.newAST(AST.JLS3);
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setName(ast.newSimpleName("Company"));
+
+		exceptionGenerator.generateSerialVersionUID(clazz, ast, td);
+
+		assertEquals(
+				"class Company {\n  private static final long serialVersionUID;\n}\n",
+				td.toString());
+	}
 }
