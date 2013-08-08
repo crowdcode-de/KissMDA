@@ -251,7 +251,12 @@ public class ExceptionGeneratorTest {
 		exceptionGenerator.generateConstructors(clazz, ast, td);
 
 		assertEquals(
-				"class CompanyException {\n  public CompanyException(){\n  }\n  public CompanyException(  Throwable cause){\n    super(cause);\n  }\n}\n",
+				"class CompanyException {\n  public CompanyException(){\n  }\n"
+						+ "  public CompanyException(  Throwable cause){\n"
+						+ "    super(cause);\n  }\n  public CompanyException(  String message){\n"
+						+ "    super(message);\n  }\n"
+						+ "  public CompanyException(  String message,  Throwable cause){\n"
+						+ "    super(message,cause);\n  }\n" + "}\n",
 				td.toString());
 	}
 }

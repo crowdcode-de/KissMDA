@@ -281,10 +281,83 @@ public class ExceptionGenerator {
 	 * @param td
 	 *            TypeDeclaration JDT
 	 */
-	@SuppressWarnings("unchecked")
 	public void generateConstructors(Classifier clazz, AST ast,
 			TypeDeclaration td) {
 		// Default constructor
+		generateConstructorDefault(clazz, ast, td);
+
+		// Param: Throwable exception
+		generateConstructorWithOneParam(clazz, ast, td, "Throwable", "cause");
+
+		// Param: String message
+		generateConstructorWithOneParam(clazz, ast, td, "String", "message");
+
+		// Param: String message, Throwable throwable
+		generateConstructorWithTwoParam(clazz, ast, td, "String", "Throwable",
+				"message", "cause");
+	}
+
+	@SuppressWarnings("unchecked")
+	private void generateConstructorWithOneParam(Classifier clazz, AST ast,
+			TypeDeclaration td, String varType, String varName) {
+		MethodDeclaration constructor = ast.newMethodDeclaration();
+		constructor.setConstructor(true);
+		constructor.setName(ast.newSimpleName(clazz.getName()));
+		constructor.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+		SingleVariableDeclaration variableDeclaration = ast
+				.newSingleVariableDeclaration();
+		variableDeclaration.setType(ast.newSimpleType(ast
+				.newSimpleName(varType)));
+		variableDeclaration.setName(ast.newSimpleName(varName));
+		constructor.parameters().add(variableDeclaration);
+
+		Block block = ast.newBlock();
+		SuperConstructorInvocation constructorInvocation = ast
+				.newSuperConstructorInvocation();
+		constructorInvocation.arguments().add(ast.newSimpleName(varName));
+		block.statements().add(constructorInvocation);
+
+		constructor.setBody(block);
+		td.bodyDeclarations().add(constructor);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void generateConstructorWithTwoParam(Classifier clazz, AST ast,
+			TypeDeclaration td, String varType1, String varType2,
+			String varName1, String varName2) {
+		MethodDeclaration constructor = ast.newMethodDeclaration();
+		constructor.setConstructor(true);
+		constructor.setName(ast.newSimpleName(clazz.getName()));
+		constructor.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+		SingleVariableDeclaration variableDeclaration = ast
+				.newSingleVariableDeclaration();
+		variableDeclaration.setType(ast.newSimpleType(ast
+				.newSimpleName(varType1)));
+		variableDeclaration.setName(ast.newSimpleName(varName1));
+		constructor.parameters().add(variableDeclaration);
+
+		variableDeclaration = ast.newSingleVariableDeclaration();
+		variableDeclaration.setType(ast.newSimpleType(ast
+				.newSimpleName(varType2)));
+		variableDeclaration.setName(ast.newSimpleName(varName2));
+		constructor.parameters().add(variableDeclaration);
+
+		Block block = ast.newBlock();
+		SuperConstructorInvocation constructorInvocation = ast
+				.newSuperConstructorInvocation();
+		constructorInvocation.arguments().add(ast.newSimpleName(varName1));
+		constructorInvocation.arguments().add(ast.newSimpleName(varName2));
+		block.statements().add(constructorInvocation);
+
+		constructor.setBody(block);
+		td.bodyDeclarations().add(constructor);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void generateConstructorDefault(Classifier clazz, AST ast,
+			TypeDeclaration td) {
 		MethodDeclaration constructor = ast.newMethodDeclaration();
 		constructor.setConstructor(true);
 		constructor.setName(ast.newSimpleName(clazz.getName()));
@@ -294,32 +367,6 @@ public class ExceptionGenerator {
 
 		constructor.setBody(block);
 		td.bodyDeclarations().add(constructor);
-
-		// Param: Throwable exception
-		constructor = ast.newMethodDeclaration();
-		constructor.setConstructor(true);
-		constructor.setName(ast.newSimpleName(clazz.getName()));
-		constructor.modifiers().add(
-				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
-		SingleVariableDeclaration variableDeclaration = ast
-				.newSingleVariableDeclaration();
-		variableDeclaration.setType(ast.newSimpleType(ast
-				.newSimpleName("Throwable")));
-		variableDeclaration.setName(ast.newSimpleName("cause"));
-		constructor.parameters().add(variableDeclaration);
-
-		block = ast.newBlock();
-		SuperConstructorInvocation constructorInvocation = ast
-				.newSuperConstructorInvocation();
-		constructorInvocation.arguments().add(ast.newSimpleName("cause"));
-		block.statements().add(constructorInvocation);
-
-		constructor.setBody(block);
-		td.bodyDeclarations().add(constructor);
-
-		// Param: String message
-
-		// Param: String message, Throwable throwable
 	}
 
 	private String getClassName(Classifier clazz) {
