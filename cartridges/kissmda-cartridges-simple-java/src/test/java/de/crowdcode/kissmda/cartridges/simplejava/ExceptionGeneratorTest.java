@@ -239,4 +239,19 @@ public class ExceptionGeneratorTest {
 				"class Company {\n  private static final long serialVersionUID=1L;\n}\n",
 				td.toString());
 	}
+
+	@Test
+	public void testGenerateConstructors() {
+		AST ast = AST.newAST(AST.JLS3);
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setName(ast.newSimpleName("CompanyException"));
+
+		when(clazz.getName()).thenReturn("CompanyException");
+
+		exceptionGenerator.generateConstructors(clazz, ast, td);
+
+		assertEquals(
+				"class CompanyException {\n  public CompanyException(){\n  }\n  public CompanyException(  Throwable cause){\n    super(cause);\n  }\n}\n",
+				td.toString());
+	}
 }

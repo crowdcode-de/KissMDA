@@ -25,14 +25,18 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.uml2.uml.Classifier;
@@ -277,10 +281,45 @@ public class ExceptionGenerator {
 	 * @param td
 	 *            TypeDeclaration JDT
 	 */
-	private void generateConstructors(Classifier clazz, AST ast,
+	@SuppressWarnings("unchecked")
+	public void generateConstructors(Classifier clazz, AST ast,
 			TypeDeclaration td) {
-		// TODO Auto-generated method stub
+		// Default constructor
+		MethodDeclaration constructor = ast.newMethodDeclaration();
+		constructor.setConstructor(true);
+		constructor.setName(ast.newSimpleName(clazz.getName()));
+		constructor.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+		Block block = ast.newBlock();
 
+		constructor.setBody(block);
+		td.bodyDeclarations().add(constructor);
+
+		// Param: Throwable exception
+		constructor = ast.newMethodDeclaration();
+		constructor.setConstructor(true);
+		constructor.setName(ast.newSimpleName(clazz.getName()));
+		constructor.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+		SingleVariableDeclaration variableDeclaration = ast
+				.newSingleVariableDeclaration();
+		variableDeclaration.setType(ast.newSimpleType(ast
+				.newSimpleName("Throwable")));
+		variableDeclaration.setName(ast.newSimpleName("cause"));
+		constructor.parameters().add(variableDeclaration);
+
+		block = ast.newBlock();
+		SuperConstructorInvocation constructorInvocation = ast
+				.newSuperConstructorInvocation();
+		constructorInvocation.arguments().add(ast.newSimpleName("cause"));
+		block.statements().add(constructorInvocation);
+
+		constructor.setBody(block);
+		td.bodyDeclarations().add(constructor);
+
+		// Param: String message
+
+		// Param: String message, Throwable throwable
 	}
 
 	private String getClassName(Classifier clazz) {
