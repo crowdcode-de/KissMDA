@@ -32,6 +32,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NumberLiteral;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
@@ -44,6 +45,7 @@ import org.eclipse.uml2.uml.Generalization;
 
 import de.crowdcode.kissmda.core.TransformerException;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
+import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
  * Generate Exception from UML class.
@@ -64,6 +66,9 @@ public class ExceptionGenerator {
 
 	@Inject
 	private InterfaceGenerator interfaceGenerator;
+
+	@Inject
+	private PackageHelper packageHelper;
 
 	@Inject
 	private JdtHelper jdtHelper;
@@ -258,10 +263,20 @@ public class ExceptionGenerator {
 	}
 
 	/**
-	 * {@link InterfaceGenerator #generatePackage(Classifier, AST, CompilationUnit)}
+	 * Generate the Java package from UML package.
+	 * 
+	 * @param clazz
+	 *            the UML class
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param cu
+	 *            the generated Java compilation unit
 	 */
 	private void generatePackage(Classifier clazz, AST ast, CompilationUnit cu) {
-		interfaceGenerator.generatePackage(clazz, ast, cu);
+		PackageDeclaration p1 = ast.newPackageDeclaration();
+		String fullPackageName = getFullPackageName(clazz);
+		p1.setName(ast.newName(fullPackageName));
+		cu.setPackage(p1);
 	}
 
 	/**
@@ -345,5 +360,11 @@ public class ExceptionGenerator {
 	private String getClassName(Classifier clazz) {
 		String className = clazz.getName();
 		return className;
+	}
+
+	private String getFullPackageName(Classifier clazz) {
+		String fullPackageName = packageHelper.getFullPackageName(clazz,
+				sourceDirectoryPackageName);
+		return fullPackageName;
 	}
 }

@@ -33,6 +33,8 @@ import de.crowdcode.kissmda.testapp.PrivateAddressService;
 import de.crowdcode.kissmda.testapp.PrivateCompany;
 import de.crowdcode.kissmda.testapp.components.Company;
 import de.crowdcode.kissmda.testapp.components.CompanyAttribute;
+import de.crowdcode.kissmda.testapp.exceptions.CreateAddressException;
+import de.crowdcode.kissmda.testapp.exceptions.CreatePersonException;
 
 /**
  * Unit test for AddressServiceImpl class.
@@ -58,7 +60,8 @@ public class AddressServiceImplTest {
 	}
 
 	@Test
-	public void testCreateAddressFromPerson() {
+	public void testCreateAddressFromPerson() throws CreateAddressException,
+			CreatePersonException {
 		Address address = prepareAddressAndCompany();
 		assertEquals(null, address.getPerson());
 
@@ -68,7 +71,8 @@ public class AddressServiceImplTest {
 	}
 
 	@Test
-	public void testCreateAddressFromPersonWithPrivateAddressService() {
+	public void testCreateAddressFromPersonWithPrivateAddressService()
+			throws CreateAddressException, CreatePersonException {
 		Address address = prepareAddressAndCompany();
 		assertEquals(null, address.getPerson());
 
