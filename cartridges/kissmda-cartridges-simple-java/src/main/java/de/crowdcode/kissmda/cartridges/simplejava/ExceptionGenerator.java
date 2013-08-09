@@ -285,72 +285,45 @@ public class ExceptionGenerator {
 			TypeDeclaration td) {
 		// Default constructor
 		generateConstructorDefault(clazz, ast, td);
-
 		// Param: Throwable exception
-		generateConstructorWithOneParam(clazz, ast, td, "Throwable", "cause");
-
+		generateConstructorWithParams(clazz, ast, td,
+				new String[] { "Throwable" }, new String[] { "cause" });
 		// Param: String message
-		generateConstructorWithOneParam(clazz, ast, td, "String", "message");
-
+		generateConstructorWithParams(clazz, ast, td,
+				new String[] { "String" }, new String[] { "message" });
 		// Param: String message, Throwable throwable
-		generateConstructorWithTwoParam(clazz, ast, td, "String", "Throwable",
-				"message", "cause");
+		generateConstructorWithParams(clazz, ast, td, new String[] { "String",
+				"Throwable" }, new String[] { "message", "cause" });
 	}
 
 	@SuppressWarnings("unchecked")
-	private void generateConstructorWithOneParam(Classifier clazz, AST ast,
-			TypeDeclaration td, String varType, String varName) {
+	public void generateConstructorWithParams(Classifier clazz, AST ast,
+			TypeDeclaration td, String[] varTypes, String[] varNames) {
 		MethodDeclaration constructor = ast.newMethodDeclaration();
 		constructor.setConstructor(true);
 		constructor.setName(ast.newSimpleName(clazz.getName()));
 		constructor.modifiers().add(
 				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
-		SingleVariableDeclaration variableDeclaration = ast
-				.newSingleVariableDeclaration();
-		variableDeclaration.setType(ast.newSimpleType(ast
-				.newSimpleName(varType)));
-		variableDeclaration.setName(ast.newSimpleName(varName));
-		constructor.parameters().add(variableDeclaration);
+
+		for (int index = 0; index < varTypes.length; index++) {
+			SingleVariableDeclaration variableDeclaration = ast
+					.newSingleVariableDeclaration();
+			variableDeclaration.setType(ast.newSimpleType(ast
+					.newSimpleName(varTypes[index])));
+			variableDeclaration.setName(ast.newSimpleName(varNames[index]));
+			constructor.parameters().add(variableDeclaration);
+		}
 
 		Block block = ast.newBlock();
 		SuperConstructorInvocation constructorInvocation = ast
 				.newSuperConstructorInvocation();
-		constructorInvocation.arguments().add(ast.newSimpleName(varName));
+
+		for (int index = 0; index < varNames.length; index++) {
+			constructorInvocation.arguments().add(
+					ast.newSimpleName(varNames[index]));
+		}
+
 		block.statements().add(constructorInvocation);
-
-		constructor.setBody(block);
-		td.bodyDeclarations().add(constructor);
-	}
-
-	@SuppressWarnings("unchecked")
-	private void generateConstructorWithTwoParam(Classifier clazz, AST ast,
-			TypeDeclaration td, String varType1, String varType2,
-			String varName1, String varName2) {
-		MethodDeclaration constructor = ast.newMethodDeclaration();
-		constructor.setConstructor(true);
-		constructor.setName(ast.newSimpleName(clazz.getName()));
-		constructor.modifiers().add(
-				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
-		SingleVariableDeclaration variableDeclaration = ast
-				.newSingleVariableDeclaration();
-		variableDeclaration.setType(ast.newSimpleType(ast
-				.newSimpleName(varType1)));
-		variableDeclaration.setName(ast.newSimpleName(varName1));
-		constructor.parameters().add(variableDeclaration);
-
-		variableDeclaration = ast.newSingleVariableDeclaration();
-		variableDeclaration.setType(ast.newSimpleType(ast
-				.newSimpleName(varType2)));
-		variableDeclaration.setName(ast.newSimpleName(varName2));
-		constructor.parameters().add(variableDeclaration);
-
-		Block block = ast.newBlock();
-		SuperConstructorInvocation constructorInvocation = ast
-				.newSuperConstructorInvocation();
-		constructorInvocation.arguments().add(ast.newSimpleName(varName1));
-		constructorInvocation.arguments().add(ast.newSimpleName(varName2));
-		block.statements().add(constructorInvocation);
-
 		constructor.setBody(block);
 		td.bodyDeclarations().add(constructor);
 	}

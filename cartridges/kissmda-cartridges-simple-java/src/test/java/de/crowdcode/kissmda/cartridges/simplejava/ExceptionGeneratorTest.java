@@ -259,4 +259,23 @@ public class ExceptionGeneratorTest {
 						+ "    super(message,cause);\n  }\n" + "}\n",
 				td.toString());
 	}
+
+	@Test
+	public void testGenerateConstructorWithParams() {
+		AST ast = AST.newAST(AST.JLS3);
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setName(ast.newSimpleName("CompanyException"));
+
+		when(clazz.getName()).thenReturn("CompanyException");
+
+		exceptionGenerator.generateConstructorWithParams(clazz, ast, td,
+				new String[] { "String", "Throwable" }, new String[] {
+						"message", "cause" });
+
+		assertEquals(
+				"class CompanyException {\n"
+						+ "  public CompanyException(  String message,  Throwable cause){\n"
+						+ "    super(message,cause);\n  }\n" + "}\n",
+				td.toString());
+	}
 }
