@@ -39,6 +39,7 @@ import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.TemplateParameter;
 import org.eclipse.uml2.uml.TemplateSignature;
 import org.eclipse.uml2.uml.Type;
@@ -256,6 +257,73 @@ public class InterfaceGeneratorTest {
 				"Comment...\nTest\n@author: Lofi Dewanto");
 
 		interfaceGenerator.generateMethodJavadoc(ast, operation, md);
+
+		assertEquals(
+				"/** \n * Comment...\n * Test\n * @author: Lofi Dewanto\n */\nvoid calculateAge();\n",
+				md.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateClassJavadoc() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		Class clazz = mock(Class.class, Answers.RETURNS_DEEP_STUBS.get());
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Comment> commentIterator = mock(Iterator.class);
+		Comment comment = mock(Comment.class, Answers.RETURNS_DEEP_STUBS.get());
+
+		when(clazz.getOwnedComments()).thenReturn(comments);
+		when(comments.iterator()).thenReturn(commentIterator);
+		when(commentIterator.hasNext()).thenReturn(true, false);
+		when(commentIterator.next()).thenReturn(comment);
+		when(comment.getBody()).thenReturn(
+				"Comment...\nTest\n@author: Lofi Dewanto");
+
+		interfaceGenerator.generateClassJavadoc(clazz, ast, td);
+
+		assertEquals(
+				"/** \n * Comment...\n * Test\n * @author: Lofi Dewanto\n */\npublic interface Company {\n}\n",
+				td.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateGetterSetterJavadoc() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+		MethodDeclaration md = ast.newMethodDeclaration();
+		md.setName(ast.newSimpleName("calculateAge"));
+
+		Property property = mock(Property.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Comment> commentIterator = mock(Iterator.class);
+		Comment comment = mock(Comment.class, Answers.RETURNS_DEEP_STUBS.get());
+
+		when(property.getOwnedComments()).thenReturn(comments);
+		when(comments.iterator()).thenReturn(commentIterator);
+		when(commentIterator.hasNext()).thenReturn(true, false);
+		when(commentIterator.next()).thenReturn(comment);
+		when(comment.getBody()).thenReturn(
+				"Comment...\nTest\n@author: Lofi Dewanto");
+
+		interfaceGenerator.generateGetterSetterJavadoc(ast, property, md);
 
 		assertEquals(
 				"/** \n * Comment...\n * Test\n * @author: Lofi Dewanto\n */\nvoid calculateAge();\n",
