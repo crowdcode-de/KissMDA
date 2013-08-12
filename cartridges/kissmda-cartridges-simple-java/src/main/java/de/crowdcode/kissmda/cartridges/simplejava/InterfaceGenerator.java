@@ -156,6 +156,8 @@ public class InterfaceGenerator {
 						umlTypeName, umlQualifiedTypeName,
 						sourceDirectoryPackageName);
 			}
+			// Getter Javadoc
+			generateGetterSetterJavadoc(ast, property, mdGetter);
 
 			// Create setter method for each property
 			MethodDeclaration mdSetter = ast.newMethodDeclaration();
@@ -185,6 +187,28 @@ public class InterfaceGenerator {
 						umlQualifiedTypeName, umlPropertyName,
 						sourceDirectoryPackageName);
 			}
+			// Setter Javadoc
+			generateGetterSetterJavadoc(ast, property, mdSetter);
+		}
+	}
+
+	/**
+	 * Generate Javadoc for Getter and Setter method.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param property
+	 *            UML Property
+	 * @param methodDeclaration
+	 *            MethodDeclaration for Getter and Setter
+	 */
+	public void generateGetterSetterJavadoc(AST ast, Property property,
+			MethodDeclaration methodDeclaration) {
+		EList<Comment> comments = property.getOwnedComments();
+		for (Comment comment : comments) {
+			Javadoc javadoc = ast.newJavadoc();
+			generateJavadoc(ast, comment, javadoc);
+			methodDeclaration.setJavadoc(javadoc);
 		}
 	}
 
