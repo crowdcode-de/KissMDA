@@ -298,7 +298,6 @@ public class InterfaceGenerator {
 	 * @param td
 	 *            TypeDeclaration JDT
 	 */
-	@SuppressWarnings("unchecked")
 	public void generateMethods(Classifier clazz, AST ast, TypeDeclaration td) {
 		// Get all methods for this clazz
 		// Only for this class without inheritance
@@ -308,41 +307,55 @@ public class InterfaceGenerator {
 			md.setName(ast.newSimpleName(operation.getName()));
 
 			// Parameters, exclude the return parameter
-			EList<Parameter> parameters = operation.getOwnedParameters();
-			for (Parameter parameter : parameters) {
-				if (parameter.getDirection().getValue() != ParameterDirectionKind.RETURN) {
-					Type type = parameter.getType();
-					String umlTypeName = type.getName();
-					String umlQualifiedTypeName = type.getQualifiedName();
-					String umlPropertyName = StringUtils.uncapitalize(parameter
-							.getName());
-					logger.info("Parameter: " + parameter.getName() + " - "
-							+ "Type: " + umlTypeName);
-					jdtHelper.createParameterTypes(ast, td, md, umlTypeName,
-							umlQualifiedTypeName, umlPropertyName,
-							sourceDirectoryPackageName);
-				}
-			}
-
+			generateMethodParams(ast, td, operation, md);
 			// Return type
-			Type type = operation.getType();
-			String umlTypeName = type.getName();
-			String umlQualifiedTypeName = type.getQualifiedName();
-			logger.info("UmlQualifiedTypeName: " + umlQualifiedTypeName + " - "
-					+ "umlTypeName: " + umlTypeName);
-			jdtHelper.createReturnType(ast, td, md, umlTypeName,
-					umlQualifiedTypeName, sourceDirectoryPackageName);
-
+			generateMethodReturnType(ast, td, operation, md);
 			// Throws Exception
-			EList<Type> raisedExceptions = operation.getRaisedExceptions();
-			for (Type raisedExceptionType : raisedExceptions) {
-				String umlExceptionQualifiedTypeName = raisedExceptionType
-						.getQualifiedName();
-				String name = jdtHelper.createFullQualifiedTypeAsString(ast,
-						umlExceptionQualifiedTypeName,
+			generateMethodThrowException(ast, operation, md);
+			// Generate JavaDoc
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void generateMethodThrowException(AST ast, Operation operation,
+			MethodDeclaration md) {
+		EList<Type> raisedExceptions = operation.getRaisedExceptions();
+		for (Type raisedExceptionType : raisedExceptions) {
+			String umlExceptionQualifiedTypeName = raisedExceptionType
+					.getQualifiedName();
+			String name = jdtHelper.createFullQualifiedTypeAsString(ast,
+					umlExceptionQualifiedTypeName, sourceDirectoryPackageName);
+			Name typeName = ast.newName(name);
+			md.thrownExceptions().add(typeName);
+		}
+	}
+
+	private void generateMethodReturnType(AST ast, TypeDeclaration td,
+			Operation operation, MethodDeclaration md) {
+		Type type = operation.getType();
+		String umlTypeName = type.getName();
+		String umlQualifiedTypeName = type.getQualifiedName();
+		logger.info("UmlQualifiedTypeName: " + umlQualifiedTypeName + " - "
+				+ "umlTypeName: " + umlTypeName);
+		jdtHelper.createReturnType(ast, td, md, umlTypeName,
+				umlQualifiedTypeName, sourceDirectoryPackageName);
+	}
+
+	private void generateMethodParams(AST ast, TypeDeclaration td,
+			Operation operation, MethodDeclaration md) {
+		EList<Parameter> parameters = operation.getOwnedParameters();
+		for (Parameter parameter : parameters) {
+			if (parameter.getDirection().getValue() != ParameterDirectionKind.RETURN) {
+				Type type = parameter.getType();
+				String umlTypeName = type.getName();
+				String umlQualifiedTypeName = type.getQualifiedName();
+				String umlPropertyName = StringUtils.uncapitalize(parameter
+						.getName());
+				logger.info("Parameter: " + parameter.getName() + " - "
+						+ "Type: " + umlTypeName);
+				jdtHelper.createParameterTypes(ast, td, md, umlTypeName,
+						umlQualifiedTypeName, umlPropertyName,
 						sourceDirectoryPackageName);
-				Name typeName = ast.newName(name);
-				md.thrownExceptions().add(typeName);
 			}
 		}
 	}
