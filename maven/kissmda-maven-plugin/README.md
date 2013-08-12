@@ -8,12 +8,12 @@ To use this plugin you can see following example:
             <plugin>
 				<groupId>de.crowdcode.kissmda.maven</groupId>
 				<artifactId>kissmda-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<version>[Version Number]</version>
 				<dependencies>
 					<dependency>
 						<groupId>de.crowdcode.kissmda.cartridges</groupId>
 						<artifactId>kissmda-cartridges-simple-java</artifactId>
-						<version>1.0.0</version>
+						<version>[Version Number]</version>
 					</dependency>
 				</dependencies>
 				<executions>
