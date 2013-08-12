@@ -86,7 +86,14 @@ public class SimpleJavaTransformer implements Transformer {
 	@Inject
 	private EnumGenerator enumGenerator;
 
+	@Inject
+	private JavaCodeFormatter javaCodeFormatter;
+
 	private Context context;
+
+	public void setJavaCodeFormatter(JavaCodeFormatter javaCodeFormatter) {
+		this.javaCodeFormatter = javaCodeFormatter;
+	}
 
 	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
 		this.interfaceGenerator = interfaceGenerator;
@@ -236,7 +243,8 @@ public class SimpleJavaTransformer implements Transformer {
 	}
 
 	/**
-	 * Create the output file on the directory.
+	 * Create the output file on the directory. We also format the code before
+	 * we save it.
 	 * 
 	 * @param clazz
 	 *            UML2 class of Eclipse
@@ -249,7 +257,8 @@ public class SimpleJavaTransformer implements Transformer {
 			throws IOException {
 		String fullPackageName = packageHelper.getFullPackageName(clazz,
 				sourceDirectoryPackageName);
+		String formattedCode = javaCodeFormatter.format(compilationUnit);
 		javaFileWriter.createJavaFile(context, fullPackageName,
-				clazz.getName(), compilationUnit);
+				clazz.getName(), formattedCode);
 	}
 }
