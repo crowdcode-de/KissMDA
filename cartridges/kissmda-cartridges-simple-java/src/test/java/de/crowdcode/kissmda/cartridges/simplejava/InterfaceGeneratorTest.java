@@ -28,12 +28,14 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
@@ -89,6 +91,7 @@ public class InterfaceGeneratorTest {
 				new UniqueEList<Interface>());
 		when(clazz.getGeneralizations()).thenReturn(
 				new UniqueEList<Generalization>());
+		when(clazz.getOwnedComments()).thenReturn(new UniqueEList<Comment>());
 	}
 
 	@Test
@@ -222,5 +225,40 @@ public class InterfaceGeneratorTest {
 		assertEquals(
 				"public interface Company {\n  de.test.Calculator calculateMe() throws de.test.CalculatorException ;\n}\n",
 				td.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateMethodJavadoc() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+		MethodDeclaration md = ast.newMethodDeclaration();
+		md.setName(ast.newSimpleName("calculateAge"));
+
+		Operation operation = mock(Operation.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Comment> commentIterator = mock(Iterator.class);
+		Comment comment = mock(Comment.class, Answers.RETURNS_DEEP_STUBS.get());
+
+		when(operation.getOwnedComments()).thenReturn(comments);
+		when(comments.iterator()).thenReturn(commentIterator);
+		when(commentIterator.hasNext()).thenReturn(true, false);
+		when(commentIterator.next()).thenReturn(comment);
+		when(comment.getBody()).thenReturn(
+				"Comment...\nTest\n@author: Lofi Dewanto");
+
+		interfaceGenerator.generateMethodJavadoc(ast, operation, md);
+
+		assertEquals(
+				"/** \n * Comment...\n * Test\n * @author: Lofi Dewanto\n */\nvoid calculateAge();\n",
+				md.toString());
 	}
 }

@@ -27,15 +27,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
@@ -210,10 +213,32 @@ public class InterfaceGenerator {
 		generateClassInheritance(clazz, ast, td);
 		// Add template params
 		generateClassTemplateParams(clazz, ast, td);
+		// Add Javadoc
+		generateClassJavadoc(clazz, ast, td);
 
 		cu.types().add(td);
 
 		return td;
+	}
+
+	/**
+	 * Generate Javadoc for Interface.
+	 * 
+	 * @param clazz
+	 *            Classifier
+	 * @param ast
+	 *            JDT AST tree
+	 * @param td
+	 *            TypeDeclaration
+	 */
+	public void generateClassJavadoc(Classifier clazz, AST ast,
+			TypeDeclaration td) {
+		EList<Comment> comments = clazz.getOwnedComments();
+		for (Comment comment : comments) {
+			Javadoc javadoc = ast.newJavadoc();
+			generateJavadoc(ast, comment, javadoc);
+			td.setJavadoc(javadoc);
+		}
 	}
 
 	/**
@@ -312,8 +337,44 @@ public class InterfaceGenerator {
 			generateMethodReturnType(ast, td, operation, md);
 			// Throws Exception
 			generateMethodThrowException(ast, operation, md);
-			// Generate JavaDoc
+			// Generate Javadoc
+			generateMethodJavadoc(ast, operation, md);
 		}
+	}
+
+	/**
+	 * Generate Javadoc for UML Operation.
+	 * 
+	 * @param ast
+	 *            AST tree JDT
+	 * @param operation
+	 *            UML Operation - Method
+	 * @param md
+	 *            MethodDeclaration
+	 */
+	public void generateMethodJavadoc(AST ast, Operation operation,
+			MethodDeclaration md) {
+		EList<Comment> comments = operation.getOwnedComments();
+		for (Comment comment : comments) {
+			Javadoc javadoc = ast.newJavadoc();
+			generateJavadoc(ast, comment, javadoc);
+			md.setJavadoc(javadoc);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void generateJavadoc(AST ast, Comment comment, Javadoc javadoc) {
+		String[] commentContents = parseComent(comment.getBody());
+		for (String commentContent : commentContents) {
+			TagElement tagElement = ast.newTagElement();
+			tagElement.setTagName(commentContent);
+			javadoc.tags().add(tagElement);
+		}
+	}
+
+	private String[] parseComent(String body) {
+		String lines[] = body.split("\\r?\\n");
+		return lines;
 	}
 
 	@SuppressWarnings("unchecked")
