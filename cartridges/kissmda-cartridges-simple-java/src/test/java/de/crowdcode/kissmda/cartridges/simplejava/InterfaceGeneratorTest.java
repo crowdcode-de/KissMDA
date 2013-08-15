@@ -329,4 +329,21 @@ public class InterfaceGeneratorTest {
 				"/** \n * Comment...\n * Test\n * @author: Lofi Dewanto\n */\nvoid calculateAge();\n",
 				md.toString());
 	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateMethodTemplateParams() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+		MethodDeclaration md = ast.newMethodDeclaration();
+		md.setName(ast.newSimpleName("calculateAge"));
+
+		// TODO Implement test for this method
+	}
 }

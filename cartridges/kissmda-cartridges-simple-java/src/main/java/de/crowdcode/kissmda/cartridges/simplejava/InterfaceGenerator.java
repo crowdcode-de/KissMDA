@@ -363,6 +363,25 @@ public class InterfaceGenerator {
 			generateMethodThrowException(ast, operation, md);
 			// Generate Javadoc
 			generateMethodJavadoc(ast, operation, md);
+			// Generate Method template params
+			generateMethodTemplateParams(ast, operation, md);
+		}
+	}
+
+	/**
+	 * Generate the template parameter for the given method - Generic Method.
+	 * 
+	 * @param ast
+	 * @param operation
+	 * @param md
+	 */
+	public void generateMethodTemplateParams(AST ast, Operation operation,
+			MethodDeclaration md) {
+		// TODO Implement this Generic Method
+		TemplateSignature templateSignature = operation
+				.getOwnedTemplateSignature();
+		if (templateSignature != null) {
+			logger.info("XXXXXXXXXXXXXX: " + templateSignature.toString());
 		}
 	}
 
