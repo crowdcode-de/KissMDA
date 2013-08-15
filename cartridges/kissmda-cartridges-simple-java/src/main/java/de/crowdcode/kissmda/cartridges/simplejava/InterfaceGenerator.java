@@ -382,6 +382,11 @@ public class InterfaceGenerator {
 				.getOwnedTemplateSignature();
 		if (templateSignature != null) {
 			logger.info("XXXXXXXXXXXXXX: " + templateSignature.toString());
+			EList<TemplateParameter> templateParameters = templateSignature
+					.getOwnedParameters();
+			for (TemplateParameter templateParameter : templateParameters) {
+				logger.info("XXXXXXXXXXXXXX: " + templateParameter.toString());
+			}
 		}
 	}
 
