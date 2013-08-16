@@ -20,6 +20,9 @@ package de.crowdcode.kissmda.examples.apptest;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -109,6 +112,11 @@ public class AddressServiceImplTest {
 		companyAttribute.setName("Lofi");
 		companyAttribute.add("Test Element", 23);
 		company.setCompanyAttribute(companyAttribute);
+
+		String owner = "Lofi";
+		Collection<String> owners = new ArrayList<String>();
+		owners.add(owner);
+		company.defineCompany(owners, owner);
 
 		Address address = new AddressImpl();
 		address.setStreet("Jakarta");
