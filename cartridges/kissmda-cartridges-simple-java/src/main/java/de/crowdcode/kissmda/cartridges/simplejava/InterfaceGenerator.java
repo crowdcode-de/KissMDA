@@ -372,20 +372,27 @@ public class InterfaceGenerator {
 	 * Generate the template parameter for the given method - Generic Method.
 	 * 
 	 * @param ast
+	 *            AST tree JDT
 	 * @param operation
+	 *            UML2 Operation
 	 * @param md
+	 *            MethodDeclaration JDT
 	 */
+	@SuppressWarnings("unchecked")
 	public void generateMethodTemplateParams(AST ast, Operation operation,
 			MethodDeclaration md) {
-		// TODO Implement this Generic Method
 		TemplateSignature templateSignature = operation
 				.getOwnedTemplateSignature();
 		if (templateSignature != null) {
-			logger.info("XXXXXXXXXXXXXX: " + templateSignature.toString());
 			EList<TemplateParameter> templateParameters = templateSignature
-					.getOwnedParameters();
+					.getParameters();
 			for (TemplateParameter templateParameter : templateParameters) {
-				logger.info("XXXXXXXXXXXXXX: " + templateParameter.toString());
+				Classifier classifier = (Classifier) templateParameter
+						.getOwnedParameteredElement();
+				String typeName = classifier.getLabel();
+				TypeParameter typeParameter = ast.newTypeParameter();
+				typeParameter.setName(ast.newSimpleName(typeName));
+				md.typeParameters().add(typeParameter);
 			}
 		}
 	}

@@ -35,6 +35,7 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
@@ -344,6 +345,29 @@ public class InterfaceGeneratorTest {
 		MethodDeclaration md = ast.newMethodDeclaration();
 		md.setName(ast.newSimpleName("calculateAge"));
 
-		// TODO Implement test for this method
+		Operation operation = mock(Operation.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		EList<TemplateParameter> templateParams = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<TemplateParameter> templateParamIterator = mock(Iterator.class);
+		TemplateSignature templateSignature = mock(TemplateSignature.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		TemplateParameter templateParameter = mock(TemplateParameter.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Classifier classifier = mock(Classifier.class);
+
+		when(operation.getOwnedTemplateSignature()).thenReturn(
+				templateSignature);
+		when(templateSignature.getParameters()).thenReturn(templateParams);
+		when(templateParams.iterator()).thenReturn(templateParamIterator);
+		when(templateParamIterator.hasNext()).thenReturn(true, false);
+		when(templateParamIterator.next()).thenReturn(templateParameter);
+		when(templateParameter.getOwnedParameteredElement()).thenReturn(
+				classifier);
+		when(classifier.getLabel()).thenReturn("T");
+
+		interfaceGenerator.generateMethodTemplateParams(ast, operation, md);
+
+		assertEquals("<T>void calculateAge();\n", md.toString());
 	}
 }
