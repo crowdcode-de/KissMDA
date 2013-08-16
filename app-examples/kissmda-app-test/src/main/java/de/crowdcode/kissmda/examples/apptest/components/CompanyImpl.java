@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.examples.apptest.components;
 
+import java.util.Collection;
 import java.util.Date;
 
 import de.crowdcode.kissmda.testapp.components.Company;
@@ -69,5 +70,11 @@ public class CompanyImpl implements Company {
 	public void setCompanyAttribute(
 			CompanyAttribute<String, Integer> companyAttribute) {
 		this.companyAttribute = companyAttribute;
+	}
+
+	@Override
+	public <T> void defineCompany(Collection<T> owners, T owner) {
+		T newOwner = owner;
+		owners.add(newOwner);
 	}
 }
