@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
@@ -92,9 +93,9 @@ public class JavaCodeFormatter {
 		try {
 			te.apply(doc);
 		} catch (MalformedTreeException e) {
-			logger.log(Level.SEVERE, e.getStackTrace().toString());
+			logger.log(Level.SEVERE, ExceptionUtils.getStackTrace(e));
 		} catch (BadLocationException e) {
-			logger.log(Level.SEVERE, e.getStackTrace().toString());
+			logger.log(Level.SEVERE, ExceptionUtils.getStackTrace(e));
 		}
 		String formattedCode = doc.get();
 		return formattedCode;

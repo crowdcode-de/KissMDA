@@ -139,10 +139,10 @@ public class InterfaceGenerator {
 			mdGetter.setName(ast.newSimpleName(getterName));
 			// Return type?
 			Type type = property.getType();
-			logger.info("Class: " + clazz.getName() + " - " + "Property: "
-					+ property.getName() + " - " + "Property Upper: "
-					+ property.getUpper() + " - " + "Property Lower: "
-					+ property.getLower());
+			logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
+					+ "Property: " + property.getName() + " - "
+					+ "Property Upper: " + property.getUpper() + " - "
+					+ "Property Lower: " + property.getLower());
 			String umlTypeName = type.getName();
 			String umlQualifiedTypeName = type.getQualifiedName();
 			if (property.getUpper() >= 0) {
@@ -451,8 +451,8 @@ public class InterfaceGenerator {
 		Type type = operation.getType();
 		String umlTypeName = type.getName();
 		String umlQualifiedTypeName = type.getQualifiedName();
-		logger.info("UmlQualifiedTypeName: " + umlQualifiedTypeName + " - "
-				+ "umlTypeName: " + umlTypeName);
+		logger.log(Level.FINE, "UmlQualifiedTypeName: " + umlQualifiedTypeName
+				+ " - " + "umlTypeName: " + umlTypeName);
 		jdtHelper.createReturnType(ast, td, md, umlTypeName,
 				umlQualifiedTypeName, sourceDirectoryPackageName);
 	}
@@ -467,8 +467,8 @@ public class InterfaceGenerator {
 				String umlQualifiedTypeName = type.getQualifiedName();
 				String umlPropertyName = StringUtils.uncapitalize(parameter
 						.getName());
-				logger.info("Parameter: " + parameter.getName() + " - "
-						+ "Type: " + umlTypeName);
+				logger.log(Level.FINE, "Parameter: " + parameter.getName()
+						+ " - " + "Type: " + umlTypeName);
 				jdtHelper.createParameterTypes(ast, td, md, umlTypeName,
 						umlQualifiedTypeName, umlPropertyName,
 						sourceDirectoryPackageName);

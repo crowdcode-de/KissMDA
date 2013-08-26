@@ -19,6 +19,7 @@
 package de.crowdcode.kissmda.core.uml;
 
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -64,10 +65,10 @@ public class PackageHelper {
 
 	public org.eclipse.uml2.uml.Package getRootPackage(Context context)
 			throws URISyntaxException {
-		logger.info("Get from following sourceModel: "
-				+ context.getSourceModel());
+		logger.log(Level.INFO,
+				"Get from following sourceModel: " + context.getSourceModel());
 		String uriString = FILE_PROTOCOL + context.getSourceModel();
-		logger.info("Get from following URI: " + uriString);
+		logger.log(Level.INFO, "Get from following URI: " + uriString);
 		URI uri = URI.createURI(uriString);
 		readerWriter.registerSchema();
 		readerWriter.registerResourceFactories();
@@ -81,7 +82,7 @@ public class PackageHelper {
 	public String getFullPackageName(Classifier clazz,
 			String sourceDirectoryPackageName) {
 		// Get package until the beginning of SourceDirectory
-		logger.info("Qualified name: " + clazz.getQualifiedName());
+		logger.log(Level.FINE, "Qualified name: " + clazz.getQualifiedName());
 		// Remove the sourceDirectoryPackageName
 		String toBeDeleted = sourceDirectoryPackageName + "::";
 		String fullPackageName = clazz.getQualifiedName().replaceFirst(
@@ -91,21 +92,21 @@ public class PackageHelper {
 		fullPackageName = fullPackageName.replaceFirst(toBeDeleted, "");
 		// Change :: to .
 		fullPackageName = fullPackageName.replaceAll("::", ".");
-		logger.info("Real package name: " + fullPackageName);
+		logger.log(Level.FINE, "Real package name: " + fullPackageName);
 		return fullPackageName;
 	}
 
 	public String getFullPackageName(String umlPackageNameWithClass,
 			String sourceDirectoryPackageName) {
 		// Get package until the beginning of SourceDirectory
-		logger.info("Qualified name: " + umlPackageNameWithClass);
+		logger.log(Level.FINE, "Qualified name: " + umlPackageNameWithClass);
 		// Remove the sourceDirectoryPackageName
 		String toBeDeleted = sourceDirectoryPackageName + "::";
 		String fullPackageName = umlPackageNameWithClass.replaceFirst(
 				toBeDeleted, "");
 		// Change :: to .
 		fullPackageName = fullPackageName.replaceAll("::", ".");
-		logger.info("Real package name: " + fullPackageName);
+		logger.log(Level.FINE, "Real package name: " + fullPackageName);
 		return fullPackageName;
 	}
 

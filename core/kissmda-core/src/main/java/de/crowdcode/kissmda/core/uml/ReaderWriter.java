@@ -59,7 +59,7 @@ public class ReaderWriter {
 	protected static final ResourceSet resourceSet = new ResourceSetImpl();
 
 	protected void out(String output) {
-		logger.log(Level.INFO, output);
+		logger.log(Level.FINE, output);
 	}
 
 	protected void err(String error) {

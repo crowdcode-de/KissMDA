@@ -20,6 +20,7 @@ package de.crowdcode.kissmda.cartridges.simplejava;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -145,7 +146,7 @@ public class SimpleJavaTransformer implements Transformer {
 						// From this SourceDirectory we can work...
 						org.eclipse.uml2.uml.Package packagez = (org.eclipse.uml2.uml.Package) element;
 						sourceDirectoryPackageName = packagez.getName();
-						logger.info("SourceDirectory package name: "
+						logger.log(Level.FINE, "SourceDirectory package name: "
 								+ sourceDirectoryPackageName);
 					}
 					if (stereotype.getName().equals(STEREOTYPE_ENTITY)
@@ -178,7 +179,7 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private void generateEnum(Element element) throws IOException {
 		Enumeration clazz = (Enumeration) element;
-		logger.info("Enum: " + clazz.getName());
+		logger.log(Level.FINE, "Enum: " + clazz.getName());
 		// Generate the enumeration for this class
 		String compilationUnit = enumGenerator.generateEnum(clazz,
 				sourceDirectoryPackageName);
@@ -189,8 +190,8 @@ public class SimpleJavaTransformer implements Transformer {
 			Stereotype stereotype) throws IOException {
 		// Stereotype Interface
 		Class clazz = (Class) element;
-		logger.info("Class: " + clazz.getName() + " - " + "Stereotype: "
-				+ stereotype.getName());
+		logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
+				+ "Stereotype: " + stereotype.getName());
 		// Generate the interface for this class
 		String compilationUnit = interfaceGenerator.generateInterface(clazz,
 				sourceDirectoryPackageName);
@@ -201,8 +202,8 @@ public class SimpleJavaTransformer implements Transformer {
 			throws IOException {
 		// Stereotype Interface
 		Class clazz = (Class) element;
-		logger.info("Class: " + clazz.getName() + " - " + "Stereotype: "
-				+ stereotype.getName());
+		logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
+				+ "Stereotype: " + stereotype.getName());
 		// Generate the exception for this class
 		String compilationUnit = exceptionGenerator.generateCheckedException(
 				clazz, sourceDirectoryPackageName);
@@ -213,8 +214,8 @@ public class SimpleJavaTransformer implements Transformer {
 			Stereotype stereotype) throws IOException {
 		// Stereotype Interface
 		Class clazz = (Class) element;
-		logger.info("Class: " + clazz.getName() + " - " + "Stereotype: "
-				+ stereotype.getName());
+		logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
+				+ "Stereotype: " + stereotype.getName());
 		// Generate the exception for this class
 		String compilationUnit = exceptionGenerator.generateUncheckedException(
 				clazz, sourceDirectoryPackageName);
@@ -229,7 +230,7 @@ public class SimpleJavaTransformer implements Transformer {
 				// From this SourceDirectory we can work...
 				org.eclipse.uml2.uml.Package packagez = outPackage;
 				sourceDirectoryPackageName = packagez.getName();
-				logger.info("SourceDirectory package name: "
+				logger.log(Level.FINE, "SourceDirectory package name: "
 						+ sourceDirectoryPackageName);
 			}
 		}

@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
@@ -74,11 +75,12 @@ public class UmlHelper {
 	private Map<String, String> annotationSourceKeyMap = null;
 
 	public void log(Object o) {
-		logger.info(o != null ? o.toString() : "<null>");
+		logger.log(Level.FINE, o != null ? o.toString() : "<null>");
 	}
 
 	public void log(Object o, String logMsg) {
-		logger.info(logMsg + ": " + o != null ? o.toString() : "<null>");
+		logger.log(Level.FINE, logMsg + ": " + o != null ? o.toString()
+				: "<null>");
 	}
 
 	/**
