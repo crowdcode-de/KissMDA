@@ -20,6 +20,7 @@ package de.crowdcode.kissmda.examples.apptest;
 
 import java.util.Collection;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.AddressType;
@@ -36,6 +37,7 @@ public class AddressImpl implements Address {
 	private Address oldAddress;
 	private String street;
 	private Person person;
+	private final SortedSet<Person> sortedPersons = new TreeSet<Person>();
 	private AddressType addressType;
 
 	@Override
@@ -101,13 +103,11 @@ public class AddressImpl implements Address {
 
 	@Override
 	public SortedSet<Person> getNewPersons() {
-		// TODO Auto-generated method stub
-		return null;
+		return sortedPersons;
 	}
 
 	@Override
 	public void addNewPersons(Person newPerso) {
-		// TODO Auto-generated method stub
-
+		sortedPersons.add(newPerso);
 	}
 }

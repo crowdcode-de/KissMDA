@@ -54,6 +54,9 @@ public class MethodHelperTest {
 	public void testAdderName() {
 		String result = methodHelper.getAdderName("testfield");
 		assertEquals("addTestfield", result);
+
+		result = methodHelper.getAdderName("testfields");
+		assertEquals("addTestfields", result);
 	}
 
 	@Test

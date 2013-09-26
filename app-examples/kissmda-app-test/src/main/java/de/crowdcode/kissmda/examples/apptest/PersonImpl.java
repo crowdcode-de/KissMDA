@@ -20,6 +20,7 @@ package de.crowdcode.kissmda.examples.apptest;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -39,6 +40,7 @@ public class PersonImpl implements Person {
 			.getName());
 	private String name;
 	private final Collection<Address> addresses = new ArrayList<Address>();
+	private final Set<Address> uniqueAddresses = new HashSet<Address>();
 	private Company company;
 
 	@Override
@@ -97,13 +99,11 @@ public class PersonImpl implements Person {
 
 	@Override
 	public Set<Address> getNewAddresses() {
-		// TODO Auto-generated method stub
-		return null;
+		return uniqueAddresses;
 	}
 
 	@Override
 	public void addNewAddresses(Address newAddress) {
-		// TODO Auto-generated method stub
-
+		uniqueAddresses.add(newAddress);
 	}
 }
