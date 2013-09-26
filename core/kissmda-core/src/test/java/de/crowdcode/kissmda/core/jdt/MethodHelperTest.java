@@ -22,6 +22,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * Unit test for Method Helper.
@@ -29,13 +33,18 @@ import org.junit.Test;
  * @author Lofi Dewanto
  * @version 1.0.0
  */
+@RunWith(MockitoJUnitRunner.class)
 public class MethodHelperTest {
 
+	@InjectMocks
 	private MethodHelper methodHelper;
+
+	@SuppressWarnings("unused")
+	@Spy
+	private Inflector inflector;
 
 	@Before
 	public void setUp() throws Exception {
-		methodHelper = new MethodHelper();
 	}
 
 	@Test
@@ -65,9 +74,9 @@ public class MethodHelperTest {
 		assertEquals("address", result1);
 
 		String result2 = methodHelper.getSingularName("persons");
-		assertEquals("perso", result2);
+		assertEquals("person", result2);
 
 		String result3 = methodHelper.getSingularName("companies");
-		assertEquals("compani", result3);
+		assertEquals("company", result3);
 	}
 }

@@ -28,14 +28,19 @@ import java.util.regex.Pattern;
 /**
  * This class is taken from http://goo.gl/I3eW3Y. Copyright 2009-2010.
  * 
+ * Lofi's change: remove all static and use normal class to be injected.
+ * 
  * @author Igor Polevoy
+ * @author lofi
  */
 public class Inflector {
 
-	private static List<String[]> singulars, plurals, irregulars;
-	private static List<String> uncountables;
+	private final List<String[]> singulars, plurals, irregulars;
+	private List<String> uncountables;
 
-	static {
+	public Inflector() {
+		super();
+
 		singulars = new ArrayList<String[]>();
 		plurals = new ArrayList<String[]>();
 		irregulars = new ArrayList<String[]>();
@@ -97,15 +102,15 @@ public class Inflector {
 				"money", "species", "series", "fish", "sheep");
 	}
 
-	public static void addPlural(String rule, String replacement) {
+	public void addPlural(String rule, String replacement) {
 		plurals.add(0, new String[] { rule, replacement });
 	}
 
-	public static void addSingular(String rule, String replacement) {
+	public void addSingular(String rule, String replacement) {
 		singulars.add(0, new String[] { rule, replacement });
 	}
 
-	public static void addIrregular(String rule, String replacement) {
+	public void addIrregular(String rule, String replacement) {
 		irregulars.add(new String[] { rule, replacement });
 	}
 
@@ -118,13 +123,13 @@ public class Inflector {
 	 * @return Replaces a found pattern in a word and returns a transformed
 	 *         word. Null is pattern does not match.
 	 */
-	public static String gsub(String word, String rule, String replacement) {
+	public String gsub(String word, String rule, String replacement) {
 		Pattern pattern = Pattern.compile(rule, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(word);
 		return matcher.find() ? matcher.replaceFirst(replacement) : null;
 	}
 
-	public static String pluralize(String word) {
+	public String pluralize(String word) {
 
 		if (uncountables.contains(word))
 			return word;
@@ -144,7 +149,7 @@ public class Inflector {
 		return word;
 	}
 
-	public static String singularize(String word) {
+	public String singularize(String word) {
 
 		if (uncountables.contains(word))
 			return word;
@@ -173,11 +178,11 @@ public class Inflector {
 	 *            any CamelCase phrase.
 	 * @return pluralized version of underscored CamelCase.
 	 */
-	public static String tableize(String camelCase) {
+	public String tableize(String camelCase) {
 		return pluralize(underscore(camelCase));
 	}
 
-	public static String underscore(String camel) {
+	public String underscore(String camel) {
 
 		List<Integer> upper = new ArrayList<Integer>();
 		byte[] bytes = camel.getBytes();
@@ -205,7 +210,7 @@ public class Inflector {
 	 *            underscore version of a word to converted to camel case.
 	 * @return camel case version of underscore.
 	 */
-	public static String camelize(String underscore) {
+	public String camelize(String underscore) {
 		return camelize(underscore, true);
 	}
 
@@ -219,7 +224,7 @@ public class Inflector {
 	 *            if not.
 	 * @return camel case version of underscore.
 	 */
-	public static String camelize(String underscore, boolean capitalizeFirstChar) {
+	public String camelize(String underscore, boolean capitalizeFirstChar) {
 		String result = "";
 		StringTokenizer st = new StringTokenizer(underscore, "_");
 		while (st.hasMoreTokens()) {
@@ -236,16 +241,16 @@ public class Inflector {
 	 *            word/phrase to capitalize.
 	 * @return same as input argument, but the first character is capitalized.
 	 */
-	public static String capitalize(String word) {
+	public String capitalize(String word) {
 		return word.substring(0, 1).toUpperCase() + word.substring(1);
 	}
 
-	public static String shortName(String className) {
+	public String shortName(String className) {
 		return className.substring(className.lastIndexOf('.') + 1);
 	}
 
-	public static String getIdName(String tableName) {
-		String idName = Inflector.singularize(tableName) + "_id";
+	public String getIdName(String tableName) {
+		String idName = singularize(tableName) + "_id";
 		return idName.toLowerCase();
 	}
 
@@ -262,7 +267,7 @@ public class Inflector {
 	 *            this is a potential "join" table name.
 	 * @return a name of "another" table from a join table name.
 	 */
-	public static String getOtherName(String source, String target) {
+	public String getOtherName(String source, String target) {
 
 		String other;
 		if (target.contains(source) && !target.equals(source)) {

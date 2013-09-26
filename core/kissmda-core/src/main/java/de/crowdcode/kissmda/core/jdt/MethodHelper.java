@@ -18,6 +18,8 @@
  */
 package de.crowdcode.kissmda.core.jdt;
 
+import javax.inject.Inject;
+
 /**
  * Method Helper class for Java language.
  * 
@@ -26,6 +28,9 @@ package de.crowdcode.kissmda.core.jdt;
  * @version 1.0.0
  */
 public class MethodHelper {
+
+	@Inject
+	private Inflector inflector;
 
 	/**
 	 * Get the getter name.
@@ -75,7 +80,7 @@ public class MethodHelper {
 	 */
 	public String getSingularName(String pluralName) {
 		// Remove the last two chars
-		String singular = pluralName.substring(0, pluralName.length() - 2);
+		String singular = inflector.singularize(pluralName);
 		return singular;
 	}
 }
