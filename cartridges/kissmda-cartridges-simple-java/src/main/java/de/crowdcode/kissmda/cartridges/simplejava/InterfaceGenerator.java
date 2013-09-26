@@ -151,10 +151,8 @@ public class InterfaceGenerator {
 						umlQualifiedTypeName, sourceDirectoryPackageName);
 			} else {
 				// Upper Cardinality 0..*
-				// We need to add Collection<Type> as returnType
-				jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
-						umlTypeName, umlQualifiedTypeName,
-						sourceDirectoryPackageName);
+				generateAssociationEndUpperCardinalityMultiples(ast, td,
+						property, mdGetter, umlTypeName, umlQualifiedTypeName);
 			}
 			// Getter Javadoc
 			generateGetterSetterJavadoc(ast, property, mdGetter);
@@ -189,6 +187,49 @@ public class InterfaceGenerator {
 			}
 			// Setter Javadoc
 			generateGetterSetterJavadoc(ast, property, mdSetter);
+		}
+	}
+
+	/**
+	 * Generate the association end for * association.
+	 * 
+	 * @param ast
+	 *            AST from JDT
+	 * @param td
+	 *            TypeDeclaration JDT
+	 * @param property
+	 *            UML2 property (aka AssociationEnd)
+	 * @param mdGetter
+	 *            method declaration JDT
+	 * @param umlTypeName
+	 *            UML2 type name as String
+	 * @param umlQualifiedTypeName
+	 *            UML2 qualified type name as String
+	 */
+	public void generateAssociationEndUpperCardinalityMultiples(AST ast,
+			TypeDeclaration td, Property property, MethodDeclaration mdGetter,
+			String umlTypeName, String umlQualifiedTypeName) {
+		// Check for isOrdered and isUnique
+		if (property.isOrdered() && !property.isUnique()) {
+			// We need to add List<Type> as returnType
+			jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
+					umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_LIST);
+		} else if (property.isUnique() && !property.isOrdered()) {
+			// We need to add Set<Type> as returnType
+			jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
+					umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_SET);
+		} else if (property.isUnique() && property.isOrdered()) {
+			// We need to add SortedSet<Type> as returnType
+			jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
+					umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_SORTEDSET);
+		} else {
+			// We need to add Collection<Type> as returnType
+			jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
+					umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_COLLECTION);
 		}
 	}
 

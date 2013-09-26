@@ -193,6 +193,76 @@ public class JdtHelperTest {
 		assertEquals("java.util.Collection", md.getReturnType2().toString());
 	}
 
+	@Test
+	public void testCreateReturnTypeAsCollectionResultCollection() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		TypeDeclaration td = ast.newTypeDeclaration();
+		MethodDeclaration md = ast.newMethodDeclaration();
+		String umlTypeName = "String";
+		String umlQualifiedTypeName = "Validation Profile::OCL Library::String";
+		String sourceDirectoryPackageName = "Data";
+		jdtHelper.createReturnTypeAsCollection(ast, td, md, umlTypeName,
+				umlQualifiedTypeName, sourceDirectoryPackageName,
+				JdtHelper.JAVA_UTIL_COLLECTION);
+
+		assertEquals("java.util.Collection<String>", md.getReturnType2()
+				.toString());
+	}
+
+	@Test
+	public void testCreateReturnTypeAsCollectionResultSet() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		TypeDeclaration td = ast.newTypeDeclaration();
+		MethodDeclaration md = ast.newMethodDeclaration();
+		String umlTypeName = "String";
+		String umlQualifiedTypeName = "Validation Profile::OCL Library::String";
+		String sourceDirectoryPackageName = "Data";
+		jdtHelper.createReturnTypeAsCollection(ast, td, md, umlTypeName,
+				umlQualifiedTypeName, sourceDirectoryPackageName,
+				JdtHelper.JAVA_UTIL_SET);
+
+		assertEquals("java.util.Set<String>", md.getReturnType2().toString());
+	}
+
+	@Test
+	public void testCreateReturnTypeAsCollectionResultList() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		TypeDeclaration td = ast.newTypeDeclaration();
+		MethodDeclaration md = ast.newMethodDeclaration();
+		String umlTypeName = "String";
+		String umlQualifiedTypeName = "Validation Profile::OCL Library::String";
+		String sourceDirectoryPackageName = "Data";
+		jdtHelper.createReturnTypeAsCollection(ast, td, md, umlTypeName,
+				umlQualifiedTypeName, sourceDirectoryPackageName,
+				JdtHelper.JAVA_UTIL_LIST);
+
+		assertEquals("java.util.List<String>", md.getReturnType2().toString());
+	}
+
+	@Test
+	public void testCreateReturnTypeAsCollectionResultSortedSet() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		TypeDeclaration td = ast.newTypeDeclaration();
+		MethodDeclaration md = ast.newMethodDeclaration();
+		String umlTypeName = "String";
+		String umlQualifiedTypeName = "Validation Profile::OCL Library::String";
+		String sourceDirectoryPackageName = "Data";
+		jdtHelper.createReturnTypeAsCollection(ast, td, md, umlTypeName,
+				umlQualifiedTypeName, sourceDirectoryPackageName,
+				JdtHelper.JAVA_UTIL_SORTEDSET);
+
+		assertEquals("java.util.SortedSet<String>", md.getReturnType2()
+				.toString());
+	}
+
 	private Map<String, String> createJavaTypes() {
 		Map<String, String> javaTypes = new HashMap<String, String>();
 		javaTypes.put("integer", "Integer");

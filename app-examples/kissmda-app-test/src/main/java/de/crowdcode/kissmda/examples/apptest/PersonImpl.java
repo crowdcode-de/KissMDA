@@ -20,6 +20,7 @@ package de.crowdcode.kissmda.examples.apptest;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import de.crowdcode.kissmda.testapp.Address;
@@ -92,5 +93,17 @@ public class PersonImpl implements Person {
 	public void changeLastAddress(Address address, Boolean isLastOne) {
 		addresses.add(address);
 		logger.info("This is the last one: " + isLastOne);
+	}
+
+	@Override
+	public Set<Address> getNewAddresses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addNewAddresses(Address newAddress) {
+		// TODO Auto-generated method stub
+
 	}
 }

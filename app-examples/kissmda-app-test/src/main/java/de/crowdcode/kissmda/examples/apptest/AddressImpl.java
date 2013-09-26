@@ -19,6 +19,7 @@
 package de.crowdcode.kissmda.examples.apptest;
 
 import java.util.Collection;
+import java.util.SortedSet;
 
 import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.AddressType;
@@ -96,5 +97,17 @@ public class AddressImpl implements Address {
 	@Override
 	public Collection<String> getNewAddresses() {
 		return null;
+	}
+
+	@Override
+	public SortedSet<Person> getNewPersons() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addNewPersons(Person newPerso) {
+		// TODO Auto-generated method stub
+
 	}
 }

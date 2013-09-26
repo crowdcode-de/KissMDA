@@ -370,4 +370,124 @@ public class InterfaceGeneratorTest {
 
 		assertEquals("<T>void calculateAge();\n", md.toString());
 	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateAssociationEndUpperCardinalityMultiplesIsOrdered() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		Property property = mock(Property.class);
+
+		MethodDeclaration mdGetter = ast.newMethodDeclaration();
+		mdGetter.setName(ast.newSimpleName("getCompanies"));
+
+		String umlQualifiedTypeName = "test.de.Company";
+		String umlTypeName = "Company";
+
+		when(property.isOrdered()).thenReturn(true);
+		when(property.isUnique()).thenReturn(false);
+
+		interfaceGenerator.generateAssociationEndUpperCardinalityMultiples(ast,
+				td, property, mdGetter, umlTypeName, umlQualifiedTypeName);
+
+		assertEquals("java.util.List<test.de.Company>", mdGetter
+				.getReturnType2().toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateAssociationEndUpperCardinalityMultiplesIsUnique() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		Property property = mock(Property.class);
+
+		MethodDeclaration mdGetter = ast.newMethodDeclaration();
+		mdGetter.setName(ast.newSimpleName("getCompanies"));
+
+		String umlQualifiedTypeName = "test.de.Company";
+		String umlTypeName = "Company";
+
+		when(property.isOrdered()).thenReturn(false);
+		when(property.isUnique()).thenReturn(true);
+
+		interfaceGenerator.generateAssociationEndUpperCardinalityMultiples(ast,
+				td, property, mdGetter, umlTypeName, umlQualifiedTypeName);
+
+		assertEquals("java.util.Set<test.de.Company>", mdGetter
+				.getReturnType2().toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateAssociationEndUpperCardinalityMultiplesDefault() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		Property property = mock(Property.class);
+
+		MethodDeclaration mdGetter = ast.newMethodDeclaration();
+		mdGetter.setName(ast.newSimpleName("getCompanies"));
+
+		String umlQualifiedTypeName = "test.de.Company";
+		String umlTypeName = "Company";
+
+		when(property.isOrdered()).thenReturn(false);
+		when(property.isUnique()).thenReturn(false);
+
+		interfaceGenerator.generateAssociationEndUpperCardinalityMultiples(ast,
+				td, property, mdGetter, umlTypeName, umlQualifiedTypeName);
+
+		assertEquals("java.util.Collection<test.de.Company>", mdGetter
+				.getReturnType2().toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateAssociationEndUpperCardinalityMultiplesIsUniqueAndIsOrdered() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		Property property = mock(Property.class);
+
+		MethodDeclaration mdGetter = ast.newMethodDeclaration();
+		mdGetter.setName(ast.newSimpleName("getCompanies"));
+
+		String umlQualifiedTypeName = "test.de.Company";
+		String umlTypeName = "Company";
+
+		when(property.isOrdered()).thenReturn(true);
+		when(property.isUnique()).thenReturn(true);
+
+		interfaceGenerator.generateAssociationEndUpperCardinalityMultiples(ast,
+				td, property, mdGetter, umlTypeName, umlQualifiedTypeName);
+
+		assertEquals("java.util.SortedSet<test.de.Company>", mdGetter
+				.getReturnType2().toString());
+	}
 }

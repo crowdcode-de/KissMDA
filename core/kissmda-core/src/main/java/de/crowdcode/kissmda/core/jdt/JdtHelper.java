@@ -44,7 +44,13 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  */
 public class JdtHelper {
 
-	private static final String JAVA_UTIL_COLLECTION = "java.util.Collection";
+	public static final String JAVA_UTIL_COLLECTION = "java.util.Collection";
+
+	public static final String JAVA_UTIL_LIST = "java.util.List";
+
+	public static final String JAVA_UTIL_SET = "java.util.Set";
+
+	public static final String JAVA_UTIL_SORTEDSET = "java.util.SortedSet";
 
 	@Inject
 	private PackageHelper packageHelper;
@@ -157,18 +163,21 @@ public class JdtHelper {
 	 *            UML qualified type name
 	 * @param sourceDirectoryPackageName
 	 *            source directory of UML
+	 * @param collectionTypeConstant
+	 *            type of the collection: Collection, Set or List
 	 */
 	@SuppressWarnings("unchecked")
 	public void createReturnTypeAsCollection(AST ast, TypeDeclaration td,
 			MethodDeclaration md, String umlTypeName,
-			String umlQualifiedTypeName, String sourceDirectoryPackageName) {
+			String umlQualifiedTypeName, String sourceDirectoryPackageName,
+			String collectionTypeConstant) {
 		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
 		// Create Collection
 		SimpleType tp = getAstSimpleType(ast, typeName);
 		SimpleType collectionType = ast.newSimpleType(ast
-				.newName(JAVA_UTIL_COLLECTION));
+				.newName(collectionTypeConstant));
 		ParameterizedType pt = ast.newParameterizedType(collectionType);
 		pt.typeArguments().add(tp);
 		md.setReturnType2(pt);
