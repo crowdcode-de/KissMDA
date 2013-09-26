@@ -107,7 +107,7 @@ public class AddressImpl implements Address {
 	}
 
 	@Override
-	public void addNewPersons(Person newPerso) {
-		sortedPersons.add(newPerso);
+	public void addNewPersons(Person newPerson) {
+		sortedPersons.add(newPerson);
 	}
 }
