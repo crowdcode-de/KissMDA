@@ -50,6 +50,7 @@ import org.mockito.Answers;
 
 import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
+import de.crowdcode.kissmda.core.jdt.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -65,6 +66,7 @@ public class InterfaceGeneratorTest {
 	private PackageHelper packageHelper;
 	private JdtHelper jdtHelper;
 	private DataTypeUtils dataTypeUtils;
+	private MethodHelper methodHelper;
 
 	private Class clazz;
 
@@ -74,10 +76,12 @@ public class InterfaceGeneratorTest {
 		packageHelper = new PackageHelper();
 		interfaceGenerator = new InterfaceGenerator();
 		jdtHelper = new JdtHelper();
+		methodHelper = new MethodHelper();
 		jdtHelper.setPackageHelper(packageHelper);
 		jdtHelper.setDataTypeUtils(dataTypeUtils);
 		interfaceGenerator.setPackageHelper(packageHelper);
 		interfaceGenerator.setJdtHelper(jdtHelper);
+		interfaceGenerator.setMethodHelper(methodHelper);
 
 		setUpMocks();
 	}
@@ -489,5 +493,75 @@ public class InterfaceGeneratorTest {
 
 		assertEquals("java.util.SortedSet<test.de.Company>", mdGetter
 				.getReturnType2().toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateGetterMethodUpperZero() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		Property property = mock(Property.class);
+
+		String umlQualifiedTypeName = "test.de.Company";
+		String umlTypeName = "Company";
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(property.getName()).thenReturn("name");
+		when(property.getUpper()).thenReturn(0);
+		when(property.getOwnedComments()).thenReturn(comments);
+
+		interfaceGenerator.generateGetterMethod(ast, td, property, umlTypeName,
+				umlQualifiedTypeName);
+
+		MethodDeclaration[] methods = td.getMethods();
+		for (MethodDeclaration method : methods) {
+			assertEquals("getName", method.getName().toString());
+			assertEquals("test.de.Company", method.getReturnType2().toString());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateGetterMethodUpperAsterisk() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		Property property = mock(Property.class);
+
+		String umlQualifiedTypeName = "test.de.Company";
+		String umlTypeName = "Company";
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(property.getName()).thenReturn("name");
+		when(property.getUpper()).thenReturn(-1);
+		when(property.getOwnedComments()).thenReturn(comments);
+
+		interfaceGenerator.generateGetterMethod(ast, td, property, umlTypeName,
+				umlQualifiedTypeName);
+
+		MethodDeclaration[] methods = td.getMethods();
+		for (MethodDeclaration method : methods) {
+			assertEquals("getName", method.getName().toString());
+			assertEquals("java.util.Collection<test.de.Company>", method
+					.getReturnType2().toString());
+
+		}
 	}
 }
