@@ -126,17 +126,13 @@ public class InterfaceGenerator {
 	 * @param td
 	 *            TypeDeclaration Java JDT
 	 */
-	@SuppressWarnings("unchecked")
-	private void generateGettersSetters(Classifier clazz, AST ast,
+	public void generateGettersSetters(Classifier clazz, AST ast,
 			TypeDeclaration td) {
 		// Create getter and setter for all attributes
 		// Without inheritance
 		EList<Property> properties = clazz.getAttributes();
 		for (Property property : properties) {
 			// Create getter for each property
-			MethodDeclaration mdGetter = ast.newMethodDeclaration();
-			String getterName = methodHelper.getGetterName(property.getName());
-			mdGetter.setName(ast.newSimpleName(getterName));
 			// Return type?
 			Type type = property.getType();
 			logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
@@ -145,49 +141,95 @@ public class InterfaceGenerator {
 					+ "Property Lower: " + property.getLower());
 			String umlTypeName = type.getName();
 			String umlQualifiedTypeName = type.getQualifiedName();
-			if (property.getUpper() >= 0) {
-				// Upper Cardinality 0..1
-				jdtHelper.createReturnType(ast, td, mdGetter, umlTypeName,
-						umlQualifiedTypeName, sourceDirectoryPackageName);
-			} else {
-				// Upper Cardinality 0..*
-				generateAssociationEndUpperCardinalityMultiples(ast, td,
-						property, mdGetter, umlTypeName, umlQualifiedTypeName);
-			}
-			// Getter Javadoc
-			generateGetterSetterJavadoc(ast, property, mdGetter);
 
-			// Create setter method for each property
-			MethodDeclaration mdSetter = ast.newMethodDeclaration();
-			// Return type void
-			PrimitiveType primitiveType = jdtHelper.getAstPrimitiveType(ast,
-					"void");
-			mdSetter.setReturnType2(primitiveType);
-			td.bodyDeclarations().add(mdSetter);
-			String umlPropertyName = property.getName();
+			// Create getter for each property
+			generateGetterMethod(ast, td, property, umlTypeName,
+					umlQualifiedTypeName);
 
-			if (property.getUpper() >= 0) {
-				// Upper Cardinality 0..1 params
-				String setterName = methodHelper.getSetterName(property
-						.getName());
-				mdSetter.setName(ast.newSimpleName(setterName));
-				jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
-						umlQualifiedTypeName, umlPropertyName,
-						sourceDirectoryPackageName);
-			} else {
-				// Upper Cardinality 0..* params
-				// We need to use addXxx instead of setXxx
-				String adderName = methodHelper
-						.getAdderName(property.getName());
-				umlPropertyName = methodHelper.getSingularName(umlPropertyName);
-				mdSetter.setName(ast.newSimpleName(adderName));
-				jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
-						umlQualifiedTypeName, umlPropertyName,
-						sourceDirectoryPackageName);
+			if (!property.isReadOnly()) {
+				// Create setter method for each property
+				generateSetterMethod(ast, td, property, umlTypeName,
+						umlQualifiedTypeName);
 			}
-			// Setter Javadoc
-			generateGetterSetterJavadoc(ast, property, mdSetter);
 		}
+	}
+
+	/**
+	 * Generate the getter method.
+	 * 
+	 * @param ast
+	 *            AST JDT
+	 * @param td
+	 *            Type Declaration JDT
+	 * @param property
+	 *            UML2 property
+	 * @param umlTypeName
+	 *            UML2 type name
+	 * @param umlQualifiedTypeName
+	 *            UML2 qualified type name
+	 */
+	public void generateGetterMethod(AST ast, TypeDeclaration td,
+			Property property, String umlTypeName, String umlQualifiedTypeName) {
+		MethodDeclaration mdGetter = ast.newMethodDeclaration();
+		String getterName = methodHelper.getGetterName(property.getName());
+		mdGetter.setName(ast.newSimpleName(getterName));
+		if (property.getUpper() >= 0) {
+			// Upper Cardinality 0..1
+			jdtHelper.createReturnType(ast, td, mdGetter, umlTypeName,
+					umlQualifiedTypeName, sourceDirectoryPackageName);
+		} else {
+			// Upper Cardinality 0..*
+			generateAssociationEndUpperCardinalityMultiples(ast, td, property,
+					mdGetter, umlTypeName, umlQualifiedTypeName);
+		}
+		// Getter Javadoc
+		generateGetterSetterJavadoc(ast, property, mdGetter);
+	}
+
+	/**
+	 * Generate the setter method.
+	 * 
+	 * @param ast
+	 *            AST JDT
+	 * @param td
+	 *            Type Declaration JDT
+	 * @param property
+	 *            UML2 property
+	 * @param umlTypeName
+	 *            UML2 type name
+	 * @param umlQualifiedTypeName
+	 *            UML2 qualified type name
+	 */
+	@SuppressWarnings("unchecked")
+	public void generateSetterMethod(AST ast, TypeDeclaration td,
+			Property property, String umlTypeName, String umlQualifiedTypeName) {
+		MethodDeclaration mdSetter = ast.newMethodDeclaration();
+		// Return type void
+		PrimitiveType primitiveType = jdtHelper
+				.getAstPrimitiveType(ast, "void");
+		mdSetter.setReturnType2(primitiveType);
+		td.bodyDeclarations().add(mdSetter);
+		String umlPropertyName = property.getName();
+
+		if (property.getUpper() >= 0) {
+			// Upper Cardinality 0..1 params
+			String setterName = methodHelper.getSetterName(property.getName());
+			mdSetter.setName(ast.newSimpleName(setterName));
+			jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
+					umlQualifiedTypeName, umlPropertyName,
+					sourceDirectoryPackageName);
+		} else {
+			// Upper Cardinality 0..* params
+			// We need to use addXxx instead of setXxx
+			String adderName = methodHelper.getAdderName(property.getName());
+			umlPropertyName = methodHelper.getSingularName(umlPropertyName);
+			mdSetter.setName(ast.newSimpleName(adderName));
+			jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,
+					umlQualifiedTypeName, umlPropertyName,
+					sourceDirectoryPackageName);
+		}
+		// Setter Javadoc
+		generateGetterSetterJavadoc(ast, property, mdSetter);
 	}
 
 	/**
