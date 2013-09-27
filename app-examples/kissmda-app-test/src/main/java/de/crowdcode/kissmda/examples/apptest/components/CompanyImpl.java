@@ -21,6 +21,8 @@ package de.crowdcode.kissmda.examples.apptest.components;
 import java.util.Collection;
 import java.util.Date;
 
+import de.crowdcode.kissmda.examples.apptest.PersonImpl;
+import de.crowdcode.kissmda.testapp.Person;
 import de.crowdcode.kissmda.testapp.components.Company;
 import de.crowdcode.kissmda.testapp.components.CompanyAttribute;
 
@@ -30,6 +32,7 @@ public class CompanyImpl implements Company {
 	private double value;
 	private Date created;
 	private CompanyAttribute<String, Integer> companyAttribute;
+	private Person person;
 
 	@Override
 	public String getName() {
@@ -76,5 +79,11 @@ public class CompanyImpl implements Company {
 	public <T> void defineCompany(Collection<T> owners, T owner) {
 		T newOwner = owner;
 		owners.add(newOwner);
+	}
+
+	@Override
+	public Person getVirtualPerson() {
+		person = new PersonImpl();
+		return person;
 	}
 }
