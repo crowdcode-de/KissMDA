@@ -39,6 +39,7 @@ public class AddressImpl implements Address {
 	private Person person;
 	private final SortedSet<Person> sortedPersons = new TreeSet<Person>();
 	private AddressType addressType;
+	private boolean old;
 
 	@Override
 	public Address getOldAddress() {
@@ -109,5 +110,15 @@ public class AddressImpl implements Address {
 	@Override
 	public void addNewPersons(Person newPerson) {
 		sortedPersons.add(newPerson);
+	}
+
+	@Override
+	public boolean isOld() {
+		return old;
+	}
+
+	@Override
+	public void setOld(boolean old) {
+		this.old = old;
 	}
 }

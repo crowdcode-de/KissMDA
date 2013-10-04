@@ -46,6 +46,19 @@ public class MethodHelper {
 	}
 
 	/**
+	 * Get the is name.
+	 * 
+	 * @param name
+	 *            input name
+	 * @return is name
+	 */
+	public String getIsName(String name) {
+		String isName = "is" + name.substring(0, 1).toUpperCase()
+				+ name.substring(1);
+		return isName;
+	}
+
+	/**
 	 * Get the setter name.
 	 * 
 	 * @param name

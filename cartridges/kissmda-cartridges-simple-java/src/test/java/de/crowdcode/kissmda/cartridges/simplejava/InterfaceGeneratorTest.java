@@ -564,4 +564,73 @@ public class InterfaceGeneratorTest {
 
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateGetterMethodTypeBoolean() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		Property property = mock(Property.class);
+
+		String umlQualifiedTypeName = "Boolean";
+		String umlTypeName = "Boolean";
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(property.getName()).thenReturn("name");
+		when(property.getUpper()).thenReturn(0);
+		when(property.getOwnedComments()).thenReturn(comments);
+
+		interfaceGenerator.generateGetterMethod(ast, td, property, umlTypeName,
+				umlQualifiedTypeName);
+
+		MethodDeclaration[] methods = td.getMethods();
+		for (MethodDeclaration method : methods) {
+			assertEquals("isName", method.getName().toString());
+			assertEquals("Boolean", method.getReturnType2().toString());
+
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateGetterMethodTypeLowerCaseBoolean() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+
+		Property property = mock(Property.class);
+
+		String umlQualifiedTypeName = "boolean";
+		String umlTypeName = "boolean";
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(property.getName()).thenReturn("name");
+		when(property.getUpper()).thenReturn(0);
+		when(property.getOwnedComments()).thenReturn(comments);
+
+		interfaceGenerator.generateGetterMethod(ast, td, property, umlTypeName,
+				umlQualifiedTypeName);
+
+		MethodDeclaration[] methods = td.getMethods();
+		for (MethodDeclaration method : methods) {
+			assertEquals("isName", method.getName().toString());
+			assertEquals("boolean", method.getReturnType2().toString());
+		}
+	}
 }

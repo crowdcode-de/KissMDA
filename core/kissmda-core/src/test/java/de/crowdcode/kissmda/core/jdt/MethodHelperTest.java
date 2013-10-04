@@ -79,4 +79,10 @@ public class MethodHelperTest {
 		String result3 = methodHelper.getSingularName("companies");
 		assertEquals("company", result3);
 	}
+
+	@Test
+	public void testIsName() {
+		String result = methodHelper.getIsName("testfield");
+		assertEquals("isTestfield", result);
+	}
 }

@@ -171,8 +171,15 @@ public class InterfaceGenerator {
 	public void generateGetterMethod(AST ast, TypeDeclaration td,
 			Property property, String umlTypeName, String umlQualifiedTypeName) {
 		MethodDeclaration mdGetter = ast.newMethodDeclaration();
+
 		String getterName = methodHelper.getGetterName(property.getName());
+		// Check for boolean or Boolean, we need to make
+		// isXxx instead of getXxx
+		if (umlTypeName.equalsIgnoreCase("boolean")) {
+			getterName = methodHelper.getIsName(property.getName());
+		}
 		mdGetter.setName(ast.newSimpleName(getterName));
+
 		if (property.getUpper() >= 0) {
 			// Upper Cardinality 0..1
 			jdtHelper.createReturnType(ast, td, mdGetter, umlTypeName,
@@ -182,6 +189,7 @@ public class InterfaceGenerator {
 			generateAssociationEndUpperCardinalityMultiples(ast, td, property,
 					mdGetter, umlTypeName, umlQualifiedTypeName);
 		}
+
 		// Getter Javadoc
 		generateGetterSetterJavadoc(ast, property, mdGetter);
 	}

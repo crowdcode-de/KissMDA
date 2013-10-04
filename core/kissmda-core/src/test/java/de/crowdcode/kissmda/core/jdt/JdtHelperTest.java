@@ -122,6 +122,17 @@ public class JdtHelperTest {
 	}
 
 	@Test
+	public void testGetAstPrimitiveTypeBoolean() {
+		Map<String, Code> primitiveTypes = createPrimitiveTypeCodes();
+		when(dataTypeUtils.getPrimitiveTypeCodes()).thenReturn(primitiveTypes);
+
+		String typeName = "boolean";
+		PrimitiveType tp = jdtHelper.getAstPrimitiveType(ast, typeName);
+
+		assertEquals("boolean", tp.toString());
+	}
+
+	@Test
 	public void testGetAstArrayTypePrimitive() {
 		Map<String, Code> primitiveTypes = createPrimitiveTypeCodes();
 		when(dataTypeUtils.getPrimitiveTypeCodes()).thenReturn(primitiveTypes);
@@ -276,6 +287,7 @@ public class JdtHelperTest {
 		primitiveTypeCodes.put("integer", PrimitiveType.INT);
 		primitiveTypeCodes.put("short", PrimitiveType.SHORT);
 		primitiveTypeCodes.put("byte", PrimitiveType.BYTE);
+		primitiveTypeCodes.put("boolean", PrimitiveType.BOOLEAN);
 		return primitiveTypeCodes;
 	}
 }
