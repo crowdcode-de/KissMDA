@@ -29,11 +29,16 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
+import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Slot;
+import org.eclipse.uml2.uml.Type;
+import org.eclipse.uml2.uml.ValueSpecification;
 
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
@@ -81,9 +86,28 @@ public class EnumGenerator {
 		generatePackage(clazz, ast, cu);
 		EnumDeclaration ed = generateEnum(clazz, ast, cu);
 		generateConstants(clazz, ast, ed);
+		generateConstructor(clazz, ast, ed);
+		generateGetter(clazz, ast, ed);
+		generateAttribute(clazz, ast, ed);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		return cu.toString();
+	}
+
+	private void generateAttribute(Classifier clazz, AST ast, EnumDeclaration ed) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void generateGetter(Classifier clazz, AST ast, EnumDeclaration ed) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void generateConstructor(Classifier clazz, AST ast,
+			EnumDeclaration ed) {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
@@ -140,11 +164,35 @@ public class EnumGenerator {
 	private void generateConstants(Classifier clazz, AST ast, EnumDeclaration ed) {
 		// Get all properties for this enumeration
 		Enumeration enumeration = (Enumeration) clazz;
-		EList<Element> elements = enumeration.allOwnedElements();
-		for (Element element : elements) {
-			EnumerationLiteral enumLiteral = (EnumerationLiteral) element;
+		EList<EnumerationLiteral> enumerationLiterals = enumeration
+				.getOwnedLiterals();
+		for (EnumerationLiteral enumLiteral : enumerationLiterals) {
 			EnumConstantDeclaration ec = ast.newEnumConstantDeclaration();
 			ec.setName(ast.newSimpleName(enumLiteral.getName().toUpperCase()));
+
+			EList<Slot> slots = enumLiteral.getSlots();
+			for (Slot slot : slots) {
+				Property property = (Property) slot.getDefiningFeature();
+				Type type = property.getType();
+				EList<ValueSpecification> valueSpecifications = slot
+						.getValues();
+
+				for (ValueSpecification valueSpecification : valueSpecifications) {
+					if (type.getName().equalsIgnoreCase("integer")) {
+						NumberLiteral numberLiteral = ast.newNumberLiteral();
+						numberLiteral.setToken(String
+								.valueOf(valueSpecification.integerValue()));
+						ec.arguments().add(numberLiteral);
+					} else if (type.getName().equalsIgnoreCase("boolean")) {
+						ast.newBooleanLiteral(valueSpecification.booleanValue());
+					} else if (type.getName().equalsIgnoreCase("string")) {
+						StringLiteral stringLiteral = ast.newStringLiteral();
+						stringLiteral.setLiteralValue(valueSpecification
+								.stringValue());
+					}
+				}
+			}
+
 			ed.enumConstants().add(ec);
 		}
 	}
