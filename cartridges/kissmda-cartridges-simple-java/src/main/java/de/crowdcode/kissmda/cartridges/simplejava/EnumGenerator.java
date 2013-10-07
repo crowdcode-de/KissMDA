@@ -112,9 +112,9 @@ public class EnumGenerator {
 		generatePackage(clazz, ast, cu);
 		EnumDeclaration ed = generateEnum(clazz, ast, cu);
 		generateConstants(clazz, ast, ed);
+		generateAttribute(clazz, ast, ed);
 		generateConstructor(clazz, ast, ed);
 		generateGetterMethod(clazz, ast, ed);
-		generateAttribute(clazz, ast, ed);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		return cu.toString();

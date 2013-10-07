@@ -30,6 +30,7 @@ import de.crowdcode.kissmda.examples.apptest.components.CompanyAttributeImpl;
 import de.crowdcode.kissmda.examples.apptest.components.CompanyImpl;
 import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.AddressService;
+import de.crowdcode.kissmda.testapp.AddressSimpleType;
 import de.crowdcode.kissmda.testapp.AddressType;
 import de.crowdcode.kissmda.testapp.Person;
 import de.crowdcode.kissmda.testapp.PrivateAddressService;
@@ -121,6 +122,7 @@ public class AddressServiceImplTest {
 		Address address = new AddressImpl();
 		address.setStreet("Jakarta");
 		address.setAddressType(AddressType.HOME);
+		address.setAddressSimpleType(AddressSimpleType.HOME);
 
 		return address;
 	}

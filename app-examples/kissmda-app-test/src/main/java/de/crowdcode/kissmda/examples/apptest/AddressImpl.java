@@ -23,6 +23,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import de.crowdcode.kissmda.testapp.Address;
+import de.crowdcode.kissmda.testapp.AddressSimpleType;
 import de.crowdcode.kissmda.testapp.AddressType;
 import de.crowdcode.kissmda.testapp.Person;
 
@@ -40,6 +41,7 @@ public class AddressImpl implements Address {
 	private final SortedSet<Person> sortedPersons = new TreeSet<Person>();
 	private AddressType addressType;
 	private boolean old;
+	private AddressSimpleType addressSimpleType;
 
 	@Override
 	public Address getOldAddress() {
@@ -120,5 +122,15 @@ public class AddressImpl implements Address {
 	@Override
 	public void setOld(boolean old) {
 		this.old = old;
+	}
+
+	@Override
+	public AddressSimpleType getAddressSimpleType() {
+		return addressSimpleType;
+	}
+
+	@Override
+	public void setAddressSimpleType(AddressSimpleType addressSimpleType) {
+		this.addressSimpleType = addressSimpleType;
 	}
 }
