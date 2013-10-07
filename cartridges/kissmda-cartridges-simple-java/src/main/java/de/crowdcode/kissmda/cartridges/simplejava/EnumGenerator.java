@@ -161,7 +161,7 @@ public class EnumGenerator {
 	 *            Enumeration declaration for Java JDT
 	 */
 	@SuppressWarnings("unchecked")
-	private void generateConstants(Classifier clazz, AST ast, EnumDeclaration ed) {
+	public void generateConstants(Classifier clazz, AST ast, EnumDeclaration ed) {
 		// Get all properties for this enumeration
 		Enumeration enumeration = (Enumeration) clazz;
 		EList<EnumerationLiteral> enumerationLiterals = enumeration

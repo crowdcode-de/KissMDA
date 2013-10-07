@@ -22,12 +22,22 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Iterator;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Enumeration;
+import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Slot;
+import org.eclipse.uml2.uml.Type;
+import org.eclipse.uml2.uml.ValueSpecification;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -86,5 +96,54 @@ public class EnumGeneratorTest {
 		enumGenerator.generateEnum(clazz, ast, cu);
 
 		assertEquals("public enum Company {}\n", cu.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateConstants() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+
+		Enumeration enumeration = mock(Enumeration.class);
+		EList<EnumerationLiteral> enumLiterals = mock(EList.class);
+		Iterator<EnumerationLiteral> enumIter = mock(Iterator.class);
+		EnumerationLiteral enumLiteral = mock(EnumerationLiteral.class);
+
+		EList<Slot> slots = mock(EList.class);
+		Iterator<Slot> slotIter = mock(Iterator.class);
+		Slot slot = mock(Slot.class);
+
+		Property property = mock(Property.class);
+		Type type = mock(Type.class);
+
+		EList<ValueSpecification> valueSpecifications = mock(EList.class);
+		Iterator<ValueSpecification> valueSpecificationIter = mock(Iterator.class);
+		ValueSpecification valueSpecification = mock(ValueSpecification.class);
+
+		when(enumeration.getOwnedLiterals()).thenReturn(enumLiterals);
+		when(enumLiterals.iterator()).thenReturn(enumIter);
+		when(enumIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(enumIter.next()).thenReturn(enumLiteral);
+		when(enumLiteral.getName()).thenReturn("Home");
+
+		when(enumLiteral.getSlots()).thenReturn(slots);
+		when(slots.iterator()).thenReturn(slotIter);
+		when(slotIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(slotIter.next()).thenReturn(slot);
+		when(slot.getDefiningFeature()).thenReturn(property);
+
+		when(property.getType()).thenReturn(type);
+		when(type.getName()).thenReturn("Integer");
+
+		when(slot.getValues()).thenReturn(valueSpecifications);
+		when(valueSpecifications.iterator()).thenReturn(valueSpecificationIter);
+		when(valueSpecificationIter.hasNext()).thenReturn(true).thenReturn(
+				false);
+		when(valueSpecificationIter.next()).thenReturn(valueSpecification);
+
+		enumGenerator.generateConstants(enumeration, ast, ed);
+
+		assertEquals("public enum Company {HOME(0)}\n", ed.toString());
 	}
 }
