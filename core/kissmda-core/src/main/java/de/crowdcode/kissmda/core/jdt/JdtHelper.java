@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Name;
@@ -31,7 +32,6 @@ import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
@@ -115,7 +115,7 @@ public class JdtHelper {
 	 * @param ast
 	 *            JDT AST tree
 	 * @param td
-	 *            JDT type declaration
+	 *            JDT abstract type declaration
 	 * @param md
 	 *            JDT method declaration
 	 * @param umlTypeName
@@ -126,7 +126,7 @@ public class JdtHelper {
 	 *            source directory of UML
 	 */
 	@SuppressWarnings("unchecked")
-	public void createReturnType(AST ast, TypeDeclaration td,
+	public void createReturnType(AST ast, AbstractTypeDeclaration td,
 			MethodDeclaration md, String umlTypeName,
 			String umlQualifiedTypeName, String sourceDirectoryPackageName) {
 		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
@@ -154,7 +154,7 @@ public class JdtHelper {
 	 * @param ast
 	 *            JDT AST tree
 	 * @param td
-	 *            JDT type declaration
+	 *            JDT abstract type declaration
 	 * @param md
 	 *            JDT method declaration
 	 * @param umlTypeName
@@ -167,10 +167,10 @@ public class JdtHelper {
 	 *            type of the collection: Collection, Set or List
 	 */
 	@SuppressWarnings("unchecked")
-	public void createReturnTypeAsCollection(AST ast, TypeDeclaration td,
-			MethodDeclaration md, String umlTypeName,
-			String umlQualifiedTypeName, String sourceDirectoryPackageName,
-			String collectionTypeConstant) {
+	public void createReturnTypeAsCollection(AST ast,
+			AbstractTypeDeclaration td, MethodDeclaration md,
+			String umlTypeName, String umlQualifiedTypeName,
+			String sourceDirectoryPackageName, String collectionTypeConstant) {
 		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
@@ -283,7 +283,7 @@ public class JdtHelper {
 	 * @param ast
 	 *            JDT AST tree
 	 * @param td
-	 *            JDT TypeDeclaration
+	 *            JDT AbstractTypeDeclaration
 	 * @param md
 	 *            JDT MethodDeclaration
 	 * @param umlTypeName
@@ -296,7 +296,7 @@ public class JdtHelper {
 	 *            UML source directory start
 	 */
 	@SuppressWarnings("unchecked")
-	public void createParameterTypes(AST ast, TypeDeclaration td,
+	public void createParameterTypes(AST ast, AbstractTypeDeclaration td,
 			MethodDeclaration md, String umlTypeName,
 			String umlQualifiedTypeName, String umlPropertyName,
 			String sourceDirectoryPackageName) {

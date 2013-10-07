@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Interface;
@@ -40,7 +41,11 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.ValueSpecification;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Answers;
 
+import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
+import de.crowdcode.kissmda.core.jdt.JdtHelper;
+import de.crowdcode.kissmda.core.jdt.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -54,6 +59,10 @@ public class EnumGeneratorTest {
 
 	private EnumGenerator enumGenerator;
 	private PackageHelper packageHelper;
+	private InterfaceGenerator interfaceGenerator;
+	private MethodHelper methodHelper;
+	private JdtHelper jdtHelper;
+	private DataTypeUtils dataTypeUtils;
 
 	private Class clazz;
 
@@ -61,7 +70,17 @@ public class EnumGeneratorTest {
 	public void setUp() throws Exception {
 		packageHelper = new PackageHelper();
 		enumGenerator = new EnumGenerator();
+		interfaceGenerator = new InterfaceGenerator();
+		methodHelper = new MethodHelper();
+		jdtHelper = new JdtHelper();
+		dataTypeUtils = new DataTypeUtils();
 		enumGenerator.setPackageHelper(packageHelper);
+		enumGenerator.setInterfaceGenerator(interfaceGenerator);
+		interfaceGenerator.setMethodHelper(methodHelper);
+		interfaceGenerator.setJdtHelper(jdtHelper);
+		interfaceGenerator.setPackageHelper(packageHelper);
+		jdtHelper.setPackageHelper(packageHelper);
+		jdtHelper.setDataTypeUtils(dataTypeUtils);
 
 		setUpMocks();
 	}
@@ -146,5 +165,40 @@ public class EnumGeneratorTest {
 		enumGenerator.generateConstants(enumeration, ast, ed);
 
 		assertEquals("public enum Company {HOME(0)}\n", ed.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateGetterMethod() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+
+		EList<Property> properties = mock(EList.class);
+		Iterator<Property> propertyIter = mock(Iterator.class);
+		Property property = mock(Property.class);
+		Type type = mock(Type.class);
+		String name = "type";
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(clazz.getAttributes()).thenReturn(properties);
+		when(properties.iterator()).thenReturn(propertyIter);
+		when(propertyIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(propertyIter.next()).thenReturn(property);
+		when(property.getType()).thenReturn(type);
+		when(property.getName()).thenReturn(name);
+		when(property.getUpper()).thenReturn(1);
+		when(property.getLower()).thenReturn(1);
+		when(property.getOwnedComments()).thenReturn(comments);
+		when(type.getName()).thenReturn("String");
+		when(type.getQualifiedName()).thenReturn("String");
+
+		enumGenerator.generateGetterMethod(clazz, ast, ed);
+
+		assertEquals(
+				"public enum Company {; public String getType(){\n  return type;\n}\n}\n",
+				cu.toString());
 	}
 }

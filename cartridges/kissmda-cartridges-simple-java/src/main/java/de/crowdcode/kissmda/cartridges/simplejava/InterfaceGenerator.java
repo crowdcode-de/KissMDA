@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -160,7 +161,7 @@ public class InterfaceGenerator {
 	 * @param ast
 	 *            AST JDT
 	 * @param td
-	 *            Type Declaration JDT
+	 *            Abstract Type Declaration JDT
 	 * @param property
 	 *            UML2 property
 	 * @param umlTypeName
@@ -168,8 +169,9 @@ public class InterfaceGenerator {
 	 * @param umlQualifiedTypeName
 	 *            UML2 qualified type name
 	 */
-	public void generateGetterMethod(AST ast, TypeDeclaration td,
-			Property property, String umlTypeName, String umlQualifiedTypeName) {
+	public MethodDeclaration generateGetterMethod(AST ast,
+			AbstractTypeDeclaration td, Property property, String umlTypeName,
+			String umlQualifiedTypeName) {
 		MethodDeclaration mdGetter = ast.newMethodDeclaration();
 
 		String getterName = methodHelper.getGetterName(property.getName());
@@ -192,6 +194,8 @@ public class InterfaceGenerator {
 
 		// Getter Javadoc
 		generateGetterSetterJavadoc(ast, property, mdGetter);
+
+		return mdGetter;
 	}
 
 	/**
@@ -200,7 +204,7 @@ public class InterfaceGenerator {
 	 * @param ast
 	 *            AST JDT
 	 * @param td
-	 *            Type Declaration JDT
+	 *            Abstract Type Declaration JDT
 	 * @param property
 	 *            UML2 property
 	 * @param umlTypeName
@@ -209,7 +213,7 @@ public class InterfaceGenerator {
 	 *            UML2 qualified type name
 	 */
 	@SuppressWarnings("unchecked")
-	public void generateSetterMethod(AST ast, TypeDeclaration td,
+	public void generateSetterMethod(AST ast, AbstractTypeDeclaration td,
 			Property property, String umlTypeName, String umlQualifiedTypeName) {
 		MethodDeclaration mdSetter = ast.newMethodDeclaration();
 		// Return type void
@@ -257,8 +261,9 @@ public class InterfaceGenerator {
 	 *            UML2 qualified type name as String
 	 */
 	public void generateAssociationEndUpperCardinalityMultiples(AST ast,
-			TypeDeclaration td, Property property, MethodDeclaration mdGetter,
-			String umlTypeName, String umlQualifiedTypeName) {
+			AbstractTypeDeclaration td, Property property,
+			MethodDeclaration mdGetter, String umlTypeName,
+			String umlQualifiedTypeName) {
 		// Check for isOrdered and isUnique
 		if (property.isOrdered() && !property.isUnique()) {
 			// We need to add List<Type> as returnType
@@ -344,10 +349,10 @@ public class InterfaceGenerator {
 	 * @param ast
 	 *            JDT AST tree
 	 * @param td
-	 *            TypeDeclaration
+	 *            AbstractTypeDeclaration
 	 */
 	public void generateClassJavadoc(Classifier clazz, AST ast,
-			TypeDeclaration td) {
+			AbstractTypeDeclaration td) {
 		EList<Comment> comments = clazz.getOwnedComments();
 		for (Comment comment : comments) {
 			Javadoc javadoc = ast.newJavadoc();

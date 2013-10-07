@@ -25,12 +25,16 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Enumeration;
@@ -62,6 +66,9 @@ public class EnumGenerator {
 	@Inject
 	private PackageHelper packageHelper;
 
+	@Inject
+	private InterfaceGenerator interfaceGenerator;
+
 	private String sourceDirectoryPackageName;
 
 	public void setPackageHelper(PackageHelper packageHelper) {
@@ -87,7 +94,7 @@ public class EnumGenerator {
 		EnumDeclaration ed = generateEnum(clazz, ast, cu);
 		generateConstants(clazz, ast, ed);
 		generateConstructor(clazz, ast, ed);
-		generateGetter(clazz, ast, ed);
+		generateGetterMethod(clazz, ast, ed);
 		generateAttribute(clazz, ast, ed);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
@@ -99,9 +106,44 @@ public class EnumGenerator {
 
 	}
 
-	private void generateGetter(Classifier clazz, AST ast, EnumDeclaration ed) {
-		// TODO Auto-generated method stub
+	/**
+	 * Generate getter method.
+	 * 
+	 * @param clazz
+	 *            UML2 classifier
+	 * @param ast
+	 *            JDT AST tree
+	 * @param ed
+	 *            EnumDeclaration JDT
+	 */
+	@SuppressWarnings("unchecked")
+	public void generateGetterMethod(Classifier clazz, AST ast,
+			EnumDeclaration ed) {
+		EList<Property> properties = clazz.getAttributes();
+		for (Property property : properties) {
+			Type type = property.getType();
+			logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
+					+ "Property: " + property.getName() + " - "
+					+ "Property Upper: " + property.getUpper() + " - "
+					+ "Property Lower: " + property.getLower());
+			String umlTypeName = type.getName();
+			String umlQualifiedTypeName = type.getQualifiedName();
+			MethodDeclaration methodDeclaration = interfaceGenerator
+					.generateGetterMethod(ast, ed, property, umlTypeName,
+							umlQualifiedTypeName);
 
+			// Public
+			methodDeclaration.modifiers().add(
+					ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
+
+			// Content of getter method
+			Block block = ast.newBlock();
+			ReturnStatement returnStatement = ast.newReturnStatement();
+			SimpleName simpleName = ast.newSimpleName(property.getName());
+			returnStatement.setExpression(simpleName);
+			block.statements().add(returnStatement);
+			methodDeclaration.setBody(block);
+		}
 	}
 
 	private void generateConstructor(Classifier clazz, AST ast,
@@ -206,5 +248,15 @@ public class EnumGenerator {
 		String fullPackageName = packageHelper.getFullPackageName(clazz,
 				sourceDirectoryPackageName);
 		return fullPackageName;
+	}
+
+	/**
+	 * Set interface generator for Unit Test.
+	 * 
+	 * @param interfaceGenerator
+	 *            IntefaceGenerator
+	 */
+	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
+		this.interfaceGenerator = interfaceGenerator;
 	}
 }
