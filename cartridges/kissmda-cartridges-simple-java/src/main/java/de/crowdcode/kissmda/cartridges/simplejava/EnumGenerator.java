@@ -25,10 +25,13 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
@@ -36,7 +39,9 @@ import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Enumeration;
@@ -79,6 +84,14 @@ public class EnumGenerator {
 
 	public void setPackageHelper(PackageHelper packageHelper) {
 		this.packageHelper = packageHelper;
+	}
+
+	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
+		this.interfaceGenerator = interfaceGenerator;
+	}
+
+	public void setJdtHelper(JdtHelper jdtHelper) {
+		this.jdtHelper = jdtHelper;
 	}
 
 	/**
@@ -187,10 +200,75 @@ public class EnumGenerator {
 		}
 	}
 
-	private void generateConstructor(Classifier clazz, AST ast,
+	/**
+	 * Generate constructor.
+	 * 
+	 * @param clazz
+	 *            UML2 class
+	 * @param ast
+	 *            JDT AST
+	 * @param ed
+	 *            EnumDeclaration JDT
+	 */
+	@SuppressWarnings("unchecked")
+	public void generateConstructor(Classifier clazz, AST ast,
 			EnumDeclaration ed) {
-		// TODO Auto-generated method stub
+		EList<Property> properties = clazz.getAttributes();
+		for (Property property : properties) {
+			Type type = property.getType();
+			logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
+					+ "Property: " + property.getName() + " - "
+					+ "Property Upper: " + property.getUpper() + " - "
+					+ "Property Lower: " + property.getLower());
+			String umlTypeName = type.getName();
+			String umlQualifiedTypeName = type.getQualifiedName();
 
+			// Check whether primitive or array type or simple type?
+			org.eclipse.jdt.core.dom.Type chosenType = jdtHelper.getChosenType(
+					ast, umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName);
+
+			// Constructor
+			MethodDeclaration md = ast.newMethodDeclaration();
+			md.setConstructor(true);
+			md.setName(ast.newSimpleName(clazz.getName()));
+			md.modifiers().add(
+					ast.newModifier(Modifier.ModifierKeyword.PRIVATE_KEYWORD));
+
+			SingleVariableDeclaration variableDeclaration = ast
+					.newSingleVariableDeclaration();
+			variableDeclaration.setType(chosenType);
+			variableDeclaration.setName(ast.newSimpleName(property.getName()));
+			md.parameters().add(variableDeclaration);
+
+			ed.bodyDeclarations().add(md);
+
+			// Content of constructor
+			Block block = ast.newBlock();
+
+			// Left expression
+			SimpleName simpleName = ast.newSimpleName(property.getName());
+			ThisExpression thisExpression = ast.newThisExpression();
+			FieldAccess fieldAccess = ast.newFieldAccess();
+			fieldAccess.setName(simpleName);
+			fieldAccess.setExpression(thisExpression);
+
+			// Right expression
+			SimpleName parameter = ast.newSimpleName(property.getName());
+
+			Assignment assignment = ast.newAssignment();
+			assignment
+					.setOperator(org.eclipse.jdt.core.dom.Assignment.Operator.ASSIGN);
+			assignment.setLeftHandSide(fieldAccess);
+			assignment.setRightHandSide(parameter);
+
+			// Expression
+			ExpressionStatement expressionStatement = ast
+					.newExpressionStatement(assignment);
+
+			block.statements().add(expressionStatement);
+			md.setBody(block);
+		}
 	}
 
 	/**
@@ -289,25 +367,5 @@ public class EnumGenerator {
 		String fullPackageName = packageHelper.getFullPackageName(clazz,
 				sourceDirectoryPackageName);
 		return fullPackageName;
-	}
-
-	/**
-	 * Set interface generator for Unit Test.
-	 * 
-	 * @param interfaceGenerator
-	 *            IntefaceGenerator
-	 */
-	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
-		this.interfaceGenerator = interfaceGenerator;
-	}
-
-	/**
-	 * Set JdtHelper for Unit Test.
-	 * 
-	 * @param jdtHelper
-	 *            JdtHelper
-	 */
-	public void setJdtHelper(JdtHelper jdtHelper) {
-		this.jdtHelper = jdtHelper;
 	}
 }
