@@ -129,6 +129,28 @@ public class JdtHelper {
 	public void createReturnType(AST ast, AbstractTypeDeclaration td,
 			MethodDeclaration md, String umlTypeName,
 			String umlQualifiedTypeName, String sourceDirectoryPackageName) {
+		Type chosenType = getChosenType(ast, umlTypeName, umlQualifiedTypeName,
+				sourceDirectoryPackageName);
+
+		md.setReturnType2(chosenType);
+		td.bodyDeclarations().add(md);
+	}
+
+	/**
+	 * Calculate the type we can choose.
+	 * 
+	 * @param ast
+	 *            AST JDT
+	 * @param umlTypeName
+	 *            UML2 Type Name
+	 * @param umlQualifiedTypeName
+	 *            UML2 Qualified Type Name
+	 * @param sourceDirectoryPackageName
+	 *            source directory
+	 * @return Type
+	 */
+	public Type getChosenType(AST ast, String umlTypeName,
+			String umlQualifiedTypeName, String sourceDirectoryPackageName) {
 		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
 		typeName = packageHelper.getFullPackageName(typeName,
 				sourceDirectoryPackageName);
@@ -143,9 +165,7 @@ public class JdtHelper {
 		} else {
 			chosenType = getAstSimpleType(ast, typeName);
 		}
-
-		md.setReturnType2(chosenType);
-		td.bodyDeclarations().add(md);
+		return chosenType;
 	}
 
 	/**
@@ -300,20 +320,8 @@ public class JdtHelper {
 			MethodDeclaration md, String umlTypeName,
 			String umlQualifiedTypeName, String umlPropertyName,
 			String sourceDirectoryPackageName) {
-		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
-		typeName = packageHelper.getFullPackageName(typeName,
+		Type chosenType = getChosenType(ast, umlTypeName, umlQualifiedTypeName,
 				sourceDirectoryPackageName);
-		// Check whether primitive or array type or simple type?
-		Type chosenType = null;
-		if (dataTypeUtils.isPrimitiveType(typeName)) {
-			chosenType = getAstPrimitiveType(ast, umlTypeName);
-		} else if (dataTypeUtils.isArrayType(typeName)) {
-			chosenType = getAstArrayType(ast, typeName);
-		} else if (dataTypeUtils.isParameterizedType(typeName)) {
-			chosenType = getAstParameterizedType(ast, typeName);
-		} else {
-			chosenType = getAstSimpleType(ast, typeName);
-		}
 
 		SingleVariableDeclaration variableDeclaration = ast
 				.newSingleVariableDeclaration();

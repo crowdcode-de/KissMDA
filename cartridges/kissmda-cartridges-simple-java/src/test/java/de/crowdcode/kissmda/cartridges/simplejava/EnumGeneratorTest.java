@@ -76,6 +76,7 @@ public class EnumGeneratorTest {
 		dataTypeUtils = new DataTypeUtils();
 		enumGenerator.setPackageHelper(packageHelper);
 		enumGenerator.setInterfaceGenerator(interfaceGenerator);
+		enumGenerator.setJdtHelper(jdtHelper);
 		interfaceGenerator.setMethodHelper(methodHelper);
 		interfaceGenerator.setJdtHelper(jdtHelper);
 		interfaceGenerator.setPackageHelper(packageHelper);
@@ -200,5 +201,38 @@ public class EnumGeneratorTest {
 		assertEquals(
 				"public enum Company {; public String getType(){\n  return type;\n}\n}\n",
 				cu.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateAttribute() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+
+		EList<Property> properties = mock(EList.class);
+		Iterator<Property> propertyIter = mock(Iterator.class);
+		Property property = mock(Property.class);
+		Type type = mock(Type.class);
+		String name = "type";
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(clazz.getAttributes()).thenReturn(properties);
+		when(properties.iterator()).thenReturn(propertyIter);
+		when(propertyIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(propertyIter.next()).thenReturn(property);
+		when(property.getType()).thenReturn(type);
+		when(property.getName()).thenReturn(name);
+		when(property.getUpper()).thenReturn(1);
+		when(property.getLower()).thenReturn(1);
+		when(property.getOwnedComments()).thenReturn(comments);
+		when(type.getName()).thenReturn("String");
+		when(type.getQualifiedName()).thenReturn("String");
+
+		enumGenerator.generateAttribute(clazz, ast, ed);
+
+		assertEquals("public enum Company {; String type;\n}\n", cu.toString());
 	}
 }

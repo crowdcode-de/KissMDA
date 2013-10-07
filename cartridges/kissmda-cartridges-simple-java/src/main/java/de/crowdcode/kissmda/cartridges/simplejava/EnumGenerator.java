@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.NumberLiteral;
@@ -36,6 +37,7 @@ import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
@@ -44,6 +46,7 @@ import org.eclipse.uml2.uml.Slot;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.ValueSpecification;
 
+import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
@@ -68,6 +71,9 @@ public class EnumGenerator {
 
 	@Inject
 	private InterfaceGenerator interfaceGenerator;
+
+	@Inject
+	private JdtHelper jdtHelper;
 
 	private String sourceDirectoryPackageName;
 
@@ -101,9 +107,44 @@ public class EnumGenerator {
 		return cu.toString();
 	}
 
-	private void generateAttribute(Classifier clazz, AST ast, EnumDeclaration ed) {
-		// TODO Auto-generated method stub
+	/**
+	 * Generate the attribute.
+	 * 
+	 * @param clazz
+	 *            UML2 class
+	 * @param ast
+	 *            JDT AST
+	 * @param ed
+	 *            EnumerationDeclaration
+	 */
+	@SuppressWarnings("unchecked")
+	public void generateAttribute(Classifier clazz, AST ast, EnumDeclaration ed) {
+		EList<Property> properties = clazz.getAttributes();
+		for (Property property : properties) {
+			Type type = property.getType();
+			logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
+					+ "Property: " + property.getName() + " - "
+					+ "Property Upper: " + property.getUpper() + " - "
+					+ "Property Lower: " + property.getLower());
+			String umlTypeName = type.getName();
+			String umlQualifiedTypeName = type.getQualifiedName();
 
+			// Check whether primitive or array type or simple type?
+			org.eclipse.jdt.core.dom.Type chosenType = jdtHelper.getChosenType(
+					ast, umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName);
+
+			VariableDeclarationFragment fragment = ast
+					.newVariableDeclarationFragment();
+			SimpleName variableName = ast.newSimpleName(property.getName());
+			fragment.setName(variableName);
+
+			FieldDeclaration fieldDeclaration = ast
+					.newFieldDeclaration(fragment);
+			fieldDeclaration.setType(chosenType);
+
+			ed.bodyDeclarations().add(fieldDeclaration);
+		}
 	}
 
 	/**
@@ -258,5 +299,15 @@ public class EnumGenerator {
 	 */
 	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
 		this.interfaceGenerator = interfaceGenerator;
+	}
+
+	/**
+	 * Set JdtHelper for Unit Test.
+	 * 
+	 * @param jdtHelper
+	 *            JdtHelper
+	 */
+	public void setJdtHelper(JdtHelper jdtHelper) {
+		this.jdtHelper = jdtHelper;
 	}
 }
