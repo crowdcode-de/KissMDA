@@ -141,6 +141,7 @@ public class EnumGeneratorTest {
 		when(valueSpecificationIter.hasNext()).thenReturn(true).thenReturn(
 				false);
 		when(valueSpecificationIter.next()).thenReturn(valueSpecification);
+		when(valueSpecification.integerValue()).thenReturn(0);
 
 		enumGenerator.generateConstants(enumeration, ast, ed);
 
