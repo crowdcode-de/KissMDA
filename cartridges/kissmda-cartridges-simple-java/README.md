@@ -13,6 +13,10 @@ Stereotypes
 * Applied on: class
 * Produces Java interfaces with all the attributes, methods and relationships.
 
+**enumeration**
+* Applied on: enumeration
+* Produces Java enumeration.
+
 **Service**
 * Applied on: class
 * Produces Java interfaces with all the attributes, methods and relationships. Service stereotype is just the same as Entity stereotype.
