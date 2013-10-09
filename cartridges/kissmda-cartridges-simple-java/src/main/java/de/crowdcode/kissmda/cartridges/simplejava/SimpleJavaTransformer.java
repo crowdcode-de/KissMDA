@@ -92,30 +92,6 @@ public class SimpleJavaTransformer implements Transformer {
 
 	private Context context;
 
-	public void setJavaCodeFormatter(JavaCodeFormatter javaCodeFormatter) {
-		this.javaCodeFormatter = javaCodeFormatter;
-	}
-
-	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
-		this.interfaceGenerator = interfaceGenerator;
-	}
-
-	public void setExceptionGenerator(ExceptionGenerator exceptionGenerator) {
-		this.exceptionGenerator = exceptionGenerator;
-	}
-
-	public void setEnumGenerator(EnumGenerator enumGenerator) {
-		this.enumGenerator = enumGenerator;
-	}
-
-	public void setJavaFileWriter(JavaFileWriter javaFileWriter) {
-		this.javaFileWriter = javaFileWriter;
-	}
-
-	public void setPackageHelper(PackageHelper packageHelper) {
-		this.packageHelper = packageHelper;
-	}
-
 	/**
 	 * Start the transformation and generation.
 	 * 
