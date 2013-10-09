@@ -33,7 +33,7 @@ This framework works for [MagicDraw and Enterprise Architect](http://goo.gl/Z5QQ
 TRIMM offers some ready to use cartridges like Java, JPA and Webservice. It seems that TRIMM does not suffer of the problems mentioned above and uses almost the same approach of KissMDA (see our solution below). Following are in our opinion the weak points:
 * Using its own Java generator which is basically based on String outputs is not the best way. Using Eclipse JDT is a lot more easier and you always get syntaxtically correct Java codes which can be easily unit tested, see this [example](http://goo.gl/Au42Ql).
 * Interesting to compare the transformers for Java code generation. In TRIMM you have the class [JavaGenerator.java](http://goo.gl/XpKQSM). In KissMDA you use the class [SimpleJavaTransformer.java](http://goo.gl/YuUVRS). 
-They both are the main entering point for the generation of Java codes. Both classes look quite similar from the way of doing the works they need to do. Using DI framework like Guice makes the code more readable.
+They both are the main entering point for the generation of Java codes. Both classes look quite similar from the way of doing the works they need to do. Using DI framework like Guice in KissMDA makes the code more readable.
 
 There are some other MDA / MDSD tools available outside: [Taylor](http://taylor.sourceforge.net), [Topcased](http://www.topcased.org), [openMDX](http://www.openmdx.org). But all of them suffer the problems we mentioned above.
 
