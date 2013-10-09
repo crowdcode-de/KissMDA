@@ -26,9 +26,10 @@ import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import de.crowdcode.kissmda.core.Context;
 
@@ -38,6 +39,7 @@ import de.crowdcode.kissmda.core.Context;
  * @author Lofi Dewanto
  * @version 1.0.0
  */
+@RunWith(MockitoJUnitRunner.class)
 public class JavaFileWriterTest {
 
 	@InjectMocks
@@ -51,8 +53,6 @@ public class JavaFileWriterTest {
 
 	@Before
 	public void setUp() throws Exception {
-		fileJavaWriter = new JavaFileWriter();
-		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
