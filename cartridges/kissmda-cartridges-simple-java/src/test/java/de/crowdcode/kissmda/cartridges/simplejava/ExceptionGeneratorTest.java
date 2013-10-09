@@ -45,8 +45,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Answers;
 
 import de.crowdcode.kissmda.core.TransformerException;
-import de.crowdcode.kissmda.core.jdt.JdtHelper;
-import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
  * Test Interface Generator.
@@ -61,20 +59,8 @@ public class ExceptionGeneratorTest {
 	private static final Logger logger = Logger
 			.getLogger(ExceptionGeneratorTest.class.getName());
 
-	@SuppressWarnings("unused")
-	@Inject
-	private InterfaceGenerator interfaceGenerator;
-
 	@Inject
 	private ExceptionGenerator exceptionGenerator;
-
-	@SuppressWarnings("unused")
-	@Inject
-	private PackageHelper packageHelper;
-
-	@SuppressWarnings("unused")
-	@Inject
-	private JdtHelper jdtHelper;
 
 	private Class clazz;
 

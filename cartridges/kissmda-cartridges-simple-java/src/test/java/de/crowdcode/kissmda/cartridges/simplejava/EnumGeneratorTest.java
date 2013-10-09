@@ -47,11 +47,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Answers;
 
-import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
-import de.crowdcode.kissmda.core.jdt.JdtHelper;
-import de.crowdcode.kissmda.core.jdt.MethodHelper;
-import de.crowdcode.kissmda.core.uml.PackageHelper;
-
 /**
  * Test Enum Generator.
  * 
@@ -64,26 +59,6 @@ public class EnumGeneratorTest {
 
 	@Inject
 	private EnumGenerator enumGenerator;
-
-	@SuppressWarnings("unused")
-	@Inject
-	private PackageHelper packageHelper;
-
-	@SuppressWarnings("unused")
-	@Inject
-	private InterfaceGenerator interfaceGenerator;
-
-	@SuppressWarnings("unused")
-	@Inject
-	private MethodHelper methodHelper;
-
-	@SuppressWarnings("unused")
-	@Inject
-	private JdtHelper jdtHelper;
-
-	@SuppressWarnings("unused")
-	@Inject
-	private DataTypeUtils dataTypeUtils;
 
 	private Class clazz;
 

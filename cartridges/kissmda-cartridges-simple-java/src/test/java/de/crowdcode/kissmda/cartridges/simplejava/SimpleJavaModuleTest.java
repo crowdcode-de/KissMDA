@@ -46,8 +46,10 @@ public class SimpleJavaModuleTest {
 
 	private static final Logger logger = Logger
 			.getLogger(SimpleJavaModuleTest.class.getName());
+
 	@Inject
 	private SimpleJavaTransformer simpleJavaTransformer;
+
 	private Context context;
 
 	@Before
