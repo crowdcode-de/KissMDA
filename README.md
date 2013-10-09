@@ -26,6 +26,12 @@ of Acceleo](http://wiki.eclipse.org/Acceleo/Getting_Started) to understand how A
 So you need the MTL editor from Eclipse, imagine if something happens just like oAW. You will stuck with an old Eclipse
 version!
 
+4. [TigerTeam TRIMM – Model Driven Generator](http://trimm.tigerteam.dk) is just Open Sourced in July 2013.
+We analyzed the code at [Bitbucket.org](https://bitbucket.org/tigerteam/trimm/src) and found out that the idea with the Events and Listeners as [Extensions](http://trimm.tigerteam.dk/trimm-java/trimm-java-extensions) is a very good idea.
+TRIMM also uses Maven and does not have any dependencies to Eclipse. Special to this framework is that it uses its own [metamodel](http://goo.gl/MHIfLw) and does not use UML2 metamodel for the generators. 
+This framework works for [MagicDraw and Enterprise Architect](http://goo.gl/Z5QQrq) and it can read the files directly from those UML tools. It also uses its [own Java code generators](http://goo.gl/A5HLEm) which is basically based on Strings.
+TRIMM offers some ready to use cartridges like Java, JPA and Webservice.
+
 There are some other MDA / MDSD tools available outside: [Taylor](http://taylor.sourceforge.net), [Topcased](http://www.topcased.org), [openMDX](http://www.openmdx.org). But all of them suffer the problems we mentioned above.
 
 ***Our solution is KissMDA (Keep It Simple Stupid, MDA!)***.
