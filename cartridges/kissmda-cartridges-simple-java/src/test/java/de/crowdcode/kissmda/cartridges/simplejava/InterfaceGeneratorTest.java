@@ -24,6 +24,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Iterator;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
@@ -44,8 +46,10 @@ import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.TemplateParameter;
 import org.eclipse.uml2.uml.TemplateSignature;
 import org.eclipse.uml2.uml.Type;
+import org.jukito.JukitoRunner;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Answers;
 
 import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
@@ -60,29 +64,32 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * @version 1.0.0
  * @since 1.0.0
  */
+@RunWith(JukitoRunner.class)
 public class InterfaceGeneratorTest {
 
+	@Inject
 	private InterfaceGenerator interfaceGenerator;
+
+	@SuppressWarnings("unused")
+	@Inject
 	private PackageHelper packageHelper;
+
+	@SuppressWarnings("unused")
+	@Inject
 	private JdtHelper jdtHelper;
+
+	@SuppressWarnings("unused")
+	@Inject
 	private DataTypeUtils dataTypeUtils;
+
+	@SuppressWarnings("unused")
+	@Inject
 	private MethodHelper methodHelper;
 
 	private Class clazz;
 
 	@Before
 	public void setUp() throws Exception {
-		dataTypeUtils = new DataTypeUtils();
-		packageHelper = new PackageHelper();
-		interfaceGenerator = new InterfaceGenerator();
-		jdtHelper = new JdtHelper();
-		methodHelper = new MethodHelper();
-		jdtHelper.setPackageHelper(packageHelper);
-		jdtHelper.setDataTypeUtils(dataTypeUtils);
-		interfaceGenerator.setPackageHelper(packageHelper);
-		interfaceGenerator.setJdtHelper(jdtHelper);
-		interfaceGenerator.setMethodHelper(methodHelper);
-
 		setUpMocks();
 	}
 

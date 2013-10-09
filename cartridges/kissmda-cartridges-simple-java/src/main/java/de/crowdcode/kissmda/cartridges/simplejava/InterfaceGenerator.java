@@ -81,18 +81,6 @@ public class InterfaceGenerator {
 
 	private String sourceDirectoryPackageName;
 
-	public void setMethodHelper(MethodHelper methodHelper) {
-		this.methodHelper = methodHelper;
-	}
-
-	public void setJdtHelper(JdtHelper javaHelper) {
-		this.jdtHelper = javaHelper;
-	}
-
-	public void setPackageHelper(PackageHelper packageHelper) {
-		this.packageHelper = packageHelper;
-	}
-
 	/**
 	 * Generate the Class Interface. This is the main generation part for this
 	 * SimpleJavaTransformer.

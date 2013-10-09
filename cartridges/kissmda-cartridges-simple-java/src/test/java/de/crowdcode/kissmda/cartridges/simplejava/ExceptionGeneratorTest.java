@@ -25,6 +25,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
@@ -36,8 +38,10 @@ import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.TemplateParameter;
 import org.eclipse.uml2.uml.TemplateSignature;
+import org.jukito.JukitoRunner;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Answers;
 
 import de.crowdcode.kissmda.core.TransformerException;
@@ -51,29 +55,31 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * @version 1.0.0
  * @since 1.0.0
  */
+@RunWith(JukitoRunner.class)
 public class ExceptionGeneratorTest {
 
 	private static final Logger logger = Logger
 			.getLogger(ExceptionGeneratorTest.class.getName());
 
+	@SuppressWarnings("unused")
+	@Inject
 	private InterfaceGenerator interfaceGenerator;
+
+	@Inject
 	private ExceptionGenerator exceptionGenerator;
+
+	@SuppressWarnings("unused")
+	@Inject
 	private PackageHelper packageHelper;
+
+	@SuppressWarnings("unused")
+	@Inject
 	private JdtHelper jdtHelper;
 
 	private Class clazz;
 
 	@Before
 	public void setUp() throws Exception {
-		packageHelper = new PackageHelper();
-		interfaceGenerator = new InterfaceGenerator();
-		exceptionGenerator = new ExceptionGenerator();
-		jdtHelper = new JdtHelper();
-		jdtHelper.setPackageHelper(packageHelper);
-		interfaceGenerator.setPackageHelper(packageHelper);
-		exceptionGenerator.setJdtHelper(jdtHelper);
-		exceptionGenerator.setInterfaceGenerator(interfaceGenerator);
-
 		setUpMocks();
 	}
 

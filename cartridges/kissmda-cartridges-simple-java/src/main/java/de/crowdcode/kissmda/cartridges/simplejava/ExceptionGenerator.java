@@ -77,16 +77,14 @@ public class ExceptionGenerator {
 
 	private boolean isCheckedException = true;
 
-	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
-		this.interfaceGenerator = interfaceGenerator;
-	}
-
+	/**
+	 * Set this exception as checked exception.
+	 * 
+	 * @param isCheckedException
+	 *            boolean
+	 */
 	public void setCheckedException(boolean isCheckedException) {
 		this.isCheckedException = isCheckedException;
-	}
-
-	public void setJdtHelper(JdtHelper javaHelper) {
-		this.jdtHelper = javaHelper;
 	}
 
 	/**

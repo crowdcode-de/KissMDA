@@ -82,18 +82,6 @@ public class EnumGenerator {
 
 	private String sourceDirectoryPackageName;
 
-	public void setPackageHelper(PackageHelper packageHelper) {
-		this.packageHelper = packageHelper;
-	}
-
-	public void setInterfaceGenerator(InterfaceGenerator interfaceGenerator) {
-		this.interfaceGenerator = interfaceGenerator;
-	}
-
-	public void setJdtHelper(JdtHelper jdtHelper) {
-		this.jdtHelper = jdtHelper;
-	}
-
 	/**
 	 * Generate the Class Interface. This is the main generation part for this
 	 * SimpleJavaTransformer.
