@@ -46,6 +46,7 @@ public class DataTypeUtils {
 		if (primitiveTypeCodes == null) {
 			primitiveTypeCodes = new HashMap<String, Code>();
 			primitiveTypeCodes.put("integer", PrimitiveType.INT);
+			primitiveTypeCodes.put("int", PrimitiveType.INT);
 			primitiveTypeCodes.put("short", PrimitiveType.SHORT);
 			primitiveTypeCodes.put("double", PrimitiveType.DOUBLE);
 			primitiveTypeCodes.put("long", PrimitiveType.LONG);

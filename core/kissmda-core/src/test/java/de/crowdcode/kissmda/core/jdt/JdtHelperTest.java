@@ -57,7 +57,6 @@ public class JdtHelperTest {
 	@InjectMocks
 	private JdtHelper jdtHelper;
 
-	@SuppressWarnings("unused")
 	@Spy
 	private PackageHelper packageHelper;
 

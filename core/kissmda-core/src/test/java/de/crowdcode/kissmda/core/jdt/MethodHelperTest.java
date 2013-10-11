@@ -39,7 +39,6 @@ public class MethodHelperTest {
 	@InjectMocks
 	private MethodHelper methodHelper;
 
-	@SuppressWarnings("unused")
 	@Spy
 	private Inflector inflector;
 

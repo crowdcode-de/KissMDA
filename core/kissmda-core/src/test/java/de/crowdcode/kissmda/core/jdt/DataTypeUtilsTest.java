@@ -40,8 +40,14 @@ public class DataTypeUtilsTest {
 	}
 
 	@Test
-	public void testIsPrimitiveType() {
+	public void testIsPrimitiveType1() {
 		boolean isPrimitiveType = dataTypeUtils.isPrimitiveType("integer");
+		assertTrue(isPrimitiveType);
+	}
+	
+	@Test
+	public void testIsPrimitiveType2() {
+		boolean isPrimitiveType = dataTypeUtils.isPrimitiveType("int");
 		assertTrue(isPrimitiveType);
 	}
 
