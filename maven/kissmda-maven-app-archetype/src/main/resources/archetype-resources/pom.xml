@@ -98,7 +98,7 @@
 									<pluginExecutionFilter>
 										<groupId>de.crowdcode.kissmda.maven</groupId>
 										<artifactId>kissmda-maven-plugin</artifactId>
-										<versionRange>[1.0.0-SNAPSHOT,)</versionRange>
+										<versionRange>[1.0.0,)</versionRange>
 										<goals>
 											<goal>generate</goal>
 										</goals>
