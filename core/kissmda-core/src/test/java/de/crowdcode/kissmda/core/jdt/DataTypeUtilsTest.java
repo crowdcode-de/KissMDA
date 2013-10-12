@@ -44,7 +44,7 @@ public class DataTypeUtilsTest {
 		boolean isPrimitiveType = dataTypeUtils.isPrimitiveType("integer");
 		assertTrue(isPrimitiveType);
 	}
-	
+
 	@Test
 	public void testIsPrimitiveType2() {
 		boolean isPrimitiveType = dataTypeUtils.isPrimitiveType("int");
@@ -52,8 +52,14 @@ public class DataTypeUtilsTest {
 	}
 
 	@Test
-	public void testIsArrayType() {
+	public void testIsArrayType1() {
 		boolean isArrayType = dataTypeUtils.isArrayType("datatype.byte[]");
+		assertTrue(isArrayType);
+	}
+
+	@Test
+	public void testIsArrayType2() {
+		boolean isArrayType = dataTypeUtils.isArrayType("datatype.char[]");
 		assertTrue(isArrayType);
 	}
 

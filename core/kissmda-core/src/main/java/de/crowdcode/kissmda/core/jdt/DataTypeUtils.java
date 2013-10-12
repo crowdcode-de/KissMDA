@@ -53,6 +53,8 @@ public class DataTypeUtils {
 			primitiveTypeCodes.put("boolean", PrimitiveType.BOOLEAN);
 			primitiveTypeCodes.put("byte", PrimitiveType.BYTE);
 			primitiveTypeCodes.put("character", PrimitiveType.CHAR);
+			primitiveTypeCodes.put("char", PrimitiveType.CHAR);
+			primitiveTypeCodes.put("float", PrimitiveType.FLOAT);
 			primitiveTypeCodes.put("void", PrimitiveType.VOID);
 		}
 
@@ -71,10 +73,15 @@ public class DataTypeUtils {
 			javaTypes.put("short", "Short");
 			javaTypes.put("double", "Double");
 			javaTypes.put("long", "Long");
+			javaTypes.put("float", "Float");
 			javaTypes.put("boolean", "Boolean");
 			javaTypes.put("string", "String");
+			javaTypes.put("character", "Character");
 			javaTypes.put("date", "java.util.Date");
 			javaTypes.put("collection", "java.util.Collection");
+			javaTypes.put("list", "java.util.List");
+			javaTypes.put("set", "java.util.Set");
+			javaTypes.put("sortedset", "java.util.SortedSet");
 		}
 
 		return javaTypes;

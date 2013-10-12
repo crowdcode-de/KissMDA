@@ -110,6 +110,17 @@ public class JdtHelperTest {
 	}
 
 	@Test
+	public void testGetAstSimpleTypeJavaTypeList() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		String typeName = "List";
+		SimpleType tp = jdtHelper.getAstSimpleType(ast, typeName);
+
+		assertEquals("java.util.List", tp.getName().toString());
+	}
+
+	@Test
 	public void testGetAstPrimitiveType() {
 		Map<String, Code> primitiveTypes = createPrimitiveTypeCodes();
 		when(dataTypeUtils.getPrimitiveTypeCodes()).thenReturn(primitiveTypes);
@@ -278,6 +289,7 @@ public class JdtHelperTest {
 		javaTypes.put("integer", "Integer");
 		javaTypes.put("short", "Short");
 		javaTypes.put("collection", "java.util.Collection");
+		javaTypes.put("list", "java.util.List");
 		return javaTypes;
 	}
 
