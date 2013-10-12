@@ -189,7 +189,7 @@ public class JdtHelperTest {
 	}
 
 	@Test
-	public void testGetAstParameterizedTypesComplex() {
+	public void testGetAstParameterizedTypesComplex1() {
 		Map<String, String> javaTypes = createJavaTypes();
 		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
 		when(dataTypeUtils.isParameterizedType(Mockito.anyString()))
@@ -199,6 +199,35 @@ public class JdtHelperTest {
 		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
 
 		assertEquals("java.util.Map<String,java.util.List<String>>",
+				tp.toString());
+	}
+
+	@Test
+	public void testGetAstParameterizedTypesComplex2() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+		when(dataTypeUtils.isParameterizedType(Mockito.anyString()))
+				.thenReturn(true).thenReturn(false);
+
+		String typeName = "List<List<String>>";
+		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
+
+		assertEquals("java.util.List<java.util.List<String>>", tp.toString());
+	}
+
+	@Test
+	public void testGetAstParameterizedTypesComplex3() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+		when(dataTypeUtils.isArrayType(Mockito.anyString())).thenReturn(true)
+				.thenReturn(false).thenReturn(false);
+		when(dataTypeUtils.isParameterizedType(Mockito.anyString()))
+				.thenReturn(true).thenReturn(false).thenReturn(false);
+
+		String typeName = "Map<String[], List<String>>";
+		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
+
+		assertEquals("java.util.Map<String[],java.util.List<String>>",
 				tp.toString());
 	}
 
