@@ -64,9 +64,16 @@ public class DataTypeUtilsTest {
 	}
 
 	@Test
-	public void testIsParameterizedType() {
+	public void testIsParameterizedType1() {
 		boolean isParameterizedType = dataTypeUtils
 				.isParameterizedType("datatype.Collection<String>");
+		assertTrue(isParameterizedType);
+	}
+
+	@Test
+	public void testIsParameterizedType2() {
+		boolean isParameterizedType = dataTypeUtils
+				.isParameterizedType("List<String>");
 		assertTrue(isParameterizedType);
 	}
 

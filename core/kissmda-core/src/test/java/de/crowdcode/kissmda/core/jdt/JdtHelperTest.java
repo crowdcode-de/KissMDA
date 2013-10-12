@@ -189,6 +189,20 @@ public class JdtHelperTest {
 	}
 
 	@Test
+	public void testGetAstParameterizedTypesComplex() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+		when(dataTypeUtils.isParameterizedType(Mockito.anyString()))
+				.thenReturn(false).thenReturn(true).thenReturn(false);
+
+		String typeName = "Map<String, List<String>>";
+		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
+
+		assertEquals("java.util.Map<String,java.util.List<String>>",
+				tp.toString());
+	}
+
+	@Test
 	public void testCreateFullQualifiedTypeAsName() {
 		String sourceDirectoryPackageName = "Data";
 		String umlQualifiedTypeName = "Data::de::test::SuperCompany";
@@ -290,6 +304,7 @@ public class JdtHelperTest {
 		javaTypes.put("short", "Short");
 		javaTypes.put("collection", "java.util.Collection");
 		javaTypes.put("list", "java.util.List");
+		javaTypes.put("map", "java.util.Map");
 		return javaTypes;
 	}
 

@@ -82,6 +82,7 @@ public class DataTypeUtils {
 			javaTypes.put("list", "java.util.List");
 			javaTypes.put("set", "java.util.Set");
 			javaTypes.put("sortedset", "java.util.SortedSet");
+			javaTypes.put("map", "java.util.Map");
 		}
 
 		return javaTypes;

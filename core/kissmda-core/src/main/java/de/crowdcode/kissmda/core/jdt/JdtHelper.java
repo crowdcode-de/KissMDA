@@ -282,14 +282,18 @@ public class JdtHelper {
 				.newParameterizedType(componentType);
 
 		String paramTypeNames = StringUtils.substringAfter(typeName, "<");
-		// Result: String, Integer, Boolean>
+		paramTypeNames = StringUtils.removeEnd(paramTypeNames, ">");
+		// Result: String, Integer, List<Boolean>
 		String[] parametersAsString = StringUtils.split(paramTypeNames, ",");
 		for (int index = 0; index < parametersAsString.length; index++) {
 			String paramTypeName = parametersAsString[index];
+
 			paramTypeName = StringUtils.remove(paramTypeName, ",");
-			paramTypeName = StringUtils.remove(paramTypeName, ">");
 			paramTypeName = StringUtils.trim(paramTypeName);
-			Type paramType = getAstSimpleType(ast, paramTypeName);
+
+			Type paramType = getChosenType(ast, paramTypeName, paramTypeName,
+					"");
+
 			// Add the type arguments
 			parameterizedType.typeArguments().add(paramType);
 		}
