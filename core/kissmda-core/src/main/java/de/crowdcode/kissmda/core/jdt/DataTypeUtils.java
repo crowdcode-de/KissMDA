@@ -69,6 +69,7 @@ public class DataTypeUtils {
 	public Map<String, String> getJavaTypes() {
 		if (javaTypes == null) {
 			javaTypes = new HashMap<String, String>();
+			javaTypes.put("object", "Object");
 			javaTypes.put("integer", "Integer");
 			javaTypes.put("short", "Short");
 			javaTypes.put("double", "Double");
@@ -76,13 +77,27 @@ public class DataTypeUtils {
 			javaTypes.put("float", "Float");
 			javaTypes.put("boolean", "Boolean");
 			javaTypes.put("string", "String");
+			javaTypes.put("byte", "Byte");
 			javaTypes.put("character", "Character");
 			javaTypes.put("date", "java.util.Date");
 			javaTypes.put("collection", "java.util.Collection");
 			javaTypes.put("list", "java.util.List");
 			javaTypes.put("set", "java.util.Set");
+			javaTypes.put("queue", "java.util.Queue");
 			javaTypes.put("sortedset", "java.util.SortedSet");
 			javaTypes.put("map", "java.util.Map");
+			javaTypes.put("sortedmap", "java.util.SortedMap");
+			javaTypes.put("sortedset", "java.util.SortedSet");
+			javaTypes
+					.put("blockingqueue", "java.util.concurrent.BlockingQueue");
+			javaTypes.put("blob", "java.sql.Blob");
+			javaTypes.put("clob", "java.sql.Clob");
+			javaTypes.put("timestamp", "java.sql.Timestamp");
+			javaTypes.put("file", "java.io.File");
+			javaTypes.put("guid", "java.util.UUID");
+			javaTypes.put("treenode", "javax.swing.tree.TreeNode");
+			javaTypes.put("uri", "java.net.URI");
+			javaTypes.put("url", "java.net.URL");
 		}
 
 		return javaTypes;
