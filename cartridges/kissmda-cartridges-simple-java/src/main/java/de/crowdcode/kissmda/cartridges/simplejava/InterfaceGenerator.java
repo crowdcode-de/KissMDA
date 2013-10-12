@@ -92,6 +92,8 @@ public class InterfaceGenerator {
 	public String generateInterface(Classifier clazz,
 			String sourceDirectoryPackageName) {
 		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
+		logger.log(Level.FINE, "Start generateInterface: " + clazz.getName()
+				+ " -----------------------------");
 
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
@@ -102,6 +104,8 @@ public class InterfaceGenerator {
 		generateGettersSetters(clazz, ast, td);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
+		logger.log(Level.FINE, "End generateInterface: " + clazz.getName()
+				+ " -----------------------------");
 		return cu.toString();
 	}
 
@@ -436,6 +440,7 @@ public class InterfaceGenerator {
 		// Only for this class without inheritance
 		EList<Operation> operations = clazz.getOperations();
 		for (Operation operation : operations) {
+			logger.log(Level.FINE, "Operation: " + operation.getName());
 			MethodDeclaration md = ast.newMethodDeclaration();
 			md.setName(ast.newSimpleName(operation.getName()));
 
@@ -541,7 +546,7 @@ public class InterfaceGenerator {
 				umlQualifiedTypeName, sourceDirectoryPackageName);
 	}
 
-	private void generateMethodParams(AST ast, TypeDeclaration td,
+	public void generateMethodParams(AST ast, TypeDeclaration td,
 			Operation operation, MethodDeclaration md) {
 		EList<Parameter> parameters = operation.getOwnedParameters();
 		for (Parameter parameter : parameters) {

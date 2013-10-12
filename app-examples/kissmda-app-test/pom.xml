@@ -93,6 +93,7 @@
 						<transformerScanPackageName>de.crowdcode.kissmda.cartridges</transformerScanPackageName>
 					</transformerScanPackageNames>
 					<modelFile>src/main/resources/model/emf/test-uml.uml</modelFile>
+					<loggingLevel>SEVERE</loggingLevel>
 				</configuration>
 			</plugin>
 			<plugin>

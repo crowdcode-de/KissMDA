@@ -619,4 +619,43 @@ public class InterfaceGeneratorTest {
 			assertEquals("boolean", method.getReturnType2().toString());
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateMethodParams() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+		MethodDeclaration md = ast.newMethodDeclaration();
+		md.setName(ast.newSimpleName("calculateAge"));
+
+		Operation operation = mock(Operation.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		EList<TemplateParameter> templateParams = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<TemplateParameter> templateParamIterator = mock(Iterator.class);
+		TemplateSignature templateSignature = mock(TemplateSignature.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		TemplateParameter templateParameter = mock(TemplateParameter.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Classifier classifier = mock(Classifier.class);
+
+		when(operation.getOwnedTemplateSignature()).thenReturn(
+				templateSignature);
+		when(templateSignature.getParameters()).thenReturn(templateParams);
+		when(templateParams.iterator()).thenReturn(templateParamIterator);
+		when(templateParamIterator.hasNext()).thenReturn(true, false);
+		when(templateParamIterator.next()).thenReturn(templateParameter);
+		when(templateParameter.getOwnedParameteredElement()).thenReturn(
+				classifier);
+
+		interfaceGenerator.generateMethodParams(ast, td, operation, md);
+
+		assertEquals("void calculateAge();\n", md.toString());
+	}
 }
