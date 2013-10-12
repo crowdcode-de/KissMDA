@@ -20,6 +20,10 @@ package de.crowdcode.kissmda.maven.plugin;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -86,10 +90,20 @@ public class KissMdaMojo extends AbstractMojo {
 	 */
 	private String generatedSourcesTargetDirectory;
 
+	/**
+	 * Logging level.
+	 * 
+	 * @parameter default-value="INFO"
+	 */
+	private String loggingLevel;
+
 	private final StandardContext context;
+
+	private final LoggingLevelMapper loggingLevelMapper;
 
 	public KissMdaMojo() {
 		super();
+		loggingLevelMapper = new LoggingLevelMapper();
 		context = new StandardContext();
 	}
 
@@ -115,6 +129,10 @@ public class KissMdaMojo extends AbstractMojo {
 		this.project = project;
 	}
 
+	public void setLoggingLevel(String loggingLevel) {
+		this.loggingLevel = loggingLevel;
+	}
+
 	/**
 	 * Execute.
 	 * 
@@ -127,6 +145,8 @@ public class KissMdaMojo extends AbstractMojo {
 		// Search for Interface Transformer in the classpath, create the class
 		// and execute. Do until we have all the Transformers...
 		logger.info("Start KissMdaMojo...");
+		setLoggingLevel();
+
 		try {
 			String fullNameModelFile = project.getBasedir() + "/" + modelFile;
 			String fullNameTargetDirectory = project.getBasedir() + "/"
@@ -169,6 +189,24 @@ public class KissMdaMojo extends AbstractMojo {
 		} catch (IllegalAccessException e) {
 			throw new MojoExecutionException("Error transform the model: "
 					+ e.getLocalizedMessage(), e);
+		}
+	}
+
+	private void setLoggingLevel() {
+		Logger log = LogManager.getLogManager().getLogger("");
+
+		if (loggingLevel == null || loggingLevel.equals("")) {
+			log.setLevel(Level.INFO);
+		} else {
+			log.setLevel(loggingLevelMapper.getLevel(loggingLevel));
+		}
+
+		for (Handler handler : log.getHandlers()) {
+			if (loggingLevel == null || loggingLevel.equals("")) {
+				handler.setLevel(Level.INFO);
+			} else {
+				handler.setLevel(loggingLevelMapper.getLevel(loggingLevel));
+			}
 		}
 	}
 
