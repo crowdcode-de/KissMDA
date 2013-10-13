@@ -27,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
@@ -333,11 +334,15 @@ public class EnumGenerator {
 								.valueOf(valueSpecification.integerValue()));
 						ec.arguments().add(numberLiteral);
 					} else if (type.getName().equalsIgnoreCase("boolean")) {
-						ast.newBooleanLiteral(valueSpecification.booleanValue());
+						BooleanLiteral booleanLiteral = ast
+								.newBooleanLiteral(valueSpecification
+										.booleanValue());
+						ec.arguments().add(booleanLiteral);
 					} else if (type.getName().equalsIgnoreCase("string")) {
 						StringLiteral stringLiteral = ast.newStringLiteral();
 						stringLiteral.setLiteralValue(valueSpecification
 								.stringValue());
+						ec.arguments().add(stringLiteral);
 					}
 				}
 			}

@@ -101,7 +101,7 @@ public class EnumGeneratorTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateConstants() {
+	public void testGenerateConstantsInteger() {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
@@ -147,6 +147,56 @@ public class EnumGeneratorTest {
 		enumGenerator.generateConstants(enumeration, ast, ed);
 
 		assertEquals("public enum Company {HOME(0)}\n", ed.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateConstantsString() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+
+		Enumeration enumeration = mock(Enumeration.class);
+		EList<EnumerationLiteral> enumLiterals = mock(EList.class);
+		Iterator<EnumerationLiteral> enumIter = mock(Iterator.class);
+		EnumerationLiteral enumLiteral = mock(EnumerationLiteral.class);
+
+		EList<Slot> slots = mock(EList.class);
+		Iterator<Slot> slotIter = mock(Iterator.class);
+		Slot slot = mock(Slot.class);
+
+		Property property = mock(Property.class);
+		Type type = mock(Type.class);
+
+		EList<ValueSpecification> valueSpecifications = mock(EList.class);
+		Iterator<ValueSpecification> valueSpecificationIter = mock(Iterator.class);
+		ValueSpecification valueSpecification = mock(ValueSpecification.class);
+
+		when(enumeration.getOwnedLiterals()).thenReturn(enumLiterals);
+		when(enumLiterals.iterator()).thenReturn(enumIter);
+		when(enumIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(enumIter.next()).thenReturn(enumLiteral);
+		when(enumLiteral.getName()).thenReturn("Home");
+
+		when(enumLiteral.getSlots()).thenReturn(slots);
+		when(slots.iterator()).thenReturn(slotIter);
+		when(slotIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(slotIter.next()).thenReturn(slot);
+		when(slot.getDefiningFeature()).thenReturn(property);
+
+		when(property.getType()).thenReturn(type);
+		when(type.getName()).thenReturn("String");
+
+		when(slot.getValues()).thenReturn(valueSpecifications);
+		when(valueSpecifications.iterator()).thenReturn(valueSpecificationIter);
+		when(valueSpecificationIter.hasNext()).thenReturn(true).thenReturn(
+				false);
+		when(valueSpecificationIter.next()).thenReturn(valueSpecification);
+		when(valueSpecification.stringValue()).thenReturn("Home");
+
+		enumGenerator.generateConstants(enumeration, ast, ed);
+
+		assertEquals("public enum Company {HOME(\"Home\")}\n", ed.toString());
 	}
 
 	@SuppressWarnings("unchecked")
