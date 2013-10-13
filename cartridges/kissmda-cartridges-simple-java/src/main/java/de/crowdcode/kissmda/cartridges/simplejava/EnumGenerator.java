@@ -328,17 +328,22 @@ public class EnumGenerator {
 						.getValues();
 
 				for (ValueSpecification valueSpecification : valueSpecifications) {
-					if (type.getName().equalsIgnoreCase("integer")) {
+					if (type.getName().equalsIgnoreCase("Integer")) {
 						NumberLiteral numberLiteral = ast.newNumberLiteral();
 						numberLiteral.setToken(String
 								.valueOf(valueSpecification.integerValue()));
 						ec.arguments().add(numberLiteral);
-					} else if (type.getName().equalsIgnoreCase("boolean")) {
+					} else if (type.getName().equalsIgnoreCase("Long")) {
+						NumberLiteral numberLiteral = ast.newNumberLiteral();
+						numberLiteral.setToken(String.valueOf(
+								valueSpecification.integerValue()).concat("L"));
+						ec.arguments().add(numberLiteral);
+					} else if (type.getName().equalsIgnoreCase("Boolean")) {
 						BooleanLiteral booleanLiteral = ast
 								.newBooleanLiteral(valueSpecification
 										.booleanValue());
 						ec.arguments().add(booleanLiteral);
-					} else if (type.getName().equalsIgnoreCase("string")) {
+					} else if (type.getName().equalsIgnoreCase("String")) {
 						StringLiteral stringLiteral = ast.newStringLiteral();
 						stringLiteral.setLiteralValue(valueSpecification
 								.stringValue());
