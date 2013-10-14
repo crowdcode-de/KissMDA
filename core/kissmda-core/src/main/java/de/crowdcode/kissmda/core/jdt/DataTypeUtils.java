@@ -80,6 +80,7 @@ public class DataTypeUtils {
 			javaTypes.put("byte", "Byte");
 			javaTypes.put("character", "Character");
 			javaTypes.put("date", "java.util.Date");
+			javaTypes.put("calendar", "java.util.Calendar");
 			javaTypes.put("collection", "java.util.Collection");
 			javaTypes.put("list", "java.util.List");
 			javaTypes.put("set", "java.util.Set");
