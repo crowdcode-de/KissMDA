@@ -19,7 +19,6 @@
 package de.crowdcode.kissmda.core.uml;
 
 import java.net.URISyntaxException;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -122,23 +121,13 @@ public class PackageHelper {
 	}
 
 	/**
-	 * Remove the UML type prefixes.
+	 * Remove the UML type prefixes from {@link #UmlTypePrefix}.
 	 * 
 	 * @param fullQualifiedName
 	 *            fully qualified name
 	 * @return clean type name
 	 */
 	public String removeUmlPrefixes(final String fullQualifiedName) {
-		// At the moment MagicDraw use "Boolean" for MagicDraw
-		// Profile::datatypes::boolean instead of
-		// "boolean". We need to change this into boolean since the primitive
-		// types are always in lower case
-		boolean isNeededToMakeLowerCase = false;
-		if (StringUtils.contains(fullQualifiedName,
-				UmlTypePrefix.MAGIC_DRAW_PROFILE_DATATYPES.getValue())) {
-			isNeededToMakeLowerCase = true;
-		}
-
 		// MagicDraw specific prefixes...
 		String result = fullQualifiedName.replace(
 				UmlTypePrefix.MAGIC_DRAW_PROFILE_DATATYPES.getValue(), "");
@@ -159,11 +148,6 @@ public class PackageHelper {
 				UmlTypePrefix.DATA_DATATYPE_BINDINGS.getValue())) {
 			result = StringUtils.substringAfter(result,
 					UmlTypePrefix.DATA_DATATYPE_BINDINGS.getValue());
-		}
-
-		// We need to make lower case of the type
-		if (isNeededToMakeLowerCase) {
-			result = StringUtils.lowerCase(result, Locale.ENGLISH);
 		}
 
 		return result;

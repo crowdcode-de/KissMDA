@@ -200,6 +200,6 @@ public class PackageHelperTest {
 	public void testRemoveUmlPrefixes13() {
 		String fullQualifiedName = "MagicDraw Profile::datatypes::Boolean";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
-		assertEquals("boolean", result);
+		assertEquals("Boolean", result);
 	}
 }
