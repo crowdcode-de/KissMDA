@@ -129,7 +129,8 @@ public class PackageHelper {
 	 * @return clean type name
 	 */
 	public String removeUmlPrefixes(final String fullQualifiedName) {
-		// At the moment MagicDraw use "Boolean" for primitive type instead of
+		// At the moment MagicDraw use "Boolean" for MagicDraw
+		// Profile::datatypes::boolean instead of
 		// "boolean". We need to change this into boolean since the primitive
 		// types are always in lower case
 		boolean isNeededToMakeLowerCase = false;

@@ -191,9 +191,9 @@ public class PackageHelperTest {
 
 	@Test
 	public void testRemoveUmlPrefixes12() {
-		String fullQualifiedName = "UMLPrimitiveTypes::int";
+		String fullQualifiedName = "UMLPrimitiveTypes::Integer";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
-		assertEquals("int", result);
+		assertEquals("Integer", result);
 	}
 
 	@Test
