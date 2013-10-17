@@ -58,14 +58,6 @@ public class JdtHelper {
 	@Inject
 	private DataTypeUtils dataTypeUtils;
 
-	public void setDataTypeUtils(DataTypeUtils dataTypeUtils) {
-		this.dataTypeUtils = dataTypeUtils;
-	}
-
-	public void setPackageHelper(PackageHelper packageHelper) {
-		this.packageHelper = packageHelper;
-	}
-
 	/**
 	 * Create a fully qualified type as JDT Name.
 	 * 
