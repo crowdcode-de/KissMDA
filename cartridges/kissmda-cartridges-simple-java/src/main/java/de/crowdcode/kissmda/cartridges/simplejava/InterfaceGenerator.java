@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.cartridges.simplejava;
 
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -107,6 +108,30 @@ public class InterfaceGenerator {
 		logger.log(Level.FINE, "End generateInterface: " + clazz.getName()
 				+ " -----------------------------");
 		return cu.toString();
+	}
+
+	/**
+	 * Generate comment for the compilation unit.
+	 * 
+	 * @param ast
+	 *            the JDT Java AST
+	 * @param packageDeclaration
+	 *            the package declaration where we want to insert the javadoc
+	 * @param comment
+	 *            comments
+	 */
+	@SuppressWarnings("unchecked")
+	public void generatePackageJavadoc(AST ast,
+			PackageDeclaration packageDeclaration, String... comment) {
+		Javadoc javadoc = ast.newJavadoc();
+
+		for (String actualComment : comment) {
+			TagElement tagElement = ast.newTagElement();
+			tagElement.setTagName(actualComment);
+			javadoc.tags().add(tagElement);
+		}
+
+		packageDeclaration.setJavadoc(javadoc);
 	}
 
 	/**
@@ -419,10 +444,18 @@ public class InterfaceGenerator {
 	 *            the generated Java compilation unit
 	 */
 	public void generatePackage(Classifier clazz, AST ast, CompilationUnit cu) {
-		PackageDeclaration p1 = ast.newPackageDeclaration();
+		PackageDeclaration pd = ast.newPackageDeclaration();
 		String fullPackageName = getFullPackageName(clazz);
-		p1.setName(ast.newName(fullPackageName));
-		cu.setPackage(p1);
+		pd.setName(ast.newName(fullPackageName));
+
+		Date now = new Date();
+		String commentDate = "Generation date: " + now.toString() + ".";
+
+		generatePackageJavadoc(ast, pd, PackageComment.CONTENT_1.getValue(),
+				PackageComment.CONTENT_2.getValue(), " ",
+				PackageComment.CONTENT_3.getValue(), " ", commentDate);
+
+		cu.setPackage(pd);
 	}
 
 	/**

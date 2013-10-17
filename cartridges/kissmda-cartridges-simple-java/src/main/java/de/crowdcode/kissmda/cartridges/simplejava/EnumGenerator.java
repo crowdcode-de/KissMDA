@@ -18,6 +18,7 @@
  */
 package de.crowdcode.kissmda.cartridges.simplejava;
 
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -294,10 +295,19 @@ public class EnumGenerator {
 	 *            the generated Java compilation unit
 	 */
 	public void generatePackage(Classifier clazz, AST ast, CompilationUnit cu) {
-		PackageDeclaration p1 = ast.newPackageDeclaration();
+		PackageDeclaration pd = ast.newPackageDeclaration();
 		String fullPackageName = getFullPackageName(clazz);
-		p1.setName(ast.newName(fullPackageName));
-		cu.setPackage(p1);
+		pd.setName(ast.newName(fullPackageName));
+
+		Date now = new Date();
+		String commentDate = "Generation date: " + now.toString() + ".";
+
+		interfaceGenerator.generatePackageJavadoc(ast, pd,
+				PackageComment.CONTENT_1.getValue(),
+				PackageComment.CONTENT_2.getValue(), " ",
+				PackageComment.CONTENT_3.getValue(), " ", commentDate);
+
+		cu.setPackage(pd);
 	}
 
 	/**
