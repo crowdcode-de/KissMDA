@@ -116,7 +116,7 @@ public class PackageHelperTest {
 	public void testRemoveUmlPrefixes1() {
 		String fullQualifiedName = "UMLPrimitiveTypes::Boolean";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
-		assertEquals("Boolean", result);
+		assertEquals("boolean", result);
 	}
 
 	@Test
@@ -180,5 +180,19 @@ public class PackageHelperTest {
 		String fullQualifiedName = "MyModel::datatype-bindings::Collection<String>";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
 		assertEquals("Collection<String>", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes11() {
+		String fullQualifiedName = "UMLPrimitiveTypes::Boolean";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("boolean", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes12() {
+		String fullQualifiedName = "UMLPrimitiveTypes::int";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("int", result);
 	}
 }

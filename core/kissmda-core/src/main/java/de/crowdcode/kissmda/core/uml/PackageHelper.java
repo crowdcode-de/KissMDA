@@ -19,6 +19,7 @@
 package de.crowdcode.kissmda.core.uml;
 
 import java.net.URISyntaxException;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,28 +42,20 @@ public class PackageHelper {
 
 	private static final String FILE_PROTOCOL = "file:/";
 
-	private static final String JAVA_PRIMITIVE_TYPES = "JavaPrimitiveTypes::";
-
-	private static final String UML_PRIMITIVE_TYPES = "UMLPrimitiveTypes::";
-
-	private static final String MAGIC_DRAW_PROFILE_DATATYPES = "MagicDraw Profile::datatypes::";
-
-	private static final String VALIDATION_PROFILE_OCL_LIBRARY = "Validation Profile::OCL Library::";
-
-	private static final String DATA_DATATYPE = "datatype::";
-
-	private static final String DATA_DATATYPE_BINDINGS = "datatype-bindings::";
-
 	private static final Logger logger = Logger.getLogger(PackageHelper.class
 			.getName());
 
 	@Inject
 	private ReaderWriter readerWriter;
 
-	public void setReaderWriter(ReaderWriter readerWriter) {
-		this.readerWriter = readerWriter;
-	}
-
+	/**
+	 * Get root package.
+	 * 
+	 * @param context
+	 *            context of the transformer
+	 * @return UML2 package
+	 * @throws URISyntaxException
+	 */
 	public org.eclipse.uml2.uml.Package getRootPackage(Context context)
 			throws URISyntaxException {
 		logger.log(Level.INFO,
@@ -79,6 +72,15 @@ public class PackageHelper {
 		return outPackage;
 	}
 
+	/**
+	 * Get full package name.
+	 * 
+	 * @param clazz
+	 *            UML2 classifier
+	 * @param sourceDirectoryPackageName
+	 *            from the stereotype
+	 * @return full package name
+	 */
 	public String getFullPackageName(Classifier clazz,
 			String sourceDirectoryPackageName) {
 		// Get package until the beginning of SourceDirectory
@@ -96,6 +98,15 @@ public class PackageHelper {
 		return fullPackageName;
 	}
 
+	/**
+	 * Get full package name.
+	 * 
+	 * @param umlPackageNameWithClass
+	 *            UML2 package name with classifier as String
+	 * @param sourceDirectoryPackageName
+	 *            from the stereotype
+	 * @return full package name
+	 */
 	public String getFullPackageName(String umlPackageNameWithClass,
 			String sourceDirectoryPackageName) {
 		// Get package until the beginning of SourceDirectory
@@ -110,20 +121,50 @@ public class PackageHelper {
 		return fullPackageName;
 	}
 
+	/**
+	 * Remove the UML type prefixes.
+	 * 
+	 * @param fullQualifiedName
+	 *            fully qualified name
+	 * @return clean type name
+	 */
 	public String removeUmlPrefixes(final String fullQualifiedName) {
-		// MagicDraw specific stuffs...
-		String result = fullQualifiedName.replace(MAGIC_DRAW_PROFILE_DATATYPES,
+		// At the moment MagicDraw use "Boolean" for primitive type instead of
+		// "boolean". We need to change this into boolean since the primitive
+		// types are always in lower case
+		boolean isNeededToMakeLowerCase = false;
+		if (StringUtils.contains(fullQualifiedName,
+				UmlTypePrefix.UML_PRIMITIVE_TYPES.getValue())
+				|| (StringUtils.contains(fullQualifiedName,
+						UmlTypePrefix.JAVA_PRIMITIVE_TYPES.getValue()))) {
+			isNeededToMakeLowerCase = true;
+		}
+
+		// MagicDraw specific prefixes...
+		String result = fullQualifiedName.replace(
+				UmlTypePrefix.MAGIC_DRAW_PROFILE_DATATYPES.getValue(), "");
+		result = result.replace(UmlTypePrefix.UML_PRIMITIVE_TYPES.getValue(),
 				"");
-		result = result.replace(UML_PRIMITIVE_TYPES, "");
-		result = result.replace(JAVA_PRIMITIVE_TYPES, "");
-		result = result.replace(VALIDATION_PROFILE_OCL_LIBRARY, "");
+		result = result.replace(UmlTypePrefix.JAVA_PRIMITIVE_TYPES.getValue(),
+				"");
+		result = result.replace(
+				UmlTypePrefix.VALIDATION_PROFILE_OCL_LIBRARY.getValue(), "");
 
 		// Name dataype and dataype-bindings
-		if (StringUtils.contains(result, DATA_DATATYPE)) {
-			result = StringUtils.substringAfter(result, DATA_DATATYPE);
+		if (StringUtils
+				.contains(result, UmlTypePrefix.DATA_DATATYPE.getValue())) {
+			result = StringUtils.substringAfter(result,
+					UmlTypePrefix.DATA_DATATYPE.getValue());
 		}
-		if (StringUtils.contains(result, DATA_DATATYPE_BINDINGS)) {
-			result = StringUtils.substringAfter(result, DATA_DATATYPE_BINDINGS);
+		if (StringUtils.contains(result,
+				UmlTypePrefix.DATA_DATATYPE_BINDINGS.getValue())) {
+			result = StringUtils.substringAfter(result,
+					UmlTypePrefix.DATA_DATATYPE_BINDINGS.getValue());
+		}
+
+		// We need to make lower case of the type
+		if (isNeededToMakeLowerCase) {
+			result = StringUtils.lowerCase(result, Locale.ENGLISH);
 		}
 
 		return result;
