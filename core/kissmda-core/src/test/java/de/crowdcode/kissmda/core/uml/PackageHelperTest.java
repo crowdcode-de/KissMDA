@@ -116,7 +116,7 @@ public class PackageHelperTest {
 	public void testRemoveUmlPrefixes1() {
 		String fullQualifiedName = "UMLPrimitiveTypes::Boolean";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
-		assertEquals("boolean", result);
+		assertEquals("Boolean", result);
 	}
 
 	@Test
@@ -184,9 +184,9 @@ public class PackageHelperTest {
 
 	@Test
 	public void testRemoveUmlPrefixes11() {
-		String fullQualifiedName = "UMLPrimitiveTypes::Boolean";
+		String fullQualifiedName = "JavaPrimitiveTypes::Boolean";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
-		assertEquals("boolean", result);
+		assertEquals("Boolean", result);
 	}
 
 	@Test
@@ -194,5 +194,12 @@ public class PackageHelperTest {
 		String fullQualifiedName = "UMLPrimitiveTypes::int";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
 		assertEquals("int", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes13() {
+		String fullQualifiedName = "MagicDraw Profile::datatypes::Boolean";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("boolean", result);
 	}
 }

@@ -134,9 +134,7 @@ public class PackageHelper {
 		// types are always in lower case
 		boolean isNeededToMakeLowerCase = false;
 		if (StringUtils.contains(fullQualifiedName,
-				UmlTypePrefix.UML_PRIMITIVE_TYPES.getValue())
-				|| (StringUtils.contains(fullQualifiedName,
-						UmlTypePrefix.JAVA_PRIMITIVE_TYPES.getValue()))) {
+				UmlTypePrefix.MAGIC_DRAW_PROFILE_DATATYPES.getValue())) {
 			isNeededToMakeLowerCase = true;
 		}
 
