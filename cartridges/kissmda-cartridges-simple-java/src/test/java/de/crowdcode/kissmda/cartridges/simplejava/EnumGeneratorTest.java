@@ -19,6 +19,7 @@
 package de.crowdcode.kissmda.cartridges.simplejava;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -85,8 +86,12 @@ public class EnumGeneratorTest {
 
 		enumGenerator.generatePackage(clazz, ast, cu);
 
-		assertEquals("package de.crowdcode.kissmda.testapp.components;\n",
-				cu.toString());
+		String onlyPackage = cu.toString();
+		String expectedResult = "package de.crowdcode.kissmda.testapp.components;\n";
+
+		boolean isInside = onlyPackage.contains(expectedResult);
+
+		assertTrue(isInside);
 	}
 
 	@Test
