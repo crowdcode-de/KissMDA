@@ -16,46 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.cartridges.simplejava;
+package de.crowdcode.kissmda.core.jdt.event;
 
-import javax.inject.Singleton;
+import java.util.Map;
 
-import com.google.common.eventbus.EventBus;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-
-import de.crowdcode.kissmda.cartridges.simplejava.extension.TypesExtensionHandler;
+import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 
 /**
- * Guice Module for SimpleJavaTransformer.
+ * An event which is fired as the primitive type codes are created.
  * 
  * @author Lofi Dewanto
+ * @since 1.4.0
  * @version 1.0.0
- * @since 1.0.0
  */
-public class SimpleJavaModule extends AbstractModule {
+public class PrimitiveTypeCodesCreatedEvent extends GenericEvent {
 
-	// Create one event bus for the whole time
-	private final EventBus eventBus = new EventBus("SimpleJava EventBus");
+	private final Map<String, Code> primitiveTypeCodes;
 
-	/**
-	 * Configure the Guice module.
-	 */
-	@Override
-	protected void configure() {
-		registerHandlers();
+	public Map<String, Code> getPrimitiveTypeCodes() {
+		return primitiveTypeCodes;
 	}
 
-	/**
-	 * Register all the handlers, listeners and extensions.
-	 */
-	protected void registerHandlers() {
-		eventBus.register(new TypesExtensionHandler());
-	}
-
-	@Provides
-	@Singleton
-	private EventBus provideEventBus() {
-		return eventBus;
+	public PrimitiveTypeCodesCreatedEvent(Map<String, Code> primitiveTypeCodes) {
+		this.primitiveTypeCodes = primitiveTypeCodes;
 	}
 }

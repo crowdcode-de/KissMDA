@@ -21,8 +21,15 @@ package de.crowdcode.kissmda.core.jdt;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
+
+import com.google.common.eventbus.EventBus;
+
+import de.crowdcode.kissmda.core.jdt.event.JavaTypeCodesCreatedEvent;
+import de.crowdcode.kissmda.core.jdt.event.PrimitiveTypeCodesCreatedEvent;
 
 /**
  * Data Type Helper class for Java language with JDT.
@@ -36,6 +43,9 @@ public class DataTypeUtils {
 	private static Map<String, Code> primitiveTypeCodes = null;
 
 	private static Map<String, String> javaTypes = null;
+
+	@Inject
+	private EventBus eventBus;
 
 	/**
 	 * Get the primitive type codes.
@@ -57,6 +67,9 @@ public class DataTypeUtils {
 			primitiveTypeCodes.put("float", PrimitiveType.FLOAT);
 			primitiveTypeCodes.put("void", PrimitiveType.VOID);
 		}
+
+		// Publish an event to the bus
+		eventBus.post(new PrimitiveTypeCodesCreatedEvent(primitiveTypeCodes));
 
 		return primitiveTypeCodes;
 	}
@@ -100,6 +113,9 @@ public class DataTypeUtils {
 			javaTypes.put("uri", "java.net.URI");
 			javaTypes.put("url", "java.net.URL");
 		}
+
+		// Publish an event to the bus
+		eventBus.post(new JavaTypeCodesCreatedEvent(javaTypes));
 
 		return javaTypes;
 	}
