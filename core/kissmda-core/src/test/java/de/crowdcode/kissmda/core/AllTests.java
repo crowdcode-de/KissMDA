@@ -29,6 +29,7 @@ import de.crowdcode.kissmda.core.jdt.JdtHelperTest;
 import de.crowdcode.kissmda.core.jdt.MethodHelperTest;
 import de.crowdcode.kissmda.core.uml.PackageHelperTest;
 import de.crowdcode.kissmda.core.uml.ReaderWriterTest;
+import de.crowdcode.kissmda.core.uml.UmlHelperTest;
 
 /**
  * Test suite.
@@ -40,6 +41,6 @@ import de.crowdcode.kissmda.core.uml.ReaderWriterTest;
 @RunWith(Suite.class)
 @SuiteClasses({ FileWriterTest.class, JavaFileWriterTest.class,
 		MethodHelperTest.class, JdtHelperTest.class, DataTypeUtilsTest.class,
-		PackageHelperTest.class, ReaderWriterTest.class })
+		PackageHelperTest.class, ReaderWriterTest.class, UmlHelperTest.class })
 public class AllTests {
 }
