@@ -18,10 +18,7 @@
  */
 package de.crowdcode.kissmda.cartridges.simplejava;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,16 +42,12 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Comment;
-import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
-import org.eclipse.uml2.uml.ParameterableElement;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.TemplateBinding;
 import org.eclipse.uml2.uml.TemplateParameter;
-import org.eclipse.uml2.uml.TemplateParameterSubstitution;
 import org.eclipse.uml2.uml.TemplateSignature;
 import org.eclipse.uml2.uml.Type;
 
@@ -178,7 +171,8 @@ public class InterfaceGenerator {
 
 			// Only for parameterized type
 			if (dataTypeUtils.isParameterizedType(umlTypeName)) {
-				Map<String, String> types = checkParameterizedTypeForTemplateParameterSubstitution(type);
+				Map<String, String> types = umlHelper
+						.checkParameterizedTypeForTemplateParameterSubstitution(type);
 				umlTypeName = types.get("umlTypeName");
 				umlQualifiedTypeName = types.get("umlQualifiedTypeName");
 			}
@@ -193,90 +187,6 @@ public class InterfaceGenerator {
 						umlQualifiedTypeName);
 			}
 		}
-	}
-
-	/**
-	 * Check for parameterized type to get the template parameter subst.
-	 * 
-	 * @param type
-	 *            UML2 type
-	 * @return Map of umlTypeName and umlQualifiedTypeName
-	 */
-	private Map<String, String> checkParameterizedTypeForTemplateParameterSubstitution(
-			Type type) {
-		// TODO Refactor to core?
-		Map<String, String> results = new HashMap<String, String>();
-
-		List<String> templateSubstitutions = getTemplateParameterSubstitution(type);
-		int index = 0;
-
-		String umlTypeName = type.getName();
-		String umlQualifiedTypeName = type.getQualifiedName();
-
-		String paramTypeNames = StringUtils.substringAfter(umlTypeName, "<");
-		paramTypeNames = StringUtils.removeEnd(paramTypeNames, ">");
-		EList<String> paramTypeNameList = umlHelper.convertStringToList(
-				paramTypeNames, ",");
-
-		for (String paramTypeName : paramTypeNameList) {
-			umlTypeName = StringUtils.replace(umlTypeName, paramTypeName,
-					templateSubstitutions.get(index));
-			umlQualifiedTypeName = StringUtils.replace(umlQualifiedTypeName,
-					paramTypeName, templateSubstitutions.get(index));
-			index = index + 1;
-		}
-
-		results.put("umlTypeName", umlTypeName);
-		results.put("umlQualifiedTypeName", umlQualifiedTypeName);
-
-		return results;
-	}
-
-	/**
-	 * Get the list of template parameter subst.
-	 * 
-	 * @param type
-	 *            UML2 type
-	 * @return List of all UML2 ParameterableElement
-	 */
-	private List<String> getTemplateParameterSubstitution(Type type) {
-		List<String> results = new ArrayList<String>();
-		// TODO Refactor to core?
-		// We need to take care of following cases:
-		// -> Data::datatype-bindings::Collection<Company>
-		// -> Data::de::crowdcode::kissmda::testapp::Collection<Person>
-		// We need to have a full qualified name for the Type in
-		// Collection<Type>. Something like
-		// -> Data::datatype-bindings::Collection<de.test.Company>
-		logger.log(Level.FINE,
-				"getTemplateParameterSubstitution: " + type.getQualifiedName()
-						+ " - " + type.getTemplateParameter());
-
-		EList<Element> elements = type.allOwnedElements();
-		for (Element element : elements) {
-			if (element instanceof TemplateBinding) {
-				TemplateBinding templateBinding = (TemplateBinding) element;
-				EList<TemplateParameterSubstitution> subs = templateBinding
-						.getParameterSubstitutions();
-				for (TemplateParameterSubstitution templateParameterSubstitution : subs) {
-					ParameterableElement paramElement = templateParameterSubstitution
-							.getActual();
-					if (paramElement instanceof Classifier) {
-						Classifier clazzifier = (Classifier) paramElement;
-						if (!dataTypeUtils
-								.isPrimitiveType(clazzifier.getName())
-								&& !dataTypeUtils.isJavaType(clazzifier
-										.getName())) {
-							results.add(clazzifier.getQualifiedName());
-						} else {
-							results.add(clazzifier.getName());
-						}
-					}
-				}
-			}
-		}
-
-		return results;
 	}
 
 	/**
@@ -685,7 +595,8 @@ public class InterfaceGenerator {
 
 		// Only for parameterized type
 		if (dataTypeUtils.isParameterizedType(umlTypeName)) {
-			Map<String, String> types = checkParameterizedTypeForTemplateParameterSubstitution(type);
+			Map<String, String> types = umlHelper
+					.checkParameterizedTypeForTemplateParameterSubstitution(type);
 			umlTypeName = types.get("umlTypeName");
 			umlQualifiedTypeName = types.get("umlQualifiedTypeName");
 		}

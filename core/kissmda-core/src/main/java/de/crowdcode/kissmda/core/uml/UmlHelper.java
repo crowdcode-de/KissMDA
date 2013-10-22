@@ -18,12 +18,16 @@
  */
 package de.crowdcode.kissmda.core.uml;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.BasicEList;
@@ -48,11 +52,16 @@ import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
+import org.eclipse.uml2.uml.ParameterableElement;
 import org.eclipse.uml2.uml.PrimitiveType;
 import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.TemplateBinding;
+import org.eclipse.uml2.uml.TemplateParameterSubstitution;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.ValueSpecification;
+
+import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
 
 /**
  * This class is taken from JavaBasic-Generator Fornax oAW project. Extended by
@@ -71,6 +80,9 @@ public class UmlHelper {
 
 	private static final Logger logger = Logger.getLogger(UmlHelper.class
 			.getName());
+
+	@Inject
+	private DataTypeUtils dataTypeUtils;
 
 	private Map<String, String> annotationSourceKeyMap = null;
 
@@ -600,5 +612,87 @@ public class UmlHelper {
 		}
 
 		return theList;
+	}
+
+	/**
+	 * Get the list of template parameter substitution.
+	 * 
+	 * @param type
+	 *            UML2 type
+	 * @return List of all UML2 ParameterableElement
+	 */
+	public List<String> getTemplateParameterSubstitution(Type type) {
+		List<String> results = new ArrayList<String>();
+		// We need to take care of following cases:
+		// -> Data::datatype-bindings::Collection<Company>
+		// -> Data::de::crowdcode::kissmda::testapp::Collection<Person>
+		// We need to have a full qualified name for the Type in
+		// Collection<Type>. Something like
+		// -> Data::datatype-bindings::Collection<de.test.Company>
+		logger.log(Level.FINE,
+				"getTemplateParameterSubstitution: " + type.getQualifiedName()
+						+ " - " + type.getTemplateParameter());
+
+		EList<Element> elements = type.allOwnedElements();
+		for (Element element : elements) {
+			if (element instanceof TemplateBinding) {
+				TemplateBinding templateBinding = (TemplateBinding) element;
+				EList<TemplateParameterSubstitution> subs = templateBinding
+						.getParameterSubstitutions();
+				for (TemplateParameterSubstitution templateParameterSubstitution : subs) {
+					ParameterableElement paramElement = templateParameterSubstitution
+							.getActual();
+					if (paramElement instanceof Classifier) {
+						Classifier clazzifier = (Classifier) paramElement;
+						if (!dataTypeUtils
+								.isPrimitiveType(clazzifier.getName())
+								&& !dataTypeUtils.isJavaType(clazzifier
+										.getName())) {
+							results.add(clazzifier.getQualifiedName());
+						} else {
+							results.add(clazzifier.getName());
+						}
+					}
+				}
+			}
+		}
+
+		return results;
+	}
+
+	/**
+	 * Check for parameterized type to get the template parameter substitution.
+	 * 
+	 * @param type
+	 *            UML2 type
+	 * @return Map of umlTypeName and umlQualifiedTypeName
+	 */
+	public Map<String, String> checkParameterizedTypeForTemplateParameterSubstitution(
+			Type type) {
+		Map<String, String> results = new HashMap<String, String>();
+
+		List<String> templateSubstitutions = getTemplateParameterSubstitution(type);
+		int index = 0;
+
+		String umlTypeName = type.getName();
+		String umlQualifiedTypeName = type.getQualifiedName();
+
+		String paramTypeNames = StringUtils.substringAfter(umlTypeName, "<");
+		paramTypeNames = StringUtils.removeEnd(paramTypeNames, ">");
+		EList<String> paramTypeNameList = convertStringToList(paramTypeNames,
+				",");
+
+		for (String paramTypeName : paramTypeNameList) {
+			umlTypeName = StringUtils.replace(umlTypeName, paramTypeName,
+					templateSubstitutions.get(index));
+			umlQualifiedTypeName = StringUtils.replace(umlQualifiedTypeName,
+					paramTypeName, templateSubstitutions.get(index));
+			index = index + 1;
+		}
+
+		results.put("umlTypeName", umlTypeName);
+		results.put("umlQualifiedTypeName", umlQualifiedTypeName);
+
+		return results;
 	}
 }
