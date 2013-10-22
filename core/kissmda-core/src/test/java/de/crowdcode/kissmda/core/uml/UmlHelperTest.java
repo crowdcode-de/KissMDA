@@ -80,22 +80,40 @@ public class UmlHelperTest {
 	}
 
 	@Test
+	public void testGetTemplateParameterSubstitutionNotPrimitiveTypeButJavaType() {
+		Classifier clazzifier = prepareMocks();
+
+		when(dataTypeUtils.isPrimitiveType(Mockito.anyString())).thenReturn(
+				false);
+		when(dataTypeUtils.isJavaType(Mockito.anyString())).thenReturn(true);
+
+		when(clazzifier.getName()).thenReturn("Data::datatype::String");
+		when(clazzifier.getQualifiedName()).thenReturn(
+				"Data::datatype::de::test::String");
+
+		List<String> results = umlHelper.getTemplateParameterSubstitution(type);
+
+		assertEquals("Data::datatype::String", results.get(0));
+	}
+
+	@Test
 	public void testGetTemplateParameterSubstitutionPrimitiveType() {
 		Classifier clazzifier = prepareMocks();
 
 		when(dataTypeUtils.isPrimitiveType(Mockito.anyString())).thenReturn(
 				true);
-		when(clazzifier.getName()).thenReturn("Data::datatype::Company");
+		when(clazzifier.getName()).thenReturn("Data::datatype::Integer");
 		when(clazzifier.getQualifiedName()).thenReturn(
-				"Data::datatype::de::test::Company");
+				"Data::datatype::de::test::Integer");
 
 		List<String> results = umlHelper.getTemplateParameterSubstitution(type);
 
-		assertEquals("Data::datatype::Company", results.get(0));
+		assertEquals("Data::datatype::Integer", results.get(0));
 	}
 
 	@SuppressWarnings("unchecked")
 	private Classifier prepareMocks() {
+		// Mocks
 		EList<Element> elements = mock(EList.class,
 				Answers.RETURNS_DEEP_STUBS.get());
 
@@ -112,6 +130,7 @@ public class UmlHelperTest {
 
 		Classifier clazzifier = mock(Classifier.class);
 
+		// Prepare...
 		when(type.allOwnedElements()).thenReturn(elements);
 		when(elements.iterator()).thenReturn(iteratorElement);
 		when(iteratorElement.hasNext()).thenReturn(true, false);
