@@ -45,7 +45,7 @@ public class TypesExtensionHandler {
 	@Subscribe
 	public void onPrimitiveTypeCodesCreated(PrimitiveTypeCodesCreatedEvent event) {
 		if (!isAlreadyRunOncePrimitive) {
-			logger.severe("Primitive types can be extended here... "
+			logger.info("Primitive types can be extended here... "
 					+ event.getPrimitiveTypeCodes());
 		}
 		isAlreadyRunOncePrimitive = true;
@@ -54,11 +54,11 @@ public class TypesExtensionHandler {
 	@Subscribe
 	public void onJavaTypeCodesCreated(JavaTypeCodesCreatedEvent event) {
 		if (!isAlreadyRunOnceJava) {
-			logger.severe("Java types can be extended here... before... "
+			logger.info("Java types can be extended here... before... "
 					+ event.getJavaTypeCodes());
 			Map<String, String> javaTypeCodes = event.getJavaTypeCodes();
 			javaTypeCodes.put("test", "de.test.Test");
-			logger.severe("Java types can be extended here... after... "
+			logger.info("Java types can be extended here... after... "
 					+ event.getJavaTypeCodes());
 		}
 		isAlreadyRunOnceJava = true;
