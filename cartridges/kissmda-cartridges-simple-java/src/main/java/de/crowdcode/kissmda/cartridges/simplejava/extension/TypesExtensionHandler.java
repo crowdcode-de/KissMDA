@@ -42,6 +42,12 @@ public class TypesExtensionHandler {
 
 	private Boolean isAlreadyRunOnceJava = false;
 
+	/**
+	 * Handler of PrimitiveTypeCodesCreatedEvent.
+	 * 
+	 * @param event
+	 *            PrimitiveTypeCodesCreatedEvent
+	 */
 	@Subscribe
 	public void onPrimitiveTypeCodesCreated(PrimitiveTypeCodesCreatedEvent event) {
 		if (!isAlreadyRunOncePrimitive) {
@@ -51,6 +57,12 @@ public class TypesExtensionHandler {
 		isAlreadyRunOncePrimitive = true;
 	}
 
+	/**
+	 * Handler of JavaTypeCodesCreatedEvent.
+	 * 
+	 * @param event
+	 *            JavaTypeCodesCreatedEvent
+	 */
 	@Subscribe
 	public void onJavaTypeCodesCreated(JavaTypeCodesCreatedEvent event) {
 		if (!isAlreadyRunOnceJava) {
