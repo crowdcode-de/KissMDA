@@ -34,6 +34,7 @@ public class CompanyImpl implements Company {
 	private CompanyAttribute<String, Integer> companyAttribute;
 	private Person person;
 	private Collection<Person> oldPersons;
+	private Collection<Company> internalCompanies;
 
 	@Override
 	public String getName() {
@@ -96,5 +97,11 @@ public class CompanyImpl implements Company {
 	@Override
 	public void setOldPersons(Collection<Person> oldPersons) {
 		this.oldPersons = oldPersons;
+	}
+
+	@Override
+	public Collection<Company> calculateCompanies(
+			Collection<Company> companies, Collection<Person> persons) {
+		return internalCompanies;
 	}
 }
