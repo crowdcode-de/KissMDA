@@ -605,6 +605,18 @@ public class InterfaceGenerator {
 				umlQualifiedTypeName, sourceDirectoryPackageName);
 	}
 
+	/**
+	 * Generate method parameters.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param td
+	 *            JDT type declaration
+	 * @param operation
+	 *            UML2 operation
+	 * @param md
+	 *            JDT method declaration
+	 */
 	public void generateMethodParams(AST ast, TypeDeclaration td,
 			Operation operation, MethodDeclaration md) {
 		EList<Parameter> parameters = operation.getOwnedParameters();
@@ -613,6 +625,15 @@ public class InterfaceGenerator {
 				Type type = parameter.getType();
 				String umlTypeName = type.getName();
 				String umlQualifiedTypeName = type.getQualifiedName();
+
+				// Only for parameterized type
+				if (dataTypeUtils.isParameterizedType(umlTypeName)) {
+					Map<String, String> types = umlHelper
+							.checkParameterizedTypeForTemplateParameterSubstitution(type);
+					umlTypeName = types.get("umlTypeName");
+					umlQualifiedTypeName = types.get("umlQualifiedTypeName");
+				}
+
 				String umlPropertyName = StringUtils.uncapitalize(parameter
 						.getName());
 				logger.log(Level.FINE, "Parameter: " + parameter.getName()
