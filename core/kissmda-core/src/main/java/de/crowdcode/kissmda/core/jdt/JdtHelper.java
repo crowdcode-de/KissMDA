@@ -71,10 +71,8 @@ public class JdtHelper {
 	 */
 	public Name createFullQualifiedTypeAsName(AST ast,
 			String fullQualifiedUmlTypeName, String sourceDirectoryPackageName) {
-		String typeName = packageHelper
-				.removeUmlPrefixes(fullQualifiedUmlTypeName);
-		typeName = packageHelper.getFullPackageName(typeName,
-				sourceDirectoryPackageName);
+		String typeName = packageHelper.getFullPackageName(
+				fullQualifiedUmlTypeName, sourceDirectoryPackageName);
 		Name name = ast.newName(typeName);
 
 		return name;
@@ -93,10 +91,8 @@ public class JdtHelper {
 	 */
 	public String createFullQualifiedTypeAsString(AST ast,
 			String fullQualifiedUmlTypeName, String sourceDirectoryPackageName) {
-		String typeName = packageHelper
-				.removeUmlPrefixes(fullQualifiedUmlTypeName);
-		typeName = packageHelper.getFullPackageName(typeName,
-				sourceDirectoryPackageName);
+		String typeName = packageHelper.getFullPackageName(
+				fullQualifiedUmlTypeName, sourceDirectoryPackageName);
 
 		return typeName;
 	}
@@ -121,6 +117,7 @@ public class JdtHelper {
 	public void createReturnType(AST ast, AbstractTypeDeclaration td,
 			MethodDeclaration md, String umlTypeName,
 			String umlQualifiedTypeName, String sourceDirectoryPackageName) {
+		// Choose type
 		Type chosenType = getChosenType(ast, umlTypeName, umlQualifiedTypeName,
 				sourceDirectoryPackageName);
 
@@ -143,13 +140,14 @@ public class JdtHelper {
 	 */
 	public Type getChosenType(AST ast, String umlTypeName,
 			String umlQualifiedTypeName, String sourceDirectoryPackageName) {
-		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
-		typeName = packageHelper.getFullPackageName(typeName,
-				sourceDirectoryPackageName);
-		// Check whether primitive or array type or simple type?
+		String typeName = packageHelper.getFullPackageName(
+				umlQualifiedTypeName, sourceDirectoryPackageName);
+
+		// Check whether primitive or array type or parameterized type
+		// or simple type?
 		Type chosenType = null;
 		if (dataTypeUtils.isPrimitiveType(typeName)) {
-			chosenType = getAstPrimitiveType(ast, umlTypeName);
+			chosenType = getAstPrimitiveType(ast, typeName);
 		} else if (dataTypeUtils.isArrayType(typeName)) {
 			chosenType = getAstArrayType(ast, typeName);
 		} else if (dataTypeUtils.isParameterizedType(typeName)) {
@@ -183,9 +181,8 @@ public class JdtHelper {
 			AbstractTypeDeclaration td, MethodDeclaration md,
 			String umlTypeName, String umlQualifiedTypeName,
 			String sourceDirectoryPackageName, String collectionTypeConstant) {
-		String typeName = packageHelper.removeUmlPrefixes(umlQualifiedTypeName);
-		typeName = packageHelper.getFullPackageName(typeName,
-				sourceDirectoryPackageName);
+		String typeName = packageHelper.getFullPackageName(
+				umlQualifiedTypeName, sourceDirectoryPackageName);
 		// Create Collection
 		SimpleType tp = getAstSimpleType(ast, typeName);
 		SimpleType collectionType = ast.newSimpleType(ast
@@ -206,8 +203,7 @@ public class JdtHelper {
 	 * @return JDT SimpleType
 	 */
 	public SimpleType getAstSimpleType(AST ast, String typeName) {
-		String javaType = dataTypeUtils.getJavaTypes().get(
-				typeName.toLowerCase());
+		String javaType = dataTypeUtils.getJavaTypes().get(typeName);
 		SimpleType tp = null;
 		if (javaType != null) {
 			tp = ast.newSimpleType(ast.newName(javaType));
@@ -275,7 +271,7 @@ public class JdtHelper {
 
 		String paramTypeNames = StringUtils.substringAfter(typeName, "<");
 		paramTypeNames = StringUtils.removeEnd(paramTypeNames, ">");
-		// Result: String, Integer, List<Boolean>
+		// Result: String, Integer, List<Boolean>, de.test.Company
 		String[] parametersAsString = StringUtils.split(paramTypeNames, ",");
 		for (int index = 0; index < parametersAsString.length; index++) {
 			String paramTypeName = parametersAsString[index];

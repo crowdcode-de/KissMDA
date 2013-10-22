@@ -82,36 +82,36 @@ public class DataTypeUtils {
 	public Map<String, String> getJavaTypes() {
 		if (javaTypes == null) {
 			javaTypes = new HashMap<String, String>();
-			javaTypes.put("object", "Object");
-			javaTypes.put("integer", "Integer");
-			javaTypes.put("short", "Short");
-			javaTypes.put("double", "Double");
-			javaTypes.put("long", "Long");
-			javaTypes.put("float", "Float");
-			javaTypes.put("boolean", "Boolean");
-			javaTypes.put("string", "String");
-			javaTypes.put("byte", "Byte");
-			javaTypes.put("character", "Character");
+			javaTypes.put("Object", "Object");
+			javaTypes.put("Integer", "Integer");
+			javaTypes.put("Short", "Short");
+			javaTypes.put("Double", "Double");
+			javaTypes.put("Long", "Long");
+			javaTypes.put("Float", "Float");
+			javaTypes.put("Boolean", "Boolean");
+			javaTypes.put("String", "String");
+			javaTypes.put("Byte", "Byte");
+			javaTypes.put("Character", "Character");
+			javaTypes.put("Date", "java.util.Date");
 			javaTypes.put("date", "java.util.Date");
-			javaTypes.put("calendar", "java.util.Calendar");
-			javaTypes.put("collection", "java.util.Collection");
-			javaTypes.put("list", "java.util.List");
-			javaTypes.put("set", "java.util.Set");
-			javaTypes.put("queue", "java.util.Queue");
-			javaTypes.put("sortedset", "java.util.SortedSet");
-			javaTypes.put("map", "java.util.Map");
-			javaTypes.put("sortedmap", "java.util.SortedMap");
-			javaTypes.put("sortedset", "java.util.SortedSet");
+			javaTypes.put("Calendar", "java.util.Calendar");
+			javaTypes.put("Collection", "java.util.Collection");
+			javaTypes.put("List", "java.util.List");
+			javaTypes.put("Set", "java.util.Set");
+			javaTypes.put("Queue", "java.util.Queue");
+			javaTypes.put("SortedSet", "java.util.SortedSet");
+			javaTypes.put("Map", "java.util.Map");
+			javaTypes.put("SortedMap", "java.util.SortedMap");
 			javaTypes
-					.put("blockingqueue", "java.util.concurrent.BlockingQueue");
-			javaTypes.put("blob", "java.sql.Blob");
-			javaTypes.put("clob", "java.sql.Clob");
-			javaTypes.put("timestamp", "java.sql.Timestamp");
-			javaTypes.put("file", "java.io.File");
-			javaTypes.put("guid", "java.util.UUID");
-			javaTypes.put("treenode", "javax.swing.tree.TreeNode");
-			javaTypes.put("uri", "java.net.URI");
-			javaTypes.put("url", "java.net.URL");
+					.put("BlockingQueue", "java.util.concurrent.BlockingQueue");
+			javaTypes.put("Blob", "java.sql.Blob");
+			javaTypes.put("Clob", "java.sql.Clob");
+			javaTypes.put("Timestamp", "java.sql.Timestamp");
+			javaTypes.put("File", "java.io.File");
+			javaTypes.put("Guid", "java.util.UUID");
+			javaTypes.put("TreeNode", "javax.swing.tree.TreeNode");
+			javaTypes.put("URI", "java.net.URI");
+			javaTypes.put("URL", "java.net.URL");
 		}
 
 		// Publish an event to the bus
@@ -131,6 +131,23 @@ public class DataTypeUtils {
 		Map<String, Code> primitiveTypeCodes = getPrimitiveTypeCodes();
 		Code primitiveTypeCode = primitiveTypeCodes.get(typeName);
 		if (primitiveTypeCode != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Check whether the type name is a Java type.
+	 * 
+	 * @param typeName
+	 *            to be checked
+	 * @return true or false
+	 */
+	public boolean isJavaType(String typeName) {
+		Map<String, String> javaTypes = getJavaTypes();
+		String javaTypeCodes = javaTypes.get(typeName);
+		if (javaTypeCodes != null) {
 			return true;
 		} else {
 			return false;

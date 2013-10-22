@@ -33,6 +33,7 @@ public class CompanyImpl implements Company {
 	private Date created;
 	private CompanyAttribute<String, Integer> companyAttribute;
 	private Person person;
+	private Collection<Person> oldPersons;
 
 	@Override
 	public String getName() {
@@ -85,5 +86,15 @@ public class CompanyImpl implements Company {
 	public Person getVirtualPerson() {
 		person = new PersonImpl();
 		return person;
+	}
+
+	@Override
+	public Collection<Person> getOldPersons() {
+		return oldPersons;
+	}
+
+	@Override
+	public void setOldPersons(Collection<Person> oldPersons) {
+		this.oldPersons = oldPersons;
 	}
 }

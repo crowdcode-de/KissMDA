@@ -98,7 +98,8 @@ public class PackageHelper {
 	}
 
 	/**
-	 * Get full package name.
+	 * Get full package name, remove sourceDirectoryPackageName and change :: to
+	 * dot.
 	 * 
 	 * @param umlPackageNameWithClass
 	 *            UML2 package name with classifier as String
@@ -110,10 +111,11 @@ public class PackageHelper {
 			String sourceDirectoryPackageName) {
 		// Get package until the beginning of SourceDirectory
 		logger.log(Level.FINE, "Qualified name: " + umlPackageNameWithClass);
+		// Remove UML prefixes
+		String packageName = removeUmlPrefixes(umlPackageNameWithClass);
 		// Remove the sourceDirectoryPackageName
 		String toBeDeleted = sourceDirectoryPackageName + "::";
-		String fullPackageName = umlPackageNameWithClass.replaceFirst(
-				toBeDeleted, "");
+		String fullPackageName = packageName.replace(toBeDeleted, "");
 		// Change :: to .
 		fullPackageName = fullPackageName.replaceAll("::", ".");
 		logger.log(Level.FINE, "Real package name: " + fullPackageName);
@@ -141,13 +143,12 @@ public class PackageHelper {
 		// Name dataype and dataype-bindings
 		if (StringUtils
 				.contains(result, UmlTypePrefix.DATA_DATATYPE.getValue())) {
-			result = StringUtils.substringAfter(result,
-					UmlTypePrefix.DATA_DATATYPE.getValue());
+			result = result.replace(UmlTypePrefix.DATA_DATATYPE.getValue(), "");
 		}
 		if (StringUtils.contains(result,
 				UmlTypePrefix.DATA_DATATYPE_BINDINGS.getValue())) {
-			result = StringUtils.substringAfter(result,
-					UmlTypePrefix.DATA_DATATYPE_BINDINGS.getValue());
+			result = result.replace(
+					UmlTypePrefix.DATA_DATATYPE_BINDINGS.getValue(), "");
 		}
 
 		return result;

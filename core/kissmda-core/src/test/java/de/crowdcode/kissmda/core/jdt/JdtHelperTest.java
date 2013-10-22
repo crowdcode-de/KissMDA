@@ -81,7 +81,7 @@ public class JdtHelperTest {
 		Map<String, String> javaTypes = createJavaTypes();
 		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
 
-		String typeName = "integer";
+		String typeName = "Integer";
 		SimpleType tp = jdtHelper.getAstSimpleType(ast, typeName);
 
 		assertEquals("Integer", tp.getName().toString());
@@ -164,6 +164,17 @@ public class JdtHelperTest {
 		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
 
 		assertEquals("java.util.Collection<String>", tp.toString());
+	}
+
+	@Test
+	public void testGetAstParameterizedTypeWithFullyQualifiedName() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		String typeName = "Collection<de.test.Company>";
+		ParameterizedType tp = jdtHelper.getAstParameterizedType(ast, typeName);
+
+		assertEquals("java.util.Collection<de.test.Company>", tp.toString());
 	}
 
 	@Test
@@ -329,11 +340,11 @@ public class JdtHelperTest {
 
 	private Map<String, String> createJavaTypes() {
 		Map<String, String> javaTypes = new HashMap<String, String>();
-		javaTypes.put("integer", "Integer");
-		javaTypes.put("short", "Short");
-		javaTypes.put("collection", "java.util.Collection");
-		javaTypes.put("list", "java.util.List");
-		javaTypes.put("map", "java.util.Map");
+		javaTypes.put("Integer", "Integer");
+		javaTypes.put("Short", "Short");
+		javaTypes.put("Collection", "java.util.Collection");
+		javaTypes.put("List", "java.util.List");
+		javaTypes.put("Map", "java.util.Map");
 		return javaTypes;
 	}
 

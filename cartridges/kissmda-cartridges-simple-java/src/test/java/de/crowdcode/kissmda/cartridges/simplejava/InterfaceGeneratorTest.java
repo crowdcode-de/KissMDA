@@ -216,6 +216,7 @@ public class InterfaceGeneratorTest {
 				"de::test::CalculatorException");
 		when(operationType.getQualifiedName()).thenReturn(
 				"de::test::Calculator");
+		when(operationType.getName()).thenReturn("Calculator");
 
 		interfaceGenerator.generateMethods(clazz, ast, td);
 

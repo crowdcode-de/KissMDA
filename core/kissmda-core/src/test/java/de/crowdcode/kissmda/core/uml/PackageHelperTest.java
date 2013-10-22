@@ -80,6 +80,28 @@ public class PackageHelperTest {
 	}
 
 	@Test
+	public void testGetFullPackageNameWithStringWithDataAndUmlPrefixes() {
+		String sourceDirectoryPackageName = "Data";
+		String umlPackageNameWithClass = "Data::datatype::String";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("String", result);
+	}
+
+	@Test
+	public void testGetFullPackageNameWithCompanyWithDataAndUmlPrefixes() {
+		String sourceDirectoryPackageName = "Data";
+		String umlPackageNameWithClass = "Data::datatype::de::test::Company";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("de.test.Company", result);
+	}
+
+	@Test
 	public void testGetFullPackageNameWithStringAlreadyOk() {
 		String sourceDirectoryPackageName = "Data";
 		String umlPackageNameWithClass = "de.crowdcode.test.Company";
@@ -110,6 +132,39 @@ public class PackageHelperTest {
 				umlPackageNameWithClass, sourceDirectoryPackageName);
 
 		assertEquals("T", result);
+	}
+
+	@Test
+	public void testGetFullPackageNameWithGenericsDataBindings1() {
+		String sourceDirectoryPackageName = "Data";
+		String umlPackageNameWithClass = "Data::Collection<de.test.Company>";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("Collection<de.test.Company>", result);
+	}
+
+	@Test
+	public void testGetFullPackageNameWithGenericsDataBindings2() {
+		String sourceDirectoryPackageName = "Data";
+		String umlPackageNameWithClass = "Data::datatype::Collection<de::test::Company>";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("Collection<de.test.Company>", result);
+	}
+
+	@Test
+	public void testGetFullPackageNameWithGenericsDataBindings3() {
+		String sourceDirectoryPackageName = "Data";
+		String umlPackageNameWithClass = "Data::datatype::Collection<Data::de::test::Company>";
+
+		String result = packageHelper.getFullPackageName(
+				umlPackageNameWithClass, sourceDirectoryPackageName);
+
+		assertEquals("Collection<de.test.Company>", result);
 	}
 
 	@Test
@@ -158,14 +213,14 @@ public class PackageHelperTest {
 	public void testRemoveUmlPrefixes6() {
 		String fullQualifiedName = "Data::datatype::byte[]";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
-		assertEquals("byte[]", result);
+		assertEquals("Data::byte[]", result);
 	}
 
 	@Test
 	public void testRemoveUmlPrefixes7() {
 		String fullQualifiedName = "Data::datatype-bindings::Collection<String>";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
-		assertEquals("Collection<String>", result);
+		assertEquals("Data::Collection<String>", result);
 	}
 
 	@Test
@@ -179,7 +234,7 @@ public class PackageHelperTest {
 	public void testRemoveUmlPrefixes10() {
 		String fullQualifiedName = "MyModel::datatype-bindings::Collection<String>";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
-		assertEquals("Collection<String>", result);
+		assertEquals("MyModel::Collection<String>", result);
 	}
 
 	@Test
@@ -201,5 +256,12 @@ public class PackageHelperTest {
 		String fullQualifiedName = "MagicDraw Profile::datatypes::Boolean";
 		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
 		assertEquals("Boolean", result);
+	}
+
+	@Test
+	public void testRemoveUmlPrefixes14() {
+		String fullQualifiedName = "CompanyAttribute<Data::datatype::String, UMLPrimitiveTypes::UMLPrimitiveTypes::Integer>";
+		String result = packageHelper.removeUmlPrefixes(fullQualifiedName);
+		assertEquals("CompanyAttribute<Data::String, Integer>", result);
 	}
 }

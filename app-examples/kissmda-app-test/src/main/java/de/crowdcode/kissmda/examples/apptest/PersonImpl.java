@@ -43,6 +43,7 @@ public class PersonImpl implements Person {
 	private final Set<Address> uniqueAddresses = new HashSet<Address>();
 	private Company company;
 	private final Collection<Company> hiddenCompanies = new ArrayList<Company>();
+	private Collection<Company> oldCompanies;
 
 	@Override
 	public Integer calculateAge() {
@@ -117,5 +118,15 @@ public class PersonImpl implements Person {
 	@Override
 	public Collection<Company> getHiddenCompanies() {
 		return hiddenCompanies;
+	}
+
+	@Override
+	public Collection<Company> getOldCompanies() {
+		return oldCompanies;
+	}
+
+	@Override
+	public Collection<Company> calculateOldCompanies() {
+		return oldCompanies;
 	}
 }

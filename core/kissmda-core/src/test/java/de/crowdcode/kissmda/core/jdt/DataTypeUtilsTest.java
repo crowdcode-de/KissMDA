@@ -23,6 +23,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.eventbus.EventBus;
 
 /**
  * Unit test for Data Type Utils.
@@ -30,13 +36,17 @@ import org.junit.Test;
  * @author Lofi Dewanto
  * @version 1.0.0
  */
+@RunWith(MockitoJUnitRunner.class)
 public class DataTypeUtilsTest {
 
+	@InjectMocks
 	private DataTypeUtils dataTypeUtils;
+
+	@Mock
+	private EventBus eventBus;
 
 	@Before
 	public void setUp() throws Exception {
-		dataTypeUtils = new DataTypeUtils();
 	}
 
 	@Test
@@ -49,6 +59,18 @@ public class DataTypeUtilsTest {
 	public void testIsPrimitiveType2() {
 		boolean isPrimitiveType = dataTypeUtils.isPrimitiveType("int");
 		assertTrue(isPrimitiveType);
+	}
+
+	@Test
+	public void testIsJavaType1() {
+		boolean isJavaType = dataTypeUtils.isJavaType("Integer");
+		assertTrue(isJavaType);
+	}
+
+	@Test
+	public void testIsJavaType2() {
+		boolean isJavaType = dataTypeUtils.isJavaType("integer");
+		assertFalse(isJavaType);
 	}
 
 	@Test
