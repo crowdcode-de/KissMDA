@@ -18,32 +18,19 @@
  */
 package de.crowdcode.kissmda.cartridges.extensions;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Stereotype;
+import com.google.common.eventbus.EventBus;
 
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
-import de.crowdcode.kissmda.core.file.FileWriter;
-import de.crowdcode.kissmda.core.uml.PackageHelper;
 
 /**
- * ExtensionExamplesTransformer Transformer. This generates xxx for all the xxx from
- * the given UML model.
- * 
- * <p>
- * Most important helper classes from kissmda-core which are used in this
- * Transformer: PackageHelper, MethodHelper, JavaHelper, FileWriter and
- * DataTypeUtils
- * </p>
+ * ExtensionExamplesTransformer Transformer.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
@@ -54,26 +41,16 @@ public class ExtensionExamplesTransformer implements Transformer {
 	private static final Logger logger = Logger
 			.getLogger(ExtensionExamplesTransformer.class.getName());
 
-	private static final String STEREOTYPE_ENTITY = "Entity";
-
-	private static final String STEREOTYPE_SOURCEDIRECTORY = "SourceDirectory";
-
-	private String sourceDirectoryPackageName;
-
 	@Inject
-	private PackageHelper packageHelper;
+	private EventBus eventBus;
 
-	@Inject
-	private FileWriter fileWriter;
-
-	private Context context;
-
-	public void setFileWriter(FileWriter fileWriter) {
-		this.fileWriter = fileWriter;
-	}
-
-	public void setPackageHelper(PackageHelper packageHelper) {
-		this.packageHelper = packageHelper;
+	/**
+	 * Register all the handlers, listeners and extensions.
+	 */
+	private void registerHandlers() {
+		logger.log(Level.SEVERE, "Register event handlers to event bus: "
+				+ eventBus.toString());
+		eventBus.register(new TypesExtensionHandler());
 	}
 
 	/**
@@ -87,82 +64,12 @@ public class ExtensionExamplesTransformer implements Transformer {
 	 */
 	@Override
 	public void transform(Context context) throws TransformerException {
-		this.context = context;
-		try {
-			// Get the root package
-			org.eclipse.uml2.uml.Package outPackage = getRootPackage(context);
-			sourceDirectoryPackageName = "";
-
-			// Check the stereotype of the root package
-			checkStereotypeRootPackage(outPackage);
-
-			// Get all elements with defined stereotypes
-			EList<Element> list = outPackage.allOwnedElements();
-			for (Element element : list) {
-				EList<Stereotype> stereotypes = element.getAppliedStereotypes();
-				for (Stereotype stereotype : stereotypes) {
-					if (stereotype.getName().equals(STEREOTYPE_SOURCEDIRECTORY)) {
-						// From this SourceDirectory we can work...
-						org.eclipse.uml2.uml.Package packagez = (org.eclipse.uml2.uml.Package) element;
-						sourceDirectoryPackageName = packagez.getName();
-						logger.info("SourceDirectory package name: "
-								+ sourceDirectoryPackageName);
-					}
-					if (stereotype.getName().equals(STEREOTYPE_ENTITY)) {
-						// Stereotype Interface
-						Class clazz = (Class) element;
-						logger.info("Class: " + clazz.getName() + " - "
-								+ "Stereotype: " + stereotype.getName());
-						// Generate xxx for this class
-						// ...
-						
-						generateClassFile(clazz, "TODO");
-					}
-				}
-			}
-		} catch (URISyntaxException e) {
-			throw new TransformerException(e);
-		} catch (IOException e) {
-			throw new TransformerException(e);
-		}
-	}
-
-	private void checkStereotypeRootPackage(
-			org.eclipse.uml2.uml.Package outPackage) {
-		EList<Stereotype> rootStereotypes = outPackage.getAppliedStereotypes();
-		for (Stereotype stereotype : rootStereotypes) {
-			if (stereotype.getName().equals(STEREOTYPE_SOURCEDIRECTORY)) {
-				// From this SourceDirectory we can work...
-				org.eclipse.uml2.uml.Package packagez = outPackage;
-				sourceDirectoryPackageName = packagez.getName();
-				logger.info("SourceDirectory package name: "
-						+ sourceDirectoryPackageName);
-			}
-		}
-	}
-
-	private org.eclipse.uml2.uml.Package getRootPackage(Context context)
-			throws URISyntaxException {
-		org.eclipse.uml2.uml.Package outPackage = packageHelper
-				.getRootPackage(context);
-		return outPackage;
-	}
-
-	/**
-	 * Create the output file on the directory.
-	 * 
-	 * @param clazz
-	 *            UML2 class of Eclipse
-	 * @param compilationUnit
-	 *            compilation unit from JDT
-	 * @throws IOException
-	 *             input or output error on file system
-	 */
-	private void generateClassFile(Class clazz, String compilationUnit)
-			throws IOException {
-		String fullPackageName = packageHelper.getFullPackageName(clazz,
-				sourceDirectoryPackageName);
-		fileWriter.createFile(context, fullPackageName, clazz.getName(),
-				compilationUnit);
+		// Do nothing
+		logger.log(Level.SEVERE, "Start Extension Examples Transformer");
+		// Register event handlers
+		logger.log(Level.SEVERE,
+				"Do nothing! Just running the event handlers extensions");
+		registerHandlers();
+		logger.log(Level.SEVERE, "Stop Extension Examples Transformer");
 	}
 }

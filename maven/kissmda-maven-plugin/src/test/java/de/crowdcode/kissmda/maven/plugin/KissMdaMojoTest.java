@@ -62,6 +62,20 @@ public class KissMdaMojoTest {
 	}
 
 	@Test
+	public void testExecuteManyGuiceModules() throws MojoExecutionException {
+		List<String> packageNames = new ArrayList<String>();
+		packageNames.add("de.crowdcode.kissmda.maven.plugin.manypackages");
+		MavenProject mavenProject = new MavenProject();
+		mavenProject.setFile(new File("target/tmp/test"));
+
+		kissMdaMojo.setTransformerScanPackageNames(packageNames);
+		kissMdaMojo.setModelFile("src/main/resources/model/emf/test-uml.uml");
+		kissMdaMojo.setProject(mavenProject);
+		kissMdaMojo.execute();
+		assertTrue(true);
+	}
+
+	@Test
 	public void testExecuteNoGuiceModule() {
 		List<String> packageNames = new ArrayList<String>();
 		packageNames.add("de.crowdcode.kissmda.maven.plugin.noguice");
@@ -74,7 +88,8 @@ public class KissMdaMojoTest {
 		try {
 			kissMdaMojo.execute();
 		} catch (MojoExecutionException e) {
-			assertEquals(e.getMessage(), KissMdaMojo.ERROR_GUICE_NOT_FOUND);
+			assertEquals(e.getMessage(),
+					KissMdaMojo.ERROR_GUICE_SAME_PACKAGE_NOT_FOUND);
 		}
 	}
 

@@ -37,6 +37,7 @@
         <junit.version>4.10</junit.version>
         <kissmda.maven.plugin.version>2.0.0-SNAPSHOT</kissmda.maven.plugin.version>
         <kissmda.cartridges.simple.java.version>2.0.0-SNAPSHOT</kissmda.cartridges.simple.java.version>
+        <kissmda.extensions.examples.version>1.0.0-SNAPSHOT</kissmda.extensions.examples.version>
     </properties>
 
 	<dependencies>
@@ -74,10 +75,16 @@
 				<artifactId>kissmda-maven-plugin</artifactId>
 				<version>${kissmda.maven.plugin.version}</version>
 				<dependencies>
+				    <!-- Cartridges and Extensions should be used in the generation phase -->
 					<dependency>
 						<groupId>de.crowdcode.kissmda.cartridges</groupId>
 						<artifactId>kissmda-cartridges-simple-java</artifactId>
 						<version>${kissmda.cartridges.simple.java.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>de.crowdcode.kissmda.cartridges</groupId>
+						<artifactId>kissmda-extensions-examples</artifactId>
+						<version>${kissmda.extensions.examples.version}</version>
 					</dependency>
 				</dependencies>
 				<executions>
@@ -90,6 +97,7 @@
 				</executions>
 				<configuration>
 					<transformerScanPackageNames>
+					    <!-- You get all the transformers under this package name -->
 						<transformerScanPackageName>de.crowdcode.kissmda.cartridges</transformerScanPackageName>
 					</transformerScanPackageNames>
 					<modelFile>src/main/resources/model/emf/test-uml.uml</modelFile>

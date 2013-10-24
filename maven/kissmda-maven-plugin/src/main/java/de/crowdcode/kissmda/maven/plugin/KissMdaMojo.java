@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -35,6 +36,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import de.crowdcode.kissmda.core.CoreModule;
 import de.crowdcode.kissmda.core.StandardContext;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
@@ -53,7 +55,9 @@ public class KissMdaMojo extends AbstractMojo {
 
 	private final Log logger = getLog();
 
-	public static final String ERROR_GUICE_NOT_FOUND = "Error Guice module for the transformer not found!";
+	private static final String TRANSFORMER_SUFFIX = "Transformer";
+
+	private static final String MODULE_SUFFIX = "Module";
 
 	public static final String ERROR_GUICE_SAME_PACKAGE_NOT_FOUND = "Error Guice module for the transformer in the same package not found!";
 
@@ -148,6 +152,10 @@ public class KissMdaMojo extends AbstractMojo {
 		setLoggingLevel();
 
 		try {
+			// Create parent Guice module injector from kissmda core
+			Injector parentInjector = Guice.createInjector(new CoreModule());
+			// Go through other module injectors and create child module
+			// injectors
 			String fullNameModelFile = project.getBasedir() + "/" + modelFile;
 			String fullNameTargetDirectory = project.getBasedir() + "/"
 					+ generatedSourcesTargetDirectory;
@@ -167,10 +175,10 @@ public class KissMdaMojo extends AbstractMojo {
 					// In the same package
 					Class<? extends AbstractModule> guiceModuleClazz = getGuiceModule(
 							guiceModules, transformerClazz);
-					// Create the transformer class with Guice module and
-					// execute
-					Injector injector = Guice.createInjector(guiceModuleClazz
-							.newInstance());
+					// Create the transformer class with Guice module as child
+					// injector and execute
+					Injector injector = parentInjector
+							.createChildInjector(guiceModuleClazz.newInstance());
 					Transformer transformer = injector
 							.getInstance(transformerClazz);
 					transformer.transform(context);
@@ -216,25 +224,29 @@ public class KissMdaMojo extends AbstractMojo {
 			throws MojoExecutionException {
 		Class<? extends AbstractModule> currentGuiceModuleClazz = null;
 		for (Class<? extends AbstractModule> guiceModuleClazz : guiceModules) {
-			logger.info("Start the transformation with following Guice Module: "
-					+ guiceModuleClazz.getName());
 			// Check the package
 			String transformerPackageName = transformerClazz.getPackage()
 					.getName();
 			String guiceModulePackageName = guiceModuleClazz.getPackage()
 					.getName();
 			if (guiceModulePackageName.equalsIgnoreCase(transformerPackageName)) {
-				currentGuiceModuleClazz = guiceModuleClazz;
-			} else {
-				// No module found in the same package, error
-				throw new MojoExecutionException(
-						ERROR_GUICE_SAME_PACKAGE_NOT_FOUND);
+				String guiceModuleNameWithoutModule = StringUtils.replace(
+						guiceModuleClazz.getName(), MODULE_SUFFIX, "");
+				String transformerNameWithoutTransformer = StringUtils.replace(
+						transformerClazz.getName(), TRANSFORMER_SUFFIX, "");
+				if (guiceModuleNameWithoutModule
+						.equals(transformerNameWithoutTransformer)) {
+					currentGuiceModuleClazz = guiceModuleClazz;
+					logger.info("Start the transformation with following Guice Module: "
+							+ currentGuiceModuleClazz.getName());
+					break;
+				}
 			}
 		}
 
 		if (currentGuiceModuleClazz == null) {
 			// No module found at all, error
-			throw new MojoExecutionException(ERROR_GUICE_NOT_FOUND);
+			throw new MojoExecutionException(ERROR_GUICE_SAME_PACKAGE_NOT_FOUND);
 		}
 
 		return currentGuiceModuleClazz;

@@ -16,23 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.cartridges.simplejava;
+package de.crowdcode.kissmda.core;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
 
 /**
- * Guice Module for SimpleJavaTransformer.
+ * Guice Module for the core.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
  * @since 1.0.0
  */
-public class SimpleJavaModule extends AbstractModule {
+public class CoreModule extends AbstractModule {
 
 	/**
 	 * Configure the Guice module.
 	 */
 	@Override
 	protected void configure() {
+		// Bind EventBus as singleton
+		bind(EventBus.class).in(Scopes.SINGLETON);
 	}
 }

@@ -16,23 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.cartridges.simplejava;
+package de.crowdcode.kissmda.maven.plugin.manypackages;
 
-import com.google.inject.AbstractModule;
+import java.util.logging.Logger;
+
+import de.crowdcode.kissmda.core.Context;
+import de.crowdcode.kissmda.core.Transformer;
+import de.crowdcode.kissmda.core.TransformerException;
 
 /**
- * Guice Module for SimpleJavaTransformer.
+ * Mock Transformer for Unit Testing.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
  * @since 1.0.0
  */
-public class SimpleJavaModule extends AbstractModule {
+public class Mock2Transformer implements Transformer {
 
-	/**
-	 * Configure the Guice module.
-	 */
+	private static final Logger logger = Logger
+			.getLogger(Mock2Transformer.class.getName());
+
 	@Override
-	protected void configure() {
+	public void transform(Context context) throws TransformerException {
+		logger.info("Hello I'm MockTransformer 2 implements Transformer, the content of my sourceModel: "
+				+ context.getSourceModel());
 	}
 }

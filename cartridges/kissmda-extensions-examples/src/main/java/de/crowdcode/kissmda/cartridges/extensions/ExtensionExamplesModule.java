@@ -21,7 +21,7 @@ package de.crowdcode.kissmda.cartridges.extensions;
 import com.google.inject.AbstractModule;
 
 /**
- * Guice Module for SimpleJavaTransformer.
+ * Guice Module for ExtensionExamples.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
@@ -31,6 +31,6 @@ public class ExtensionExamplesModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		// Nothing to do...
+		// Do nothing
 	}
 }

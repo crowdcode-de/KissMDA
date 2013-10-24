@@ -16,23 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.cartridges.simplejava;
+package de.crowdcode.kissmda.maven.plugin.manypackages;
 
 import com.google.inject.AbstractModule;
 
 /**
- * Guice Module for SimpleJavaTransformer.
+ * Mock Guice Module for Unit Testing.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
  * @since 1.0.0
  */
-public class SimpleJavaModule extends AbstractModule {
+public class Mock2Module extends AbstractModule {
 
-	/**
-	 * Configure the Guice module.
-	 */
 	@Override
 	protected void configure() {
+		// Do nothing
 	}
 }

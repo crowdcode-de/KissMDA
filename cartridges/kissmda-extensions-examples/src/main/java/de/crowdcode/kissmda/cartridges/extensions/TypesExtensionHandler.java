@@ -16,9 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.cartridges.simplejava.extension;
+package de.crowdcode.kissmda.cartridges.extensions;
 
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -51,7 +52,7 @@ public class TypesExtensionHandler {
 	@Subscribe
 	public void onPrimitiveTypeCodesCreated(PrimitiveTypeCodesCreatedEvent event) {
 		if (!isAlreadyRunOncePrimitive) {
-			logger.info("Primitive types can be extended here... "
+			logger.log(Level.SEVERE, "Primitive types can be extended here... "
 					+ event.getPrimitiveTypeCodes());
 		}
 		isAlreadyRunOncePrimitive = true;
@@ -66,12 +67,16 @@ public class TypesExtensionHandler {
 	@Subscribe
 	public void onJavaTypeCodesCreated(JavaTypeCodesCreatedEvent event) {
 		if (!isAlreadyRunOnceJava) {
-			logger.info("Java types can be extended here... before... "
-					+ event.getJavaTypeCodes());
+			logger.log(
+					Level.SEVERE,
+					"Java types can be extended here... before... "
+							+ event.getJavaTypeCodes());
 			Map<String, String> javaTypeCodes = event.getJavaTypeCodes();
 			javaTypeCodes.put("test", "de.test.Test");
-			logger.info("Java types can be extended here... after... "
-					+ event.getJavaTypeCodes());
+			logger.log(
+					Level.SEVERE,
+					"Java types can be extended here... after... "
+							+ event.getJavaTypeCodes());
 		}
 		isAlreadyRunOnceJava = true;
 	}

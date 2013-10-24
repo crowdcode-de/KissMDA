@@ -43,6 +43,7 @@
 		<module>maven/kissmda-maven-app-archetype</module>
 		<module>maven/kissmda-maven-cartridge-archetype</module>
 		<module>cartridges/kissmda-cartridges-simple-java</module>
+		<module>cartridges/kissmda-extensions-examples</module>
 		<module>app-examples/kissmda-app-test</module>
 	</modules>
 </project>
