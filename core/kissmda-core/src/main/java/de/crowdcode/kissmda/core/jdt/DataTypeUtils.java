@@ -40,9 +40,9 @@ import de.crowdcode.kissmda.core.jdt.event.PrimitiveTypeCodesCreatedEvent;
  */
 public class DataTypeUtils {
 
-	private static Map<String, Code> primitiveTypeCodes = null;
+	private Map<String, Code> primitiveTypeCodes = null;
 
-	private static Map<String, String> javaTypes = null;
+	private Map<String, String> javaTypes = null;
 
 	@Inject
 	private EventBus eventBus;
@@ -54,24 +54,28 @@ public class DataTypeUtils {
 	 */
 	public Map<String, Code> getPrimitiveTypeCodes() {
 		if (primitiveTypeCodes == null) {
-			primitiveTypeCodes = new HashMap<String, Code>();
-			primitiveTypeCodes.put("integer", PrimitiveType.INT);
-			primitiveTypeCodes.put("int", PrimitiveType.INT);
-			primitiveTypeCodes.put("short", PrimitiveType.SHORT);
-			primitiveTypeCodes.put("double", PrimitiveType.DOUBLE);
-			primitiveTypeCodes.put("long", PrimitiveType.LONG);
-			primitiveTypeCodes.put("boolean", PrimitiveType.BOOLEAN);
-			primitiveTypeCodes.put("byte", PrimitiveType.BYTE);
-			primitiveTypeCodes.put("character", PrimitiveType.CHAR);
-			primitiveTypeCodes.put("char", PrimitiveType.CHAR);
-			primitiveTypeCodes.put("float", PrimitiveType.FLOAT);
-			primitiveTypeCodes.put("void", PrimitiveType.VOID);
+			createPrimitiveTypeCodes();
 		}
+
+		return primitiveTypeCodes;
+	}
+
+	private void createPrimitiveTypeCodes() {
+		primitiveTypeCodes = new HashMap<String, Code>();
+		primitiveTypeCodes.put("integer", PrimitiveType.INT);
+		primitiveTypeCodes.put("int", PrimitiveType.INT);
+		primitiveTypeCodes.put("short", PrimitiveType.SHORT);
+		primitiveTypeCodes.put("double", PrimitiveType.DOUBLE);
+		primitiveTypeCodes.put("long", PrimitiveType.LONG);
+		primitiveTypeCodes.put("boolean", PrimitiveType.BOOLEAN);
+		primitiveTypeCodes.put("byte", PrimitiveType.BYTE);
+		primitiveTypeCodes.put("character", PrimitiveType.CHAR);
+		primitiveTypeCodes.put("char", PrimitiveType.CHAR);
+		primitiveTypeCodes.put("float", PrimitiveType.FLOAT);
+		primitiveTypeCodes.put("void", PrimitiveType.VOID);
 
 		// Publish an event to the bus
 		eventBus.post(new PrimitiveTypeCodesCreatedEvent(primitiveTypeCodes));
-
-		return primitiveTypeCodes;
 	}
 
 	/**
@@ -81,43 +85,47 @@ public class DataTypeUtils {
 	 */
 	public Map<String, String> getJavaTypes() {
 		if (javaTypes == null) {
-			javaTypes = new HashMap<String, String>();
-			javaTypes.put("Object", "Object");
-			javaTypes.put("Integer", "Integer");
-			javaTypes.put("Short", "Short");
-			javaTypes.put("Double", "Double");
-			javaTypes.put("Long", "Long");
-			javaTypes.put("Float", "Float");
-			javaTypes.put("Boolean", "Boolean");
-			javaTypes.put("String", "String");
-			javaTypes.put("Byte", "Byte");
-			javaTypes.put("Character", "Character");
-			javaTypes.put("Date", "java.util.Date");
-			javaTypes.put("date", "java.util.Date");
-			javaTypes.put("Calendar", "java.util.Calendar");
-			javaTypes.put("Collection", "java.util.Collection");
-			javaTypes.put("List", "java.util.List");
-			javaTypes.put("Set", "java.util.Set");
-			javaTypes.put("Queue", "java.util.Queue");
-			javaTypes.put("SortedSet", "java.util.SortedSet");
-			javaTypes.put("Map", "java.util.Map");
-			javaTypes.put("SortedMap", "java.util.SortedMap");
-			javaTypes
-					.put("BlockingQueue", "java.util.concurrent.BlockingQueue");
-			javaTypes.put("Blob", "java.sql.Blob");
-			javaTypes.put("Clob", "java.sql.Clob");
-			javaTypes.put("Timestamp", "java.sql.Timestamp");
-			javaTypes.put("File", "java.io.File");
-			javaTypes.put("Guid", "java.util.UUID");
-			javaTypes.put("TreeNode", "javax.swing.tree.TreeNode");
-			javaTypes.put("URI", "java.net.URI");
-			javaTypes.put("URL", "java.net.URL");
+			createJavaTypes();
 		}
+
+		return javaTypes;
+	}
+
+	private void createJavaTypes() {
+		javaTypes = new HashMap<String, String>();
+		javaTypes.put("Object", "Object");
+		javaTypes.put("Integer", "Integer");
+		javaTypes.put("Short", "Short");
+		javaTypes.put("Double", "Double");
+		javaTypes.put("Long", "Long");
+		javaTypes.put("Float", "Float");
+		javaTypes.put("Boolean", "Boolean");
+		javaTypes.put("String", "String");
+		javaTypes.put("Byte", "Byte");
+		javaTypes.put("Character", "Character");
+		javaTypes.put("Date", "java.util.Date");
+		javaTypes.put("date", "java.util.Date");
+		javaTypes.put("Calendar", "java.util.Calendar");
+		javaTypes.put("Collection", "java.util.Collection");
+		javaTypes.put("List", "java.util.List");
+		javaTypes.put("Set", "java.util.Set");
+		javaTypes.put("Queue", "java.util.Queue");
+		javaTypes.put("SortedSet", "java.util.SortedSet");
+		javaTypes.put("Map", "java.util.Map");
+		javaTypes.put("SortedMap", "java.util.SortedMap");
+		javaTypes
+				.put("BlockingQueue", "java.util.concurrent.BlockingQueue");
+		javaTypes.put("Blob", "java.sql.Blob");
+		javaTypes.put("Clob", "java.sql.Clob");
+		javaTypes.put("Timestamp", "java.sql.Timestamp");
+		javaTypes.put("File", "java.io.File");
+		javaTypes.put("Guid", "java.util.UUID");
+		javaTypes.put("TreeNode", "javax.swing.tree.TreeNode");
+		javaTypes.put("URI", "java.net.URI");
+		javaTypes.put("URL", "java.net.URL");
 
 		// Publish an event to the bus
 		eventBus.post(new JavaTypeCodesCreatedEvent(javaTypes));
-
-		return javaTypes;
 	}
 
 	/**

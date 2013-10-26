@@ -39,10 +39,6 @@ public class TypesExtensionHandler {
 	private static final Logger logger = Logger
 			.getLogger(TypesExtensionHandler.class.getName());
 
-	private Boolean isAlreadyRunOncePrimitive = false;
-
-	private Boolean isAlreadyRunOnceJava = false;
-
 	/**
 	 * Handler of PrimitiveTypeCodesCreatedEvent.
 	 * 
@@ -51,11 +47,8 @@ public class TypesExtensionHandler {
 	 */
 	@Subscribe
 	public void onPrimitiveTypeCodesCreated(PrimitiveTypeCodesCreatedEvent event) {
-		if (!isAlreadyRunOncePrimitive) {
-			logger.log(Level.SEVERE, "Primitive types can be extended here... "
-					+ event.getPrimitiveTypeCodes());
-		}
-		isAlreadyRunOncePrimitive = true;
+		logger.log(Level.SEVERE, "Primitive types can be extended here... "
+				+ event.getPrimitiveTypeCodes());
 	}
 
 	/**
@@ -66,18 +59,13 @@ public class TypesExtensionHandler {
 	 */
 	@Subscribe
 	public void onJavaTypeCodesCreated(JavaTypeCodesCreatedEvent event) {
-		if (!isAlreadyRunOnceJava) {
-			logger.log(
-					Level.SEVERE,
-					"Java types can be extended here... before... "
-							+ event.getJavaTypeCodes());
-			Map<String, String> javaTypeCodes = event.getJavaTypeCodes();
-			javaTypeCodes.put("test", "de.test.Test");
-			logger.log(
-					Level.SEVERE,
-					"Java types can be extended here... after... "
-							+ event.getJavaTypeCodes());
-		}
-		isAlreadyRunOnceJava = true;
+		logger.log(
+				Level.SEVERE,
+				"Java types can be extended here... before... "
+						+ event.getJavaTypeCodes());
+		Map<String, String> javaTypeCodes = event.getJavaTypeCodes();
+		javaTypeCodes.put("test", "de.test.Test");
+		logger.log(Level.SEVERE, "Java types can be extended here... after... "
+				+ event.getJavaTypeCodes());
 	}
 }

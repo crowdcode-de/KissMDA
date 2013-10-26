@@ -22,6 +22,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 
+import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
+
 /**
  * Guice Module for the core.
  * 
@@ -38,5 +40,7 @@ public class CoreModule extends AbstractModule {
 	protected void configure() {
 		// Bind EventBus as singleton
 		bind(EventBus.class).in(Scopes.SINGLETON);
+		// Bind DataTypeUtils as singleton
+		bind(DataTypeUtils.class).in(Scopes.SINGLETON);
 	}
 }
