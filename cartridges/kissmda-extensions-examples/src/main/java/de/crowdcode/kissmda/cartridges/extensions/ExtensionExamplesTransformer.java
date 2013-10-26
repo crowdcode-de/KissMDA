@@ -44,13 +44,16 @@ public class ExtensionExamplesTransformer implements Transformer {
 	@Inject
 	private EventBus eventBus;
 
+	@Inject
+	private TypesExtensionHandler typesExtensionHandler;
+
 	/**
 	 * Register all the handlers, listeners and extensions.
 	 */
 	private void registerHandlers() {
 		logger.log(Level.SEVERE, "Register event handlers to event bus: "
 				+ eventBus.toString());
-		eventBus.register(new TypesExtensionHandler());
+		eventBus.register(typesExtensionHandler);
 	}
 
 	/**

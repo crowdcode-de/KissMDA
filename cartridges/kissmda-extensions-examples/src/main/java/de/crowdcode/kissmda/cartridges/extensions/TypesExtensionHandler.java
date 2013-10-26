@@ -22,8 +22,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import com.google.common.eventbus.Subscribe;
 
+import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
 import de.crowdcode.kissmda.core.jdt.event.JavaTypeCodesCreatedEvent;
 import de.crowdcode.kissmda.core.jdt.event.PrimitiveTypeCodesCreatedEvent;
 
@@ -38,6 +41,9 @@ public class TypesExtensionHandler {
 
 	private static final Logger logger = Logger
 			.getLogger(TypesExtensionHandler.class.getName());
+
+	@Inject
+	private DataTypeUtils datatypeUtils;
 
 	/**
 	 * Handler of PrimitiveTypeCodesCreatedEvent.
@@ -67,5 +73,9 @@ public class TypesExtensionHandler {
 		javaTypeCodes.put("test", "de.test.Test");
 		logger.log(Level.SEVERE, "Java types can be extended here... after... "
 				+ event.getJavaTypeCodes());
+
+		// Now check the real content of datatypeUtils
+		logger.log(Level.SEVERE,
+				"Java types real content " + datatypeUtils.getJavaTypes());
 	}
 }
