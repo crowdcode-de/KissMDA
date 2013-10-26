@@ -48,7 +48,7 @@ public class KissMdaMojoTest {
 	}
 
 	@Test
-	public void testExecuteOk() throws MojoExecutionException {
+	public void testExecuteScanPackageNamesOk() throws MojoExecutionException {
 		List<String> packageNames = new ArrayList<String>();
 		packageNames.add("de.crowdcode.kissmda.maven.plugin.withguice");
 		MavenProject mavenProject = new MavenProject();
@@ -62,7 +62,32 @@ public class KissMdaMojoTest {
 	}
 
 	@Test
-	public void testExecuteManyGuiceModules() throws MojoExecutionException {
+	public void testExecuteNamesWithOrderOk() throws MojoExecutionException {
+		List<String> packageNames = new ArrayList<String>();
+		packageNames.add("de.crowdcode.kissmda.maven.plugin.withguice");
+
+		List<String> transformerNameWithOrders = new ArrayList<String>();
+		transformerNameWithOrders
+				.add("2:de.crowdcode.kissmda.maven.plugin.withguice.MockTransformer");
+		transformerNameWithOrders
+				.add("10:de.crowdcode.kissmda.maven.plugin.manypackages.MockTransformer");
+		transformerNameWithOrders
+				.add("1:de.crowdcode.kissmda.maven.plugin.manypackages.Mock2Transformer");
+
+		MavenProject mavenProject = new MavenProject();
+		mavenProject.setFile(new File("target/tmp/test"));
+
+		kissMdaMojo.setTransformerScanPackageNames(packageNames);
+		kissMdaMojo.setTransformerNameWithOrders(transformerNameWithOrders);
+		kissMdaMojo.setModelFile("src/main/resources/model/emf/test-uml.uml");
+		kissMdaMojo.setProject(mavenProject);
+		kissMdaMojo.execute();
+		assertTrue(true);
+	}
+
+	@Test
+	public void testExecuteScanPackageNamesManyGuiceModules()
+			throws MojoExecutionException {
 		List<String> packageNames = new ArrayList<String>();
 		packageNames.add("de.crowdcode.kissmda.maven.plugin.manypackages");
 		MavenProject mavenProject = new MavenProject();
@@ -76,7 +101,7 @@ public class KissMdaMojoTest {
 	}
 
 	@Test
-	public void testExecuteNoGuiceModule() {
+	public void testExecuteScanPackageNamesNoGuiceModule() {
 		List<String> packageNames = new ArrayList<String>();
 		packageNames.add("de.crowdcode.kissmda.maven.plugin.noguice");
 		MavenProject mavenProject = new MavenProject();
@@ -94,7 +119,7 @@ public class KissMdaMojoTest {
 	}
 
 	@Test
-	public void testExecuteWithGuiceModuleButInTheDifferentPackage() {
+	public void testExecuteScanPackageNamesWithGuiceModuleButInTheDifferentPackage() {
 		List<String> packageNames = new ArrayList<String>();
 		packageNames.add("de.crowdcode.kissmda.maven.plugin.differentpackage");
 		MavenProject mavenProject = new MavenProject();

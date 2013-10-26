@@ -232,34 +232,34 @@ public class KissMdaMojo extends AbstractMojo {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void useTransformerNamesWithOrder(Injector parentInjector)
 			throws MojoExecutionException, InstantiationException,
 			IllegalAccessException, ClassNotFoundException {
 		// Read the list and parse:
 		// 1:de.crowdcode.kissmda.cartridges.extensions.ExtensionExamplesTransformer
 		// Put it in a map and sort the content after the order
-		Map<String, String> sortedtTransformerNameWithOrders = new TreeMap<String, String>();
+		Map<Integer, String> sortedtTransformerNameWithOrders = new TreeMap<Integer, String>();
 
 		for (String content : transformerNameWithOrders) {
 			String order = StringUtils.substringBefore(content, ":");
+			Integer orderAsInt = Integer.decode(order);
 			String transformerClazz = StringUtils.substringAfter(content, ":");
-			sortedtTransformerNameWithOrders.put(order, transformerClazz);
+			sortedtTransformerNameWithOrders.put(orderAsInt, transformerClazz);
 		}
 
-		for (Map.Entry<String, String> entry : sortedtTransformerNameWithOrders
+		for (Map.Entry<Integer, String> entry : sortedtTransformerNameWithOrders
 				.entrySet()) {
 			// We need the counterpart Guice module for this transformer
 			// In the same package but with Module as suffix
 			String transformerClazzName = entry.getValue();
 			String guiceModuleClazzName = getGuiceModuleName(transformerClazzName);
-			Class<Transformer> transformerClazz = (Class<Transformer>) Class
-					.forName(transformerClazzName);
-			Class<Module> guiceModuleClazz = (Class<Module>) Class
-					.forName(guiceModuleClazzName);
+			Class<? extends Transformer> transformerClazz = Class.forName(
+					transformerClazzName).asSubclass(Transformer.class);
+			Class<? extends Module> guiceModuleClazz = Class.forName(
+					guiceModuleClazzName).asSubclass(Module.class);
 
 			logger.info("Start the transformation with following Transformer: "
-					+ transformerClazzName);
+					+ transformerClazzName + " - order: " + entry.getKey());
 			// Create the transformer class with Guice module as child
 			// injector and execute
 			Injector injector = parentInjector
