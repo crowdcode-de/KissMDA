@@ -136,4 +136,14 @@ public class KissMdaMojoTest {
 		assertEquals(resultTargetModel,
 				"target.tmp.target.generated-sources.kissmda");
 	}
+
+	@Test
+	public void testGetGuiceModuleName() {
+		String transformerClazzName = "de.crowdcode.kissmda.cartridges.extensions.ExtensionExamplesTransformer";
+		String result = kissMdaMojo.getGuiceModuleName(transformerClazzName);
+
+		assertEquals(
+				"de.crowdcode.kissmda.cartridges.extensions.ExtensionExamplesModule",
+				result);
+	}
 }

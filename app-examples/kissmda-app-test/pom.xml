@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
- | Licensed to the Apache Software Foundation (ASF) under one
- | or more contributor license agreements.  See the NOTICE file
- | distributed with this work for additional information
- | regarding copyright ownership.  The ASF licenses this file
- | to you under the Apache License, Version 2.0 (the
- | "License"); you may not use this file except in compliance
- | with the License.  You may obtain a copy of the License at
- |
- |  http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing,
- | software distributed under the License is distributed on an
- | "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- | KIND, either express or implied.  See the License for the
- | specific language governing permissions and limitations
- | under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- | Licensed to the Apache Software Foundation (ASF) under one | or more 
+	contributor license agreements. See the NOTICE file | distributed with this 
+	work for additional information | regarding copyright ownership. The ASF 
+	licenses this file | to you under the Apache License, Version 2.0 (the | 
+	"License"); you may not use this file except in compliance | with the License. 
+	You may obtain a copy of the License at | | http://www.apache.org/licenses/LICENSE-2.0 
+	| | Unless required by applicable law or agreed to in writing, | software 
+	distributed under the License is distributed on an | "AS IS" BASIS, WITHOUT 
+	WARRANTIES OR CONDITIONS OF ANY | KIND, either express or implied. See the 
+	License for the | specific language governing permissions and limitations 
+	| under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
+	<parent>
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../../kissmda-parent/pom.xml</relativePath>
 	</parent>
-	
+
 	<groupId>de.crowdcode.kissmda.app-examples</groupId>
 	<artifactId>kissmda-app-test</artifactId>
 	<version>2.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>kissmda-app-test</name>
-		
-    <properties>
-        <junit.version>4.10</junit.version>
-        <kissmda.maven.plugin.version>2.0.0-SNAPSHOT</kissmda.maven.plugin.version>
-        <kissmda.cartridges.simple.java.version>2.0.0-SNAPSHOT</kissmda.cartridges.simple.java.version>
-        <kissmda.extensions.examples.version>1.0.0-SNAPSHOT</kissmda.extensions.examples.version>
-    </properties>
+
+	<properties>
+		<junit.version>4.10</junit.version>
+		<kissmda.maven.plugin.version>2.0.0-SNAPSHOT</kissmda.maven.plugin.version>
+		<kissmda.cartridges.simple.java.version>2.0.0-SNAPSHOT</kissmda.cartridges.simple.java.version>
+		<kissmda.extensions.examples.version>1.0.0-SNAPSHOT</kissmda.extensions.examples.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -47,7 +41,7 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-    </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -75,7 +69,7 @@
 				<artifactId>kissmda-maven-plugin</artifactId>
 				<version>${kissmda.maven.plugin.version}</version>
 				<dependencies>
-				    <!-- Cartridges and Extensions should be used in the generation phase -->
+					<!-- Cartridges and Extensions should be used in the generation phase -->
 					<dependency>
 						<groupId>de.crowdcode.kissmda.cartridges</groupId>
 						<artifactId>kissmda-cartridges-simple-java</artifactId>
@@ -96,10 +90,22 @@
 					</execution>
 				</executions>
 				<configuration>
+					<!-- You have to choose between transformerScanPackageNames and transformerNameWithOrders 
+						If you put both the transformerNameWithOrders wins -->
 					<transformerScanPackageNames>
-					    <!-- You get all the transformers under this package name -->
+						<!-- You get all the transformers under this package name -->
 						<transformerScanPackageName>de.crowdcode.kissmda.cartridges</transformerScanPackageName>
 					</transformerScanPackageNames>
+					<!-- We put both, so this transformerNameWithOrders wins -->
+					<transformerNameWithOrders>
+						<!-- You put the transformers with order -->
+						<transformerNameWithOrder>
+							1:de.crowdcode.kissmda.cartridges.extensions.ExtensionExamplesTransformer
+						</transformerNameWithOrder>
+						<transformerNameWithOrder>
+							2:de.crowdcode.kissmda.cartridges.simplejava.SimpleJavaTransformer
+						</transformerNameWithOrder>
+					</transformerNameWithOrders>
 					<modelFile>src/main/resources/model/emf/test-uml.uml</modelFile>
 					<loggingLevel>SEVERE</loggingLevel>
 				</configuration>

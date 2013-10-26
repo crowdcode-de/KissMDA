@@ -7,3 +7,4 @@
 *.iml
 pom.xml.*
 release.properties
+/target

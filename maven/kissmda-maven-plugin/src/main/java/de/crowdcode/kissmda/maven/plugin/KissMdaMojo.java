@@ -19,7 +19,9 @@
 package de.crowdcode.kissmda.maven.plugin;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -35,6 +37,7 @@ import org.reflections.Reflections;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 
 import de.crowdcode.kissmda.core.CoreModule;
 import de.crowdcode.kissmda.core.StandardContext;
@@ -74,9 +77,16 @@ public class KissMdaMojo extends AbstractMojo {
 	 * Package name to scan as collections.
 	 * 
 	 * @parameter
-	 * @required
 	 */
 	private List<String> transformerScanPackageNames;
+
+	/**
+	 * Transformer name to scan each with order, so the transformers will be
+	 * executed in the order configured.
+	 * 
+	 * @parameter
+	 */
+	private List<String> transformerNameWithOrders;
 
 	/**
 	 * Model file.
@@ -129,6 +139,11 @@ public class KissMdaMojo extends AbstractMojo {
 		this.transformerScanPackageNames = transformerScanPackageNames;
 	}
 
+	public void setTransformerNameWithOrders(
+			List<String> transformerNameWithOrders) {
+		this.transformerNameWithOrders = transformerNameWithOrders;
+	}
+
 	public void setProject(MavenProject project) {
 		this.project = project;
 	}
@@ -161,32 +176,15 @@ public class KissMdaMojo extends AbstractMojo {
 					+ generatedSourcesTargetDirectory;
 			context.setSourceModel(fullNameModelFile);
 			context.setTargetModel(fullNameTargetDirectory);
-			for (String packageName : transformerScanPackageNames) {
-				Reflections reflections = new Reflections(packageName);
-				Set<Class<? extends Transformer>> transformers = reflections
-						.getSubTypesOf(Transformer.class);
-				Set<Class<? extends AbstractModule>> guiceModules = reflections
-						.getSubTypesOf(AbstractModule.class);
 
-				for (Class<? extends Transformer> transformerClazz : transformers) {
-					logger.info("Start the transformation with following Transformer: "
-							+ transformerClazz.getName());
-					// We need the counterpart Guice module for this transformer
-					// In the same package
-					Class<? extends AbstractModule> guiceModuleClazz = getGuiceModule(
-							guiceModules, transformerClazz);
-					// Create the transformer class with Guice module as child
-					// injector and execute
-					Injector injector = parentInjector
-							.createChildInjector(guiceModuleClazz.newInstance());
-					Transformer transformer = injector
-							.getInstance(transformerClazz);
-					transformer.transform(context);
-
-					logger.info("Stop the transformation with following Transformer:"
-							+ transformerClazz.getName());
-				}
+			if (transformerNameWithOrders != null
+					&& transformerNameWithOrders.size() != 0) {
+				// transformerNameWithOrders wins if both are configured
+				useTransformerNamesWithOrder(parentInjector);
+			} else {
+				useTransformerScanPackageNames(parentInjector);
 			}
+
 			logger.info("Stop KissMdaMojo without error...");
 		} catch (TransformerException e) {
 			throw new MojoExecutionException("Error transform the model: "
@@ -197,7 +195,87 @@ public class KissMdaMojo extends AbstractMojo {
 		} catch (IllegalAccessException e) {
 			throw new MojoExecutionException("Error transform the model: "
 					+ e.getLocalizedMessage(), e);
+		} catch (ClassNotFoundException e) {
+			throw new MojoExecutionException("Error transform the model: "
+					+ e.getLocalizedMessage(), e);
 		}
+	}
+
+	private void useTransformerScanPackageNames(Injector parentInjector)
+			throws MojoExecutionException, InstantiationException,
+			IllegalAccessException {
+		for (String packageName : transformerScanPackageNames) {
+			Reflections reflections = new Reflections(packageName);
+			Set<Class<? extends Transformer>> transformers = reflections
+					.getSubTypesOf(Transformer.class);
+			Set<Class<? extends AbstractModule>> guiceModules = reflections
+					.getSubTypesOf(AbstractModule.class);
+
+			for (Class<? extends Transformer> transformerClazz : transformers) {
+				logger.info("Start the transformation with following Transformer: "
+						+ transformerClazz.getName());
+				// We need the counterpart Guice module for this transformer
+				// In the same package
+				Class<? extends AbstractModule> guiceModuleClazz = getGuiceModule(
+						guiceModules, transformerClazz);
+				// Create the transformer class with Guice module as child
+				// injector and execute
+				Injector injector = parentInjector
+						.createChildInjector(guiceModuleClazz.newInstance());
+				Transformer transformer = injector
+						.getInstance(transformerClazz);
+				transformer.transform(context);
+
+				logger.info("Stop the transformation with following Transformer:"
+						+ transformerClazz.getName());
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void useTransformerNamesWithOrder(Injector parentInjector)
+			throws MojoExecutionException, InstantiationException,
+			IllegalAccessException, ClassNotFoundException {
+		// Read the list and parse:
+		// 1:de.crowdcode.kissmda.cartridges.extensions.ExtensionExamplesTransformer
+		// Put it in a map and sort the content after the order
+		Map<String, String> sortedtTransformerNameWithOrders = new TreeMap<String, String>();
+
+		for (String content : transformerNameWithOrders) {
+			String order = StringUtils.substringBefore(content, ":");
+			String transformerClazz = StringUtils.substringAfter(content, ":");
+			sortedtTransformerNameWithOrders.put(order, transformerClazz);
+		}
+
+		for (Map.Entry<String, String> entry : sortedtTransformerNameWithOrders
+				.entrySet()) {
+			// We need the counterpart Guice module for this transformer
+			// In the same package but with Module as suffix
+			String transformerClazzName = entry.getValue();
+			String guiceModuleClazzName = getGuiceModuleName(transformerClazzName);
+			Class<Transformer> transformerClazz = (Class<Transformer>) Class
+					.forName(transformerClazzName);
+			Class<Module> guiceModuleClazz = (Class<Module>) Class
+					.forName(guiceModuleClazzName);
+
+			logger.info("Start the transformation with following Transformer: "
+					+ transformerClazzName);
+			// Create the transformer class with Guice module as child
+			// injector and execute
+			Injector injector = parentInjector
+					.createChildInjector(guiceModuleClazz.newInstance());
+			Transformer transformer = injector.getInstance(transformerClazz);
+			transformer.transform(context);
+
+			logger.info("Stop the transformation with following Transformer:"
+					+ transformerClazzName);
+		}
+	}
+
+	String getGuiceModuleName(String transformerClazzName) {
+		String guiceModuleClazzName = StringUtils.replace(transformerClazzName,
+				"Transformer", "Module");
+		return guiceModuleClazzName;
 	}
 
 	private void setLoggingLevel() {
