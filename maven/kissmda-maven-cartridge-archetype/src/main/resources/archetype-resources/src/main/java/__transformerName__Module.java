@@ -23,7 +23,7 @@ import com.google.inject.AbstractModule;
 /**
  * Guice Module for SimpleJavaTransformer.
  * 
- * @author Lofi Dewanto
+ * @author Your Name
  * @version 1.0.0
  * @since 1.0.0
  */

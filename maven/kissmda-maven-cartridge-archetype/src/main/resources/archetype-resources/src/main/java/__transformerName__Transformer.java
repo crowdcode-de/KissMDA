@@ -45,7 +45,7 @@ import de.crowdcode.kissmda.core.uml.PackageHelper;
  * DataTypeUtils
  * </p>
  * 
- * @author Lofi Dewanto
+ * @author Your Name
  * @version 1.0.0
  * @since 1.0.0
  */
@@ -67,14 +67,6 @@ public class ${transformerName}Transformer implements Transformer {
 	private FileWriter fileWriter;
 
 	private Context context;
-
-	public void setFileWriter(FileWriter fileWriter) {
-		this.fileWriter = fileWriter;
-	}
-
-	public void setPackageHelper(PackageHelper packageHelper) {
-		this.packageHelper = packageHelper;
-	}
 
 	/**
 	 * Start the transformation and generation.
