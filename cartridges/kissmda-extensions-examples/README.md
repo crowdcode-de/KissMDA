@@ -16,6 +16,6 @@ Stereotypes
 Events handled in this extension
 --------------------------------
 
-**PrimitiveTypeCodesCreatedEvent**
+**KissMDA Core: PrimitiveTypeCodesCreatedEvent**
 
-**JavaTypeCodesCreatedEvent**
+**KissMDA Core: JavaTypeCodesCreatedEvent**
