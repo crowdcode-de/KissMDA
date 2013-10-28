@@ -2,8 +2,8 @@ KissMDA Core
 ============
 This the core component of KissMDA.
 
-Events published in this module
--------------------------------
+Events published
+----------------
 
 **JavaTypeCodesCreatedEvent**
 * Published in DataTypeUtils.createJavaTypes

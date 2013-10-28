@@ -36,3 +36,16 @@ Stereotypes
 **UnexpectedException**
 * Applied on: class
 * Produces java unexpected exception objects. Unexpected exceptions are unchecked runtime exceptions. These are exceptions that clients shouldn't worry about catching but are thrown when some "unexpected" error in the application flow occurs.
+
+
+Events published
+----------------
+
+**Not Available**
+
+
+Events handled
+--------------
+
+**Not Available**
+

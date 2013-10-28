@@ -13,8 +13,14 @@ Stereotypes
 **Not Available**
 
 
-Events handled in this extension
---------------------------------
+Events published
+----------------
+
+**Not Available**
+
+
+Events handled
+--------------
 
 **KissMDA Core: PrimitiveTypeCodesCreatedEvent**
 
