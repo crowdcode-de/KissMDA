@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import de.crowdcode.kissmda.examples.apptest.PersonImpl;
+import de.crowdcode.kissmda.testapp.HeadquarterOffice;
 import de.crowdcode.kissmda.testapp.Person;
 import de.crowdcode.kissmda.testapp.components.Company;
 import de.crowdcode.kissmda.testapp.components.CompanyAttribute;
@@ -35,6 +36,7 @@ public class CompanyImpl implements Company {
 	private Person person;
 	private Collection<Person> oldPersons;
 	private Collection<Company> internalCompanies;
+	private HeadquarterOffice headquarterOffice;
 
 	@Override
 	public String getName() {
@@ -103,5 +105,15 @@ public class CompanyImpl implements Company {
 	public Collection<Company> calculateCompanies(
 			Collection<Company> companies, Collection<Person> persons) {
 		return internalCompanies;
+	}
+
+	@Override
+	public HeadquarterOffice getHeadquarterOffice() {
+		return headquarterOffice;
+	}
+
+	@Override
+	public void setHeadquarterOffice(HeadquarterOffice headquarterOffice) {
+		this.headquarterOffice = headquarterOffice;
 	}
 }
