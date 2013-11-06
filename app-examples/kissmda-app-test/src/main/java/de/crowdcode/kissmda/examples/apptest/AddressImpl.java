@@ -110,7 +110,7 @@ public class AddressImpl implements Address {
 	}
 
 	@Override
-	public void addNewPersons(Person newPerson) {
+	public void addNewPerson(Person newPerson) {
 		sortedPersons.add(newPerson);
 	}
 

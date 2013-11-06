@@ -71,8 +71,8 @@ public class PersonImplTest {
 		address2.setPerson(person);
 
 		person.setCompany(company);
-		person.addAddresses(address1);
-		person.addAddresses(address2);
+		person.addAddress(address1);
+		person.addAddress(address2);
 
 		byte[] content = null;
 		Date[] dateArray = person.run(content);

@@ -80,6 +80,21 @@ public class MethodHelperTest {
 	}
 
 	@Test
+	public void testGetPluralName() {
+		String result1 = methodHelper.getPluralName("address");
+		assertEquals("addresses", result1);
+
+		String result2 = methodHelper.getPluralName("person");
+		assertEquals("persons", result2);
+
+		String result3 = methodHelper.getPluralName("company");
+		assertEquals("companies", result3);
+
+		String result4 = methodHelper.getPluralName("HeadquarterOffice");
+		assertEquals("HeadquarterOffices", result4);
+	}
+
+	@Test
 	public void testIsName() {
 		String result = methodHelper.getIsName("testfield");
 		assertEquals("isTestfield", result);

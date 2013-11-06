@@ -177,6 +177,22 @@ public class InterfaceGenerator {
 				umlQualifiedTypeName = types.get("umlQualifiedTypeName");
 			}
 
+			// Check the property name, no content means we have to get the
+			// "type" and use it as the name
+			if (property.getName().equals("")) {
+				Type targetType = property.getType();
+				String newPropertyName = "";
+				if (property.getUpper() >= 0) {
+					// Upper Cardinality 0..1
+					newPropertyName = targetType.getName();
+				} else {
+					// Upper Cardinality 0..*
+					newPropertyName = methodHelper.getPluralName(targetType
+							.getName());
+				}
+				property.setName(StringUtils.uncapitalize(newPropertyName));
+			}
+
 			// Create getter for each property
 			generateGetterMethod(ast, td, property, umlTypeName,
 					umlQualifiedTypeName);
@@ -267,7 +283,9 @@ public class InterfaceGenerator {
 		} else {
 			// Upper Cardinality 0..* params
 			// We need to use addXxx instead of setXxx
-			String adderName = methodHelper.getAdderName(property.getName());
+			String singularAdderName = methodHelper.getSingularName(property
+					.getName());
+			String adderName = methodHelper.getAdderName(singularAdderName);
 			umlPropertyName = methodHelper.getSingularName(umlPropertyName);
 			mdSetter.setName(ast.newSimpleName(adderName));
 			jdtHelper.createParameterTypes(ast, td, mdSetter, umlTypeName,

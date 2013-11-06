@@ -84,7 +84,7 @@ public class PersonImpl implements Person {
 	}
 
 	@Override
-	public void addAddresses(Address address) {
+	public void addAddress(Address address) {
 		addresses.add(address);
 	}
 
@@ -105,7 +105,7 @@ public class PersonImpl implements Person {
 	}
 
 	@Override
-	public void addNewAddresses(Address newAddress) {
+	public void addNewAddress(Address newAddress) {
 		uniqueAddresses.add(newAddress);
 	}
 

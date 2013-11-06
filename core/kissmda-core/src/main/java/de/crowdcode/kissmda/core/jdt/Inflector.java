@@ -92,7 +92,6 @@ public class Inflector {
 		addSingular("(quiz)zes$", "$1");
 		addSingular("(database)s$", "$1");
 
-		addIrregular("person", "people");
 		addIrregular("man", "men");
 		addIrregular("child", "children");
 		addIrregular("sex", "sexes");

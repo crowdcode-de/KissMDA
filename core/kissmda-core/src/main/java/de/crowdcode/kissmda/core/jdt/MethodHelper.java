@@ -79,9 +79,9 @@ public class MethodHelper {
 	 * @return adder name
 	 */
 	public String getAdderName(String name) {
-		String setter = "add" + name.substring(0, 1).toUpperCase()
+		String adder = "add" + name.substring(0, 1).toUpperCase()
 				+ name.substring(1);
-		return setter;
+		return adder;
 	}
 
 	/**
@@ -92,8 +92,19 @@ public class MethodHelper {
 	 * @return singular name
 	 */
 	public String getSingularName(String pluralName) {
-		// Remove the last two chars
 		String singular = inflector.singularize(pluralName);
 		return singular;
+	}
+
+	/**
+	 * Get the plural name of the singular name.
+	 * 
+	 * @param singularName
+	 *            input singular name
+	 * @return plural name
+	 */
+	public String getPluralName(String singularName) {
+		String plural = inflector.pluralize(singularName);
+		return plural;
 	}
 }
