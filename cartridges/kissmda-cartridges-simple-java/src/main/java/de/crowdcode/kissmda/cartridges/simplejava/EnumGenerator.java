@@ -1,5 +1,5 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
+x * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
@@ -102,7 +102,7 @@ public class EnumGenerator {
 		generatePackage(clazz, ast, cu);
 		EnumDeclaration ed = generateEnum(clazz, ast, cu);
 		generateConstants(clazz, ast, ed);
-		generateAttribute(clazz, ast, ed);
+		generateAttributes(clazz, ast, ed);
 		generateConstructor(clazz, ast, ed);
 		generateGetterMethod(clazz, ast, ed);
 
@@ -111,7 +111,7 @@ public class EnumGenerator {
 	}
 
 	/**
-	 * Generate the attribute.
+	 * Generate the attributes.
 	 * 
 	 * @param clazz
 	 *            UML2 class
@@ -121,33 +121,46 @@ public class EnumGenerator {
 	 *            EnumerationDeclaration
 	 */
 	@SuppressWarnings("unchecked")
-	public void generateAttribute(Classifier clazz, AST ast, EnumDeclaration ed) {
+	public void generateAttributes(Classifier clazz, AST ast, EnumDeclaration ed) {
 		EList<Property> properties = clazz.getAttributes();
 		for (Property property : properties) {
-			Type type = property.getType();
-			logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
-					+ "Property: " + property.getName() + " - "
-					+ "Property Upper: " + property.getUpper() + " - "
-					+ "Property Lower: " + property.getLower());
-			String umlTypeName = type.getName();
-			String umlQualifiedTypeName = type.getQualifiedName();
-
-			// Check whether primitive or array type or simple type?
-			org.eclipse.jdt.core.dom.Type chosenType = jdtHelper.getChosenType(
-					ast, umlTypeName, umlQualifiedTypeName,
-					sourceDirectoryPackageName);
-
-			VariableDeclarationFragment fragment = ast
-					.newVariableDeclarationFragment();
-			SimpleName variableName = ast.newSimpleName(property.getName());
-			fragment.setName(variableName);
-
-			FieldDeclaration fieldDeclaration = ast
-					.newFieldDeclaration(fragment);
-			fieldDeclaration.setType(chosenType);
-
-			ed.bodyDeclarations().add(fieldDeclaration);
+			ed.bodyDeclarations().add(generateAttribute(clazz, ast,	property));
 		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param clazz UM2 class
+	 * @param ast JDT AST
+	 * @param property
+	 * @return FieldDeclaration
+	 */
+	public FieldDeclaration generateAttribute(Classifier clazz, AST ast,
+			Property property) {
+		Type type = property.getType();
+		logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
+				+ "Property: " + property.getName() + " - "
+				+ "Property Upper: " + property.getUpper() + " - "
+				+ "Property Lower: " + property.getLower());
+		String umlTypeName = type.getName();
+		String umlQualifiedTypeName = type.getQualifiedName();
+
+		// Check whether primitive or array type or simple type?
+		org.eclipse.jdt.core.dom.Type chosenType = jdtHelper.getChosenType(
+				ast, umlTypeName, umlQualifiedTypeName,
+				sourceDirectoryPackageName);
+
+		VariableDeclarationFragment fragment = ast
+				.newVariableDeclarationFragment();
+		SimpleName variableName = ast.newSimpleName(property.getName());
+		fragment.setName(variableName);
+
+		FieldDeclaration fieldDeclaration = ast.newFieldDeclaration(fragment);
+		fieldDeclaration.setType(chosenType);
+		
+		return fieldDeclaration;
 	}
 
 	/**

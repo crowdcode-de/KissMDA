@@ -367,7 +367,7 @@ public class EnumGeneratorTest {
 		when(type.getName()).thenReturn("String");
 		when(type.getQualifiedName()).thenReturn("String");
 
-		enumGenerator.generateAttribute(clazz, ast, ed);
+		enumGenerator.generateAttributes(clazz, ast, ed);
 
 		assertEquals("public enum Company {; String type;\n}\n", cu.toString());
 	}
