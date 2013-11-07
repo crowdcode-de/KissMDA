@@ -124,17 +124,19 @@ public class EnumGenerator {
 	public void generateAttributes(Classifier clazz, AST ast, EnumDeclaration ed) {
 		EList<Property> properties = clazz.getAttributes();
 		for (Property property : properties) {
-			ed.bodyDeclarations().add(generateAttribute(clazz, ast,	property));
+			ed.bodyDeclarations().add(generateAttribute(clazz, ast, property));
 		}
 	}
 
 	/**
+	 * Generate the attribute.
 	 * 
-	 * 
-	 * 
-	 * @param clazz UM2 class
-	 * @param ast JDT AST
+	 * @param clazz
+	 *            UM2 class
+	 * @param ast
+	 *            JDT AST
 	 * @param property
+	 *            UML2 property
 	 * @return FieldDeclaration
 	 */
 	public FieldDeclaration generateAttribute(Classifier clazz, AST ast,
@@ -148,9 +150,8 @@ public class EnumGenerator {
 		String umlQualifiedTypeName = type.getQualifiedName();
 
 		// Check whether primitive or array type or simple type?
-		org.eclipse.jdt.core.dom.Type chosenType = jdtHelper.getChosenType(
-				ast, umlTypeName, umlQualifiedTypeName,
-				sourceDirectoryPackageName);
+		org.eclipse.jdt.core.dom.Type chosenType = jdtHelper.getChosenType(ast,
+				umlTypeName, umlQualifiedTypeName, sourceDirectoryPackageName);
 
 		VariableDeclarationFragment fragment = ast
 				.newVariableDeclarationFragment();
@@ -159,7 +160,7 @@ public class EnumGenerator {
 
 		FieldDeclaration fieldDeclaration = ast.newFieldDeclaration(fragment);
 		fieldDeclaration.setType(chosenType);
-		
+
 		return fieldDeclaration;
 	}
 
