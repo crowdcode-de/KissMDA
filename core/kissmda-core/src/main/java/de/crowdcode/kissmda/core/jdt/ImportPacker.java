@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.SimpleType;
 
@@ -31,6 +32,18 @@ public class ImportPacker {
 			simpleTypeToImport(node);
 			return true;
 		}
+
+		@Override
+		public boolean visit(MethodDeclaration node) {
+			// FIXME idueppe - to be done
+			for (Name exception : (List<Name>)node.thrownExceptions())
+			{
+				System.out.println(" :: "+exception.getFullyQualifiedName());
+			}
+			return true;
+		}
+		
+		
 	};
 
 	private ASTVisitor importStatementVisitor = new ASTVisitor() {
