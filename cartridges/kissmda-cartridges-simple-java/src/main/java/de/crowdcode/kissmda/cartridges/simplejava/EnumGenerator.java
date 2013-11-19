@@ -53,6 +53,7 @@ import org.eclipse.uml2.uml.Slot;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.ValueSpecification;
 
+import de.crowdcode.kissmda.core.jdt.ImportOrganizer;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
@@ -81,8 +82,12 @@ public class EnumGenerator {
 
 	@Inject
 	private JdtHelper jdtHelper;
+	
+	@Inject
+	private ImportOrganizer importsOrganizer;
 
 	private String sourceDirectoryPackageName;
+	
 
 	/**
 	 * Generate the Class Interface. This is the main generation part for this
@@ -106,6 +111,8 @@ public class EnumGenerator {
 		generateConstructor(clazz, ast, ed);
 		generateGetterMethod(clazz, ast, ed);
 
+		importsOrganizer.pack(cu);
+		
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		return cu.toString();
 	}

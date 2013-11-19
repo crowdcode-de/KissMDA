@@ -45,6 +45,7 @@ import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Generalization;
 
 import de.crowdcode.kissmda.core.TransformerException;
+import de.crowdcode.kissmda.core.jdt.ImportOrganizer;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
 
@@ -73,6 +74,9 @@ public class ExceptionGenerator {
 
 	@Inject
 	private JdtHelper jdtHelper;
+	
+	@Inject
+	private ImportOrganizer importsOrganizer;
 
 	private String sourceDirectoryPackageName;
 
@@ -137,6 +141,8 @@ public class ExceptionGenerator {
 		generateMethods(clazz, ast, td);
 		generateConstructors(clazz, ast, td);
 
+		importsOrganizer.pack(cu);
+		
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		return cu;
 	}

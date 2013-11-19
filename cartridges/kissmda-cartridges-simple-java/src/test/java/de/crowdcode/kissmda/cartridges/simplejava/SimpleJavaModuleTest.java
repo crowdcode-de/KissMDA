@@ -18,9 +18,6 @@
  */
 package de.crowdcode.kissmda.cartridges.simplejava;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -32,7 +29,6 @@ import org.junit.runner.RunWith;
 
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.StandardContext;
-import de.crowdcode.kissmda.core.TransformerException;
 
 /**
  * Test Guice Java Module.
@@ -58,18 +54,13 @@ public class SimpleJavaModuleTest {
 	}
 
 	@Test
-	public void testConfigure() {
-		try {
-			String thisPath = this.getClass().getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
-			logger.info("Path: " + thisPath);
-			context.setSourceModel(thisPath + "model/emf/test-uml.uml");
-			context.setTargetModel("target/generated-sources/java-module");
-			simpleJavaTransformer.transform(context);
-		} catch (TransformerException e) {
-			assertFalse(true);
-		}
-		assertTrue(true);
+	public void testConfigure() throws Exception {
+		String thisPath = this.getClass().getProtectionDomain().getCodeSource()
+				.getLocation().getPath();
+		logger.info("Path: " + thisPath);
+		context.setSourceModel(thisPath + "model/emf/test-uml.uml");
+		context.setTargetModel("target/generated-sources/java-module");
+		simpleJavaTransformer.transform(context);
 	}
 
 }

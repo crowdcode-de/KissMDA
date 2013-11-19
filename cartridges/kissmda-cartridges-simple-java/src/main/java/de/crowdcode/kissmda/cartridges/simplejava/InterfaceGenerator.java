@@ -52,6 +52,7 @@ import org.eclipse.uml2.uml.TemplateSignature;
 import org.eclipse.uml2.uml.Type;
 
 import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
+import de.crowdcode.kissmda.core.jdt.ImportOrganizer;
 import de.crowdcode.kissmda.core.jdt.JdtHelper;
 import de.crowdcode.kissmda.core.jdt.MethodHelper;
 import de.crowdcode.kissmda.core.uml.PackageHelper;
@@ -88,6 +89,10 @@ public class InterfaceGenerator {
 
 	@Inject
 	private DataTypeUtils dataTypeUtils;
+	
+	@Inject
+	private ImportOrganizer importsOrganizer;
+	
 
 	private String sourceDirectoryPackageName;
 
@@ -116,6 +121,9 @@ public class InterfaceGenerator {
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		logger.log(Level.FINE, "End generateInterface: " + clazz.getName()
 				+ " -----------------------------");
+		
+		importsOrganizer.pack(cu);
+		
 		return cu.toString();
 	}
 
