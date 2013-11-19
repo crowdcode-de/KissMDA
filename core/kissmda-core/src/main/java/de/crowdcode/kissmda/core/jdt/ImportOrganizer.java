@@ -15,7 +15,7 @@ public class ImportOrganizer {
 	 */
 	public void pack(CompilationUnit cu)
 	{
-		new ImportOrganizerVisitor(cu).pack();
+		new ImportPacker(cu).pack();
 	}		
 	
 	
