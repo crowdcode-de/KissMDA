@@ -59,17 +59,12 @@ public class ExtensionExamplesModuleTest {
 	}
 
 	@Test
-	public void testTransform() {
-		try {
-			String thisPath = this.getClass().getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
-			logger.info("Path: " + thisPath);
-			context.setSourceModel(thisPath + "model/emf/test-uml.uml");
-			context.setTargetModel("target/generated-sources/java-module");
-			transformer.transform(context);
-		} catch (TransformerException e) {
-			assertFalse(true);
-		}
-		assertTrue(true);
+	public void testTransform() throws TransformerException {
+		String thisPath = this.getClass().getProtectionDomain().getCodeSource()
+				.getLocation().getPath();
+		logger.info("Path: " + thisPath);
+		context.setSourceModel(thisPath + "model/emf/test-uml.uml");
+		context.setTargetModel("target/generated-sources/java-module");
+		transformer.transform(context);
 	}
 }
