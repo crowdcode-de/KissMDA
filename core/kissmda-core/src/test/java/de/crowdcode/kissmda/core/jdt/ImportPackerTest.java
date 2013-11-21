@@ -2,7 +2,7 @@ package de.crowdcode.kissmda.core.jdt;
 
 import static org.junit.Assert.assertEquals;
 
-
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -213,12 +213,17 @@ public class ImportPackerTest {
 	}
 	
 	@Test
-	@Ignore("Not implemented yet.")
-	public void test_Packing_Exception_Types() {
+	public void test_Packing_Thrown_Exception_Types() {
 		String original = //
 				"package org.kissmda.test.junit;\n" //
 				+ "public class ClazzName {\n" //
-				+ "  public void doSomething(  Name values) throws org.kissmda.Exception {\n" //
+				+ "  public void doSomething1(  Name values) throws org.kissmda.AException {\n" //
+				+ "    assertNotNull(values);\n" //
+				+ "  }\n" //
+				+ "  public void doSomething2(  Name values) throws org.kissmda.BException {\n" //
+				+ "    assertNotNull(values);\n" //
+				+ "  }\n" //
+				+ "  public void doSomething3(  Name values) throws AException, BException {\n" //
 				+ "    assertNotNull(values);\n" //
 				+ "  }\n" //
 				+ "}";
@@ -227,9 +232,43 @@ public class ImportPackerTest {
 		System.out.println(cu.toString());
 		
 		assertEquals("package org.kissmda.test.junit;\n" //
-				+ "import org.kissmda.Exception;\n"
+				+ "import org.kissmda.AException;\n"
+				+ "import org.kissmda.BException;\n"
 				+ "public class ClazzName {\n" //
-				+ "  public void doSomething(  Name values) throws Exception {\n" //
+				+ "  public void doSomething1(  Name values) throws AException {\n" //
+				+ "    assertNotNull(values);\n" //
+				+ "  }\n" //
+				+ "  public void doSomething2(  Name values) throws BException {\n" //
+				+ "    assertNotNull(values);\n" //
+				+ "  }\n" //
+				+ "  public void doSomething3(  Name values) throws AException, BException {\n" //
+				+ "    assertNotNull(values);\n" //
+				+ "  }\n" //
+				+ "}", cu.toString().trim());
+	}
+
+	@Test
+	public void test_Packing_Catch_Clause_Types() {
+		String original = //
+				"package org.kissmda.test.junit;\n" //
+				+ "public class ClazzName {\n" //
+				+ "  public void doSomething(  Name values){\n" //
+				+ "    try {\n" //
+				+ "      assertNotNull(values);\n" //
+				+ "    } catch (org.kissmda.AException ex) {\n"
+				+ "	     assertNotNull(values);\n" //
+				+ "	   }\n" //
+				+ "  }\n" //
+				+ "}";
+		
+		CompilationUnit cu = buildAndPackCompilationUnit(original);
+		System.out.println(cu.toString());
+		
+		assertEquals("package org.kissmda.test.junit;\n" //
+				+ "import org.kissmda.AException;\n"
+				+ "public class ClazzName {\n" //
+				+ "  public void doSomething(  Name values){\n" //
+				+ "    try {\n" //
 				+ "    assertNotNull(values);\n" //
 				+ "  }\n" //
 				+ "}", cu.toString().trim());

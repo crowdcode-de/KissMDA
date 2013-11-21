@@ -13,12 +13,16 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.QualifiedName;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 
 /**
- * This ImportPacker scan the CompilationUnit for FullQualifiedTypes
- * and set these as simple named types and imports them.# 
+ * This ImportPacker scan the CompilationUnit for FullQualifiedTypes and set
+ * these as simple named types and imports them.#
+ * 
  * @author idueppe
  */
 public class ImportPacker {
@@ -26,47 +30,69 @@ public class ImportPacker {
 	private CompilationUnit compilationUnit;
 
 	private List<ImportDeclaration> staticImports = new LinkedList<ImportDeclaration>();
-	
+
 	private Set<String> ignoredSimpleNames = new HashSet<String>();
 
 	private Map<String, QualifiedName> importedTypes = new HashMap<String, QualifiedName>();
-	
+
 	private ASTVisitor searchSimpleNameToIgnoreVisitor = new ASTVisitor() {
 		@Override
 		public boolean visit(SimpleType type) {
-			if (type.getName().isSimpleName())
-			{
+			if (type.getName().isSimpleName()) {
 				ignoredSimpleNames.add(type.getName().getFullyQualifiedName());
 			}
 			return true;
 		}
 	};
-	
+
 	private ASTVisitor searchQualifiedNamesVisitor = new ASTVisitor() {
 		@Override
 		public boolean visit(SimpleType type) {
-			if (type.getName().isQualifiedName())
-			{
+			if (type.getName().isQualifiedName()) {
 				QualifiedName qualifiedName = (QualifiedName) type.getName();
-				if (!ignoredSimpleNames.contains(qualifiedName.getName().getFullyQualifiedName()))
-				{
-					addTypeToImport(type);					
+				if (!ignoredSimpleNames.contains(simpleName(qualifiedName))) {
+					useSimpleNameAndAddToImport(type);
 				}
 			}
 			return true;
 		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public boolean visit(MethodDeclaration node) {
+			List<Name> newExceptions = new LinkedList<Name>();
+			for (Name name : (List<Name>) node.thrownExceptions()) {
+				if (name.isQualifiedName()) {
+					QualifiedName qualifiedName = (QualifiedName) name;
+					if (isAlreadyImported(qualifiedName)) {
+						newExceptions.add(node.getAST().newName(simpleName(qualifiedName)));
+					} else if (isNewSimpleName(qualifiedName.getName())) {
+						newExceptions.add(node.getAST().newName(simpleName(qualifiedName)));
+						importedTypes.put(simpleName(qualifiedName), qualifiedName);
+					}
+				}
+			}
+			
+			if (!newExceptions.isEmpty())
+			{
+				node.thrownExceptions().clear();
+				node.thrownExceptions().addAll(newExceptions);
+			}
+			
+			return super.visit(node);
+		}
+
 	};
 
 	private ASTVisitor searchImportStatementVisitor = new ASTVisitor() {
 
 		@Override
 		public boolean visit(ImportDeclaration node) {
-			if (node.isStatic() || node.isOnDemand())
-			{
+			if (node.isStatic() || node.isOnDemand()) {
 				staticImports.add(node);
 			} else {
 				QualifiedName qualifiedName = (QualifiedName) node.getName();
-				String simpleName = qualifiedName.getName().getFullyQualifiedName();
+				String simpleName = simpleName(qualifiedName);
 				if (!importedTypes.containsKey(simpleName))
 					importedTypes.put(simpleName, qualifiedName);
 			}
@@ -85,23 +111,37 @@ public class ImportPacker {
 		rewriteImports();
 	}
 
-	protected void addTypeToImport(SimpleType simpleType) {
-		if (simpleType.getName().isQualifiedName())
-		{
+	protected void useSimpleNameAndAddToImport(SimpleType simpleType) {
+		if (simpleType.getName().isQualifiedName()) {
 			QualifiedName qualifiedName = (QualifiedName) simpleType.getName();
 			String qualifier = qualifiedName.getQualifier().getFullyQualifiedName();
-			String simpleName = qualifiedName.getName().getFullyQualifiedName();
+			String simpleName = simpleName(qualifiedName);
 			AST ast = compilationUnit.getAST();
-			if (importedTypes.containsKey(simpleName)
-				&& importedTypes.get(simpleName).getQualifier().getFullyQualifiedName().equals(qualifier))
-			{
+			if (isAlreadyImported(simpleName, qualifier)) {
 				simpleType.setName(ast.newName(simpleName));
-			} else if (!importedTypes.containsKey(simpleName))
-			{
+			} else if (isNewSimpleName(simpleName)) {
 				simpleType.setName(ast.newName(simpleName));
 				importedTypes.put(simpleName, qualifiedName);
 			}
 		}
+	}
+
+	private boolean isNewSimpleName(SimpleName name) {
+		return isNewSimpleName(name.getFullyQualifiedName());
+	}
+
+	private boolean isNewSimpleName(String simpleName) {
+		return !importedTypes.containsKey(simpleName);
+	}
+
+	private boolean isAlreadyImported(QualifiedName qualifiedName) {
+		return isAlreadyImported(simpleName(qualifiedName), qualifiedName.getQualifier()
+				.getFullyQualifiedName());
+	}
+
+	private boolean isAlreadyImported(String simpleName, String qualifier) {
+		return importedTypes.containsKey(simpleName)
+				&& importedTypes.get(simpleName).getQualifier().getFullyQualifiedName().equals(qualifier);
 	}
 
 	private void rewriteImports() {
@@ -145,6 +185,10 @@ public class ImportPacker {
 		ImportDeclaration impDecl = ast.newImportDeclaration();
 		impDecl.setName(ast.newName(qualifiedName.getFullyQualifiedName()));
 		compilationUnit.imports().add(impDecl);
+	}
+
+	private String simpleName(QualifiedName qualifiedName) {
+		return qualifiedName.getName().getFullyQualifiedName();
 	}
 
 }
