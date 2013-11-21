@@ -2,7 +2,6 @@ package de.crowdcode.kissmda.core.jdt;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
