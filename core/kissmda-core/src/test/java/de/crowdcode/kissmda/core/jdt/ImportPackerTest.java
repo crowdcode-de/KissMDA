@@ -269,7 +269,33 @@ public class ImportPackerTest {
 				+ "public class ClazzName {\n" //
 				+ "  public void doSomething(  Name values){\n" //
 				+ "    try {\n" //
-				+ "    assertNotNull(values);\n" //
+				+ "      assertNotNull(values);\n" //
+				+ "    }\n"
+				+ " catch (    AException ex) {\n"
+				+ "      assertNotNull(values);\n" //
+				+ "    }\n" //
+				+ "  }\n" //
+				+ "}", cu.toString().trim());
+	}
+	@Test
+	public void test_Packing_Throw_Clause_Types() {
+		String original = //
+				"package org.kissmda.test.junit;\n" //
+				+ "public class ClazzName {\n" //
+				+ "  public void doSomething(  Name values) throws org.kissmda.AException {\n" //
+				+ "	   throw new org.kissmda.BException();\n" //
+				+ "  }\n" //
+				+ "}";
+		
+		CompilationUnit cu = buildAndPackCompilationUnit(original);
+		System.out.println(cu.toString());
+		
+		assertEquals("package org.kissmda.test.junit;\n" //
+				+ "import org.kissmda.AException;\n"
+				+ "import org.kissmda.BException;\n"
+				+ "public class ClazzName {\n" //
+				+ "  public void doSomething(  Name values) throws AException {\n" //
+				+ "    throw new BException();\n" //
 				+ "  }\n" //
 				+ "}", cu.toString().trim());
 	}
