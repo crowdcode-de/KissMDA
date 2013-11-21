@@ -2,6 +2,7 @@ package de.crowdcode.kissmda.core.jdt;
 
 import static org.junit.Assert.assertEquals;
 
+
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -163,7 +164,54 @@ public class ImportPackerTest {
 				+ "  }\n" //
 				+ "}", cu.toString().trim());
 	}
+	
+	@Test
+	public void test_InnerClass_Conflict_Handling() {
+		String original = //
+				"package org.kissmda.test.junit;\n" //
+				+ "public class OuterClassName {\n"
+				+ "  private another.InnerClazz anotherClazz;\n"
+				+ "  private static class InnerClazz {}\n"
+				+ "  private InnerClazz innerClazz;\n" //
+				+ "}";
+		
+		CompilationUnit cu = buildAndPackCompilationUnit(original);
+		System.out.println(cu.toString());
+		
+		assertEquals("package org.kissmda.test.junit;\n" //
+				+ "public class OuterClassName {\n"
+				+ "  private another.InnerClazz anotherClazz;\n"
+				+ "private static class InnerClazz {\n"
+				+ "  }\n"
+				+ "  private InnerClazz innerClazz;\n" //
+				+ "}", cu.toString().trim());
+	}
 
+	@Test
+	public void test_Wild_Card_Import() {
+		String original = //
+				"package org.kissmda.test.junit;\n"//
+				+ "import java.util.*;" //
+				+ "public class OuterClassName {\n" //
+				+ "  private List<String> stringList;\n" //
+				+ "  private java.util.Collection col;\n"
+				+ "  private org.kissmda.Util util;\n" //
+				+ "}";
+		
+		CompilationUnit cu = buildAndPackCompilationUnit(original);
+		System.out.println(cu.toString());
+		
+		assertEquals("package org.kissmda.test.junit;\n" //
+				+ "import java.util.*;\n" //
+				+ "import java.util.Collection;\n"
+				+ "import org.kissmda.Util;\n" // 
+				+ "public class OuterClassName {\n" //
+				+ "  private List<String> stringList;\n" //
+				+ "  private Collection col;\n" //
+				+ "  private Util util;\n" //
+				+ "}", cu.toString().trim());
+	}
+	
 	@Test
 	@Ignore("Not implemented yet.")
 	public void test_Packing_Exception_Types() {
