@@ -57,7 +57,8 @@ public class ExtensionExamplesTransformer implements Transformer {
 	}
 
 	/**
-	 * Start the transformation and generation.
+	 * Start the transformation and generation. We just register the handlers to
+	 * the specific events.
 	 * 
 	 * @param context
 	 *            context object from Maven plugin
@@ -67,7 +68,6 @@ public class ExtensionExamplesTransformer implements Transformer {
 	 */
 	@Override
 	public void transform(Context context) throws TransformerException {
-		// Do nothing
 		logger.log(Level.SEVERE, "Start Extension Examples Transformer");
 		// Register event handlers
 		logger.log(Level.SEVERE,
