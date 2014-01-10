@@ -97,9 +97,9 @@ public class InterfaceGenerator {
 	 * 
 	 * @param Class
 	 *            clazz the UML class
-	 * @return String the complete class with its content as a String
+	 * @return CompilationUnit the complete class with its content as a String
 	 */
-	public String generateInterface(Classifier clazz,
+	public CompilationUnit generateInterface(Classifier clazz,
 			String sourceDirectoryPackageName) {
 		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
 		logger.log(Level.FINE, "Start generateInterface: " + clazz.getName()
@@ -116,7 +116,7 @@ public class InterfaceGenerator {
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
 		logger.log(Level.FINE, "End generateInterface: " + clazz.getName()
 				+ " -----------------------------");
-		return cu.toString();
+		return cu;
 	}
 
 	/**

@@ -93,15 +93,15 @@ public class ExceptionGenerator {
 	 * 
 	 * @param Class
 	 *            clazz the UML class
-	 * @return String the complete class with its content as a String
+	 * @return CompilationUnit the complete class with its content as a String
 	 * @throws TransformerException
 	 */
-	public String generateCheckedException(Classifier clazz,
+	public CompilationUnit generateCheckedException(Classifier clazz,
 			String sourceDirectoryPackageName) {
 		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
 		this.isCheckedException = true;
 		CompilationUnit cu = generateException(clazz);
-		return cu.toString();
+		return cu;
 	}
 
 	/**
@@ -109,14 +109,14 @@ public class ExceptionGenerator {
 	 * 
 	 * @param Class
 	 *            clazz the UML class
-	 * @return String the complete class with its content as a String
+	 * @return CompilationUnit the complete class with its content as a String
 	 */
-	public String generateUncheckedException(Classifier clazz,
+	public CompilationUnit generateUncheckedException(Classifier clazz,
 			String sourceDirectoryPackageName) {
 		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
 		this.isCheckedException = false;
 		CompilationUnit cu = generateException(clazz);
-		return cu.toString();
+		return cu;
 	}
 
 	/**

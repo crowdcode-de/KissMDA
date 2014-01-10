@@ -90,9 +90,9 @@ public class EnumGenerator {
 	 * 
 	 * @param Class
 	 *            clazz the UML class
-	 * @return String the complete class with its content as a String
+	 * @return CompilationUnit the complete class with its content as a String
 	 */
-	public String generateEnum(Classifier clazz,
+	public CompilationUnit generateEnum(Classifier clazz,
 			String sourceDirectoryPackageName) {
 		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
 
@@ -107,7 +107,7 @@ public class EnumGenerator {
 		generateGetterMethod(clazz, ast, ed);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
-		return cu.toString();
+		return cu;
 	}
 
 	/**

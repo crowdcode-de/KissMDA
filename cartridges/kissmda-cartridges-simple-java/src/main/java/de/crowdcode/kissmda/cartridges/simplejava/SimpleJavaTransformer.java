@@ -26,12 +26,16 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Stereotype;
 
+import com.google.common.eventbus.EventBus;
+
+import de.crowdcode.kissmda.cartridges.simplejava.event.BeforeClassFileGeneratedEvent;
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
@@ -89,6 +93,9 @@ public class SimpleJavaTransformer implements Transformer {
 
 	@Inject
 	private JavaCodeFormatter javaCodeFormatter;
+
+	@Inject
+	private EventBus eventBus;
 
 	private Context context;
 
@@ -157,7 +164,7 @@ public class SimpleJavaTransformer implements Transformer {
 		Enumeration clazz = (Enumeration) element;
 		logger.log(Level.FINE, "Enum: " + clazz.getName());
 		// Generate the enumeration for this class
-		String compilationUnit = enumGenerator.generateEnum(clazz,
+		CompilationUnit compilationUnit = enumGenerator.generateEnum(clazz,
 				sourceDirectoryPackageName);
 		generateClassFile(clazz, compilationUnit);
 	}
@@ -169,8 +176,8 @@ public class SimpleJavaTransformer implements Transformer {
 		logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
 				+ "Stereotype: " + stereotype.getName());
 		// Generate the interface for this class
-		String compilationUnit = interfaceGenerator.generateInterface(clazz,
-				sourceDirectoryPackageName);
+		CompilationUnit compilationUnit = interfaceGenerator.generateInterface(
+				clazz, sourceDirectoryPackageName);
 		generateClassFile(clazz, compilationUnit);
 	}
 
@@ -181,8 +188,8 @@ public class SimpleJavaTransformer implements Transformer {
 		logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
 				+ "Stereotype: " + stereotype.getName());
 		// Generate the exception for this class
-		String compilationUnit = exceptionGenerator.generateCheckedException(
-				clazz, sourceDirectoryPackageName);
+		CompilationUnit compilationUnit = exceptionGenerator
+				.generateCheckedException(clazz, sourceDirectoryPackageName);
 		generateClassFile(clazz, compilationUnit);
 	}
 
@@ -193,8 +200,8 @@ public class SimpleJavaTransformer implements Transformer {
 		logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
 				+ "Stereotype: " + stereotype.getName());
 		// Generate the exception for this class
-		String compilationUnit = exceptionGenerator.generateUncheckedException(
-				clazz, sourceDirectoryPackageName);
+		CompilationUnit compilationUnit = exceptionGenerator
+				.generateUncheckedException(clazz, sourceDirectoryPackageName);
 		generateClassFile(clazz, compilationUnit);
 	}
 
@@ -230,11 +237,17 @@ public class SimpleJavaTransformer implements Transformer {
 	 * @throws IOException
 	 *             input or output error on file system
 	 */
-	private void generateClassFile(Classifier clazz, String compilationUnit)
-			throws IOException {
+	private void generateClassFile(Classifier clazz,
+			CompilationUnit compilationUnit) throws IOException {
+		// Publish an event to the bus before we generate the class file
+		eventBus.post(new BeforeClassFileGeneratedEvent(compilationUnit));
+
 		String fullPackageName = packageHelper.getFullPackageName(clazz,
 				sourceDirectoryPackageName);
-		String formattedCode = javaCodeFormatter.format(compilationUnit);
+
+		// Format before we generate the class file
+		String formattedCode = javaCodeFormatter.format(compilationUnit
+				.toString());
 		javaFileWriter.createJavaFile(context, fullPackageName,
 				clazz.getName(), formattedCode);
 	}

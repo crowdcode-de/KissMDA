@@ -41,7 +41,9 @@ Stereotypes
 Events published
 ----------------
 
-**Not Available**
+**BeforeClassFileGeneratedEvent**
+* Published in SimpleJavaTransformer.generateClassFile.
+* Triggered before the class file is generated.
 
 
 Events handled
