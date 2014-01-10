@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.cartridges.extensions;
+package de.crowdcode.kissmda.extensions.examples;
 
 import com.google.inject.AbstractModule;
 

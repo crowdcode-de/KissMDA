@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package de.crowdcode.kissmda.cartridges.extensions;
+package de.crowdcode.kissmda.extensions.examples;
 
 import java.util.logging.Logger;
 
@@ -30,6 +30,7 @@ import org.junit.runner.RunWith;
 import de.crowdcode.kissmda.core.Context;
 import de.crowdcode.kissmda.core.StandardContext;
 import de.crowdcode.kissmda.core.TransformerException;
+import de.crowdcode.kissmda.extensions.examples.ExtensionExamplesTransformer;
 
 /**
  * Unit test for the module.
