@@ -100,7 +100,7 @@
 					<transformerNameWithOrders>
 						<!-- You put the transformers with order -->
 						<transformerNameWithOrder>
-							1:de.crowdcode.kissmda.cartridges.extensions.ExtensionExamplesTransformer
+							1:de.crowdcode.kissmda.extensions.examples.ExtensionExamplesTransformer
 						</transformerNameWithOrder>
 						<transformerNameWithOrder>
 							2:de.crowdcode.kissmda.cartridges.simplejava.SimpleJavaTransformer
