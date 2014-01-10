@@ -11,3 +11,9 @@ kissmda-extensions-examples
 This is an example project for all the extensions available in KissMDA cartridges. Generally in this
 cartridge project you can find different kind of event handlers which listen to the event bus and
 react to the available events.
+
+kissmda-extensions-import-packer
+--------------------------------
+This is an extension to organize the imports from the given compilation unit (Java code). 
+This extension implements a handler which react to the BeforeClassFileGeneratedEvent which
+is published by the kissmda-cartridges-simple-java.
