@@ -30,18 +30,12 @@ import de.crowdcode.kissmda.core.Transformer;
 import de.crowdcode.kissmda.core.TransformerException;
 
 /**
- * ImportPacker Transformer. This generates xxx for all the xxx from the given
- * UML model.
+ * ImportPacker Transformer. This handles the event
+ * BeforeClassFileGeneratedEvent from kissmda-cartridges-simple-java.
  * 
- * <p>
- * Most important helper classes from kissmda-core which are used in this
- * Transformer: PackageHelper, MethodHelper, JavaHelper, FileWriter and
- * DataTypeUtils
- * </p>
- * 
- * @author Your Name
+ * @author Lofi Dewanto
  * @version 1.0.0
- * @since 1.0.0
+ * @since 2.0.0
  */
 public class ImportPackerTransformer implements Transformer {
 
@@ -52,7 +46,7 @@ public class ImportPackerTransformer implements Transformer {
 	private EventBus eventBus;
 
 	@Inject
-	private ImportOrganizerExtensionHandler typesExtensionHandler;
+	private ImportOrganizerExtensionHandler importOrganizerExtensionHandler;
 
 	/**
 	 * Register all the handlers, listeners and extensions.
@@ -60,7 +54,7 @@ public class ImportPackerTransformer implements Transformer {
 	private void registerHandlers() {
 		logger.log(Level.SEVERE, "Register event handlers to event bus: "
 				+ eventBus.toString());
-		eventBus.register(typesExtensionHandler);
+		eventBus.register(importOrganizerExtensionHandler);
 	}
 
 	/**

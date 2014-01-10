@@ -21,7 +21,7 @@ package de.crowdcode.kissmda.extensions.importpacker;
 import com.google.inject.AbstractModule;
 
 /**
- * Guice Module for SimpleJavaTransformer.
+ * Guice Module for ImportPackerModule.
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
