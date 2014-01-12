@@ -338,6 +338,34 @@ public class JdtHelperTest {
 				.toString());
 	}
 
+	@Test
+	public void testCreateReturnTypeGenericsAsCollectionResultSortedSet() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+		when(
+				dataTypeUtils
+						.isParameterizedType("CompanyAttribute<String, Integer>"))
+				.thenReturn(true);
+		when(dataTypeUtils.isParameterizedType("String")).thenReturn(false);
+		when(dataTypeUtils.isArrayType("String")).thenReturn(false);
+		when(dataTypeUtils.isPrimitiveType("String")).thenReturn(false);
+		when(dataTypeUtils.isParameterizedType("Integer")).thenReturn(false);
+		when(dataTypeUtils.isArrayType("Integer")).thenReturn(false);
+		when(dataTypeUtils.isPrimitiveType("Integer")).thenReturn(false);
+
+		TypeDeclaration td = ast.newTypeDeclaration();
+		MethodDeclaration md = ast.newMethodDeclaration();
+		String umlTypeName = "CompanyAttribute<String, Integer>";
+		String umlQualifiedTypeName = "Validation Profile::OCL Library::CompanyAttribute<String, Integer>";
+		String sourceDirectoryPackageName = "Data";
+		jdtHelper.createReturnTypeAsCollection(ast, td, md, umlTypeName,
+				umlQualifiedTypeName, sourceDirectoryPackageName,
+				JdtHelper.JAVA_UTIL_SORTEDSET);
+
+		assertEquals("java.util.SortedSet<CompanyAttribute<String,Integer>>",
+				md.getReturnType2().toString());
+	}
+
 	private Map<String, String> createJavaTypes() {
 		Map<String, String> javaTypes = new HashMap<String, String>();
 		javaTypes.put("Integer", "Integer");

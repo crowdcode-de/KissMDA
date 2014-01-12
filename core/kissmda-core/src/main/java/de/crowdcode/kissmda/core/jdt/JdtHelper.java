@@ -181,14 +181,13 @@ public class JdtHelper {
 			AbstractTypeDeclaration td, MethodDeclaration md,
 			String umlTypeName, String umlQualifiedTypeName,
 			String sourceDirectoryPackageName, String collectionTypeConstant) {
-		String typeName = packageHelper.getFullPackageName(
-				umlQualifiedTypeName, sourceDirectoryPackageName);
+		Type type = getChosenType(ast, umlTypeName, umlQualifiedTypeName,
+				sourceDirectoryPackageName);
 		// Create Collection
-		SimpleType tp = getAstSimpleType(ast, typeName);
 		SimpleType collectionType = ast.newSimpleType(ast
 				.newName(collectionTypeConstant));
 		ParameterizedType pt = ast.newParameterizedType(collectionType);
-		pt.typeArguments().add(tp);
+		pt.typeArguments().add(type);
 		md.setReturnType2(pt);
 		td.bodyDeclarations().add(md);
 	}
