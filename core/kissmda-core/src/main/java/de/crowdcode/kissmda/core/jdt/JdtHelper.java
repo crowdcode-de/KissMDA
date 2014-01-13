@@ -322,6 +322,46 @@ public class JdtHelper {
 	}
 
 	/**
+	 * Create parameter types as Collection for MethodDeclaration.
+	 * 
+	 * @param ast
+	 *            JDT AST tree
+	 * @param td
+	 *            JDT AbstractTypeDeclaration
+	 * @param md
+	 *            JDT MethodDeclaration
+	 * @param umlTypeName
+	 *            UML type name
+	 * @param umlQualifiedTypeName
+	 *            UML fully qualified type name
+	 * @param umlPropertyName
+	 *            UML property name
+	 * @param sourceDirectoryPackageName
+	 *            UML source directory start
+	 * @param collectionTypeConstant
+	 *            type of the collection: Collection, Set or List
+	 */
+	@SuppressWarnings("unchecked")
+	public void createParameterTypesAsCollection(AST ast,
+			AbstractTypeDeclaration td, MethodDeclaration md,
+			String umlTypeName, String umlQualifiedTypeName,
+			String umlPropertyName, String sourceDirectoryPackageName,
+			String collectionTypeConstant) {
+		Type chosenType = getChosenType(ast, umlTypeName, umlQualifiedTypeName,
+				sourceDirectoryPackageName);
+		// Create Collection
+		SimpleType collectionType = ast.newSimpleType(ast
+				.newName(collectionTypeConstant));
+		ParameterizedType pt = ast.newParameterizedType(collectionType);
+		pt.typeArguments().add(chosenType);
+		SingleVariableDeclaration variableDeclaration = ast
+				.newSingleVariableDeclaration();
+		variableDeclaration.setType(pt);
+		variableDeclaration.setName(ast.newSimpleName(umlPropertyName));
+		md.parameters().add(variableDeclaration);
+	}
+
+	/**
 	 * Get the class name as String.
 	 * 
 	 * @param fullClassName

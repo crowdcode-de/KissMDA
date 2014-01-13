@@ -32,6 +32,7 @@ import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.junit.Before;
 import org.junit.Test;
@@ -364,6 +365,47 @@ public class JdtHelperTest {
 
 		assertEquals("java.util.SortedSet<CompanyAttribute<String,Integer>>",
 				md.getReturnType2().toString());
+	}
+
+	@Test
+	public void testCreateParameterTypes() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		TypeDeclaration td = ast.newTypeDeclaration();
+		MethodDeclaration md = ast.newMethodDeclaration();
+		String umlTypeName = "Person";
+		String umlQualifiedTypeName = "Validation Profile::OCL Library::Person";
+		String sourceDirectoryPackageName = "Data";
+		String umlPropertyName = "person";
+		jdtHelper.createParameterTypes(ast, td, md, umlTypeName,
+				umlQualifiedTypeName, umlPropertyName,
+				sourceDirectoryPackageName);
+
+		SingleVariableDeclaration variableDeclaration = (SingleVariableDeclaration) md
+				.parameters().get(0);
+		assertEquals("Person person", variableDeclaration.toString());
+	}
+
+	@Test
+	public void testCreateParameterTypesAsCollection() {
+		Map<String, String> javaTypes = createJavaTypes();
+		when(dataTypeUtils.getJavaTypes()).thenReturn(javaTypes);
+
+		TypeDeclaration td = ast.newTypeDeclaration();
+		MethodDeclaration md = ast.newMethodDeclaration();
+		String umlTypeName = "Person";
+		String umlQualifiedTypeName = "Validation Profile::OCL Library::Person";
+		String sourceDirectoryPackageName = "Data";
+		String umlPropertyName = "persons";
+		jdtHelper.createParameterTypesAsCollection(ast, td, md, umlTypeName,
+				umlQualifiedTypeName, umlPropertyName,
+				sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_COLLECTION);
+
+		SingleVariableDeclaration variableDeclaration = (SingleVariableDeclaration) md
+				.parameters().get(0);
+		assertEquals("java.util.Collection<Person> persons",
+				variableDeclaration.toString());
 	}
 
 	private Map<String, String> createJavaTypes() {
