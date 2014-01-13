@@ -671,23 +671,27 @@ public class UmlHelper {
 			Type type) {
 		Map<String, String> results = new HashMap<String, String>();
 
-		List<String> templateSubstitutions = getTemplateParameterSubstitution(type);
-		int index = 0;
-
 		String umlTypeName = type.getName();
 		String umlQualifiedTypeName = type.getQualifiedName();
 
-		String paramTypeNames = StringUtils.substringAfter(umlTypeName, "<");
-		paramTypeNames = StringUtils.removeEnd(paramTypeNames, ">");
-		EList<String> paramTypeNameList = convertStringToList(paramTypeNames,
-				",");
+		List<String> templateSubstitutions = getTemplateParameterSubstitution(type);
+		if (templateSubstitutions.size() != 0) {
+			int index = 0;
 
-		for (String paramTypeName : paramTypeNameList) {
-			umlTypeName = StringUtils.replace(umlTypeName, paramTypeName,
-					templateSubstitutions.get(index));
-			umlQualifiedTypeName = StringUtils.replace(umlQualifiedTypeName,
-					paramTypeName, templateSubstitutions.get(index));
-			index = index + 1;
+			String paramTypeNames = StringUtils
+					.substringAfter(umlTypeName, "<");
+			paramTypeNames = StringUtils.removeEnd(paramTypeNames, ">");
+			EList<String> paramTypeNameList = convertStringToList(
+					paramTypeNames, ",");
+
+			for (String paramTypeName : paramTypeNameList) {
+				umlTypeName = StringUtils.replace(umlTypeName, paramTypeName,
+						templateSubstitutions.get(index));
+				umlQualifiedTypeName = StringUtils.replace(
+						umlQualifiedTypeName, paramTypeName,
+						templateSubstitutions.get(index));
+				index = index + 1;
+			}
 		}
 
 		results.put("umlTypeName", umlTypeName);

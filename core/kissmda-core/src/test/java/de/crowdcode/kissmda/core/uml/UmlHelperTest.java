@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Classifier;
@@ -109,6 +110,52 @@ public class UmlHelperTest {
 		List<String> results = umlHelper.getTemplateParameterSubstitution(type);
 
 		assertEquals("Data::datatype::Integer", results.get(0));
+	}
+
+	@Test
+	public void testCheckParameterizedTypeForTemplateParameterSubstitution() {
+		Classifier clazzifier = prepareMocks();
+
+		when(type.getName()).thenReturn("Data::datatype::Collection<Integer>");
+		when(type.getQualifiedName()).thenReturn(
+				"Data::datatype::Collection<Integer>");
+
+		when(dataTypeUtils.isPrimitiveType(Mockito.anyString())).thenReturn(
+				true);
+		when(clazzifier.getName()).thenReturn("Integer");
+		when(clazzifier.getQualifiedName()).thenReturn(
+				"Data::datatype::de::test::Integer");
+
+		Map<String, String> results = umlHelper
+				.checkParameterizedTypeForTemplateParameterSubstitution(type);
+
+		String umlTypeName = results.get("umlTypeName");
+		String umlQualifiedTypeName = results.get("umlQualifiedTypeName");
+		assertEquals("Data::datatype::Collection<Integer>", umlTypeName);
+		assertEquals("Data::datatype::Collection<Integer>",
+				umlQualifiedTypeName);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testCheckParameterizedTypeForTemplateParameterSubstitutionWithNoSubstitution() {
+		prepareMocks();
+
+		Iterator<Element> iteratorElement = mock(Iterator.class);
+		when(iteratorElement.hasNext()).thenReturn(false);
+
+		when(type.getName()).thenReturn("Data::datatype::Collection<Person>");
+		when(type.getQualifiedName()).thenReturn(
+				"Data::datatype::Collection<de::test::Person>");
+
+		Map<String, String> results = umlHelper
+				.checkParameterizedTypeForTemplateParameterSubstitution(type);
+
+		String umlTypeName = results.get("umlTypeName");
+		String umlQualifiedTypeName = results.get("umlQualifiedTypeName");
+		assertEquals("Data::datatype::Collection<Person>", umlTypeName);
+		assertEquals("Data::datatype::Collection<de::test::Person>",
+				umlQualifiedTypeName);
 	}
 
 	@SuppressWarnings("unchecked")
