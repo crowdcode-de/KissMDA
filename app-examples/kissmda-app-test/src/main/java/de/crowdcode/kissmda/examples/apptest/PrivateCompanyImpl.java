@@ -18,12 +18,22 @@
  */
 package de.crowdcode.kissmda.examples.apptest;
 
+import java.util.Collection;
+import java.util.Set;
+import java.util.SortedSet;
+
 import de.crowdcode.kissmda.examples.apptest.components.CompanyImpl;
 import de.crowdcode.kissmda.testapp.PrivateCompany;
+import de.crowdcode.kissmda.testapp.components.Company;
+import de.crowdcode.kissmda.testapp.components.CompanyAttribute;
 
 public class PrivateCompanyImpl extends CompanyImpl implements PrivateCompany {
 
 	private String owner;
+
+	private Collection<Company> companies;
+
+	private SortedSet<CompanyAttribute<String, Integer>> companyAttributes;
 
 	@Override
 	public Integer calculateRevenue() {
@@ -38,5 +48,34 @@ public class PrivateCompanyImpl extends CompanyImpl implements PrivateCompany {
 	@Override
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	@Override
+	public Collection<Company> getCompanies() {
+		return companies;
+	}
+
+	@Override
+	public void addCompany(Company company) {
+		this.companies.add(company);
+	}
+
+	@Override
+	public SortedSet<CompanyAttribute<String, Integer>> getCompanyAttributes() {
+		return companyAttributes;
+	}
+
+	@Override
+	public void addCompanyAttribute(
+			CompanyAttribute<String, Integer> companyAttribute) {
+		this.companyAttributes.add(companyAttribute);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public SortedSet<CompanyAttribute<String, Integer>> calculateCompanies(
+			Collection<CompanyAttribute> companyAttributes,
+			Set<CompanyAttribute<String, Integer>> companyCompleteAttributes) {
+		return this.companyAttributes;
 	}
 }

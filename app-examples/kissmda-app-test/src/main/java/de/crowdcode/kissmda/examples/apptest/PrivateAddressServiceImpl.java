@@ -18,11 +18,15 @@
  */
 package de.crowdcode.kissmda.examples.apptest;
 
+import java.util.Collection;
+import java.util.SortedSet;
+
 import de.crowdcode.kissmda.testapp.Address;
 import de.crowdcode.kissmda.testapp.Person;
 import de.crowdcode.kissmda.testapp.PrivateAddressService;
 import de.crowdcode.kissmda.testapp.PrivateCompany;
 import de.crowdcode.kissmda.testapp.components.Company;
+import de.crowdcode.kissmda.testapp.components.CompanyAttribute;
 
 public class PrivateAddressServiceImpl extends AddressServiceImpl implements
 		PrivateAddressService {
@@ -37,5 +41,11 @@ public class PrivateAddressServiceImpl extends AddressServiceImpl implements
 	public Company getPrivateCompanyByPerson(Person person,
 			PrivateCompany privateCompany) {
 		return privateCompany;
+	}
+
+	@Override
+	public Collection<Company> getCompanies(
+			SortedSet<CompanyAttribute<String, Integer>> companyAttributes) {
+		return new PrivateCompanyImpl().getCompanies();
 	}
 }
