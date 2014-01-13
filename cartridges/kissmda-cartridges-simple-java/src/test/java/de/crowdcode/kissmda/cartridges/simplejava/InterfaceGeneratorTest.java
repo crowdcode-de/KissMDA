@@ -43,6 +43,8 @@ import org.eclipse.uml2.uml.Comment;
 import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Operation;
+import org.eclipse.uml2.uml.Parameter;
+import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.TemplateParameter;
 import org.eclipse.uml2.uml.TemplateSignature;
@@ -663,5 +665,89 @@ public class InterfaceGeneratorTest {
 		interfaceGenerator.generateMethodParams(ast, td, operation, md);
 
 		assertEquals("void calculateAge();\n", md.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateMethodParamsWithOneParameter() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+		MethodDeclaration md = ast.newMethodDeclaration();
+		md.setName(ast.newSimpleName("calculateAge"));
+
+		Operation operation = mock(Operation.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		EList<Parameter> parameters = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Parameter> paramIterator = mock(Iterator.class);
+		Parameter parameter = mock(Parameter.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Type type = mock(Type.class, Answers.RETURNS_DEEP_STUBS.get());
+
+		when(operation.getOwnedParameters()).thenReturn(parameters);
+		when(parameters.iterator()).thenReturn(paramIterator);
+		when(paramIterator.hasNext()).thenReturn(true, false);
+		when(paramIterator.next()).thenReturn(parameter);
+		when(parameter.getDirection()).thenReturn(
+				ParameterDirectionKind.IN_LITERAL);
+		when(parameter.getType()).thenReturn(type);
+		when(parameter.getName()).thenReturn("person");
+		when(parameter.getUpper()).thenReturn(0);
+		when(type.getName()).thenReturn("Person");
+		when(type.getQualifiedName()).thenReturn("de.component.Person");
+
+		interfaceGenerator.generateMethodParams(ast, td, operation, md);
+
+		assertEquals("void calculateAge(de.component.Person person);\n",
+				md.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateMethodParamsWithOneParameterWithGenerics() {
+		AST ast = AST.newAST(AST.JLS3);
+		ast.newCompilationUnit();
+		TypeDeclaration td = ast.newTypeDeclaration();
+		td.setInterface(true);
+		Modifier modifier = ast
+				.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD);
+		td.modifiers().add(modifier);
+		td.setName(ast.newSimpleName("Company"));
+		MethodDeclaration md = ast.newMethodDeclaration();
+		md.setName(ast.newSimpleName("calculateAge"));
+
+		Operation operation = mock(Operation.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		EList<Parameter> parameters = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Parameter> paramIterator = mock(Iterator.class);
+		Parameter parameter = mock(Parameter.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+		Type type = mock(Type.class, Answers.RETURNS_DEEP_STUBS.get());
+
+		when(operation.getOwnedParameters()).thenReturn(parameters);
+		when(parameters.iterator()).thenReturn(paramIterator);
+		when(paramIterator.hasNext()).thenReturn(true, false);
+		when(paramIterator.next()).thenReturn(parameter);
+		when(parameter.getDirection()).thenReturn(
+				ParameterDirectionKind.IN_LITERAL);
+		when(parameter.getType()).thenReturn(type);
+		when(parameter.getName()).thenReturn("person");
+		when(parameter.getUpper()).thenReturn(0);
+		when(type.getName()).thenReturn("Person<Integer>");
+		when(type.getQualifiedName())
+				.thenReturn("de.component.Person<Integer>");
+
+		interfaceGenerator.generateMethodParams(ast, td, operation, md);
+
+		assertEquals(
+				"void calculateAge(de.component.Person<Integer> person);\n",
+				md.toString());
 	}
 }

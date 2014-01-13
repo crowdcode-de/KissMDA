@@ -341,6 +341,94 @@ public class InterfaceGenerator {
 	}
 
 	/**
+	 * Generate the operation end for * operation.
+	 * 
+	 * @param ast
+	 *            AST from JDT
+	 * @param td
+	 *            TypeDeclaration JDT
+	 * @param operation
+	 *            UML2 operation
+	 * @param mdGetter
+	 *            method declaration JDT
+	 * @param umlTypeName
+	 *            UML2 type name as String
+	 * @param umlQualifiedTypeName
+	 *            UML2 qualified type name as String
+	 */
+	public void generateAssociationEndUpperCardinalityMultiples(AST ast,
+			AbstractTypeDeclaration td, Operation operation,
+			MethodDeclaration mdGetter, String umlTypeName,
+			String umlQualifiedTypeName) {
+		// Check for isOrdered and isUnique
+		if (operation.isOrdered() && !operation.isUnique()) {
+			// We need to add List<Type> as returnType
+			jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
+					umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_LIST);
+		} else if (operation.isUnique() && !operation.isOrdered()) {
+			// We need to add Set<Type> as returnType
+			jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
+					umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_SET);
+		} else if (operation.isUnique() && operation.isOrdered()) {
+			// We need to add SortedSet<Type> as returnType
+			jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
+					umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_SORTEDSET);
+		} else {
+			// We need to add Collection<Type> as returnType
+			jdtHelper.createReturnTypeAsCollection(ast, td, mdGetter,
+					umlTypeName, umlQualifiedTypeName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_COLLECTION);
+		}
+	}
+
+	/**
+	 * Generate the parameter for * parameter.
+	 * 
+	 * @param ast
+	 *            AST from JDT
+	 * @param td
+	 *            TypeDeclaration JDT
+	 * @param parameter
+	 *            UML2 parameter
+	 * @param md
+	 *            method declaration JDT
+	 * @param umlTypeName
+	 *            UML2 type name as String
+	 * @param umlQualifiedTypeName
+	 *            UML2 qualified type name as String
+	 */
+	public void generateAssociationEndUpperCardinalityMultiples(AST ast,
+			AbstractTypeDeclaration td, Parameter parameter,
+			MethodDeclaration md, String umlTypeName,
+			String umlQualifiedTypeName, String umlPropertyName) {
+		// Check for isOrdered and isUnique
+		if (parameter.isOrdered() && !parameter.isUnique()) {
+			// We need to add List<Type> as parameter
+			jdtHelper.createParameterTypesAsCollection(ast, td, md,
+					umlTypeName, umlQualifiedTypeName, umlPropertyName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_LIST);
+		} else if (parameter.isUnique() && !parameter.isOrdered()) {
+			// We need to add Set<Type> as parameter
+			jdtHelper.createParameterTypesAsCollection(ast, td, md,
+					umlTypeName, umlQualifiedTypeName, umlPropertyName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_SET);
+		} else if (parameter.isUnique() && parameter.isOrdered()) {
+			// We need to add SortedSet<Type> as parameter
+			jdtHelper.createParameterTypesAsCollection(ast, td, md,
+					umlTypeName, umlQualifiedTypeName, umlPropertyName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_SORTEDSET);
+		} else {
+			// We need to add Collection<Type> as parameter
+			jdtHelper.createParameterTypesAsCollection(ast, td, md,
+					umlTypeName, umlQualifiedTypeName, umlPropertyName,
+					sourceDirectoryPackageName, JdtHelper.JAVA_UTIL_COLLECTION);
+		}
+	}
+
+	/**
 	 * Generate Javadoc for Getter and Setter method.
 	 * 
 	 * @param ast
@@ -611,16 +699,23 @@ public class InterfaceGenerator {
 		logger.log(Level.FINE, "UmlQualifiedTypeName: " + umlQualifiedTypeName
 				+ " - " + "umlTypeName: " + umlTypeName);
 
-		// Only for parameterized type
-		if (dataTypeUtils.isParameterizedType(umlTypeName)) {
-			Map<String, String> types = umlHelper
-					.checkParameterizedTypeForTemplateParameterSubstitution(type);
-			umlTypeName = types.get("umlTypeName");
-			umlQualifiedTypeName = types.get("umlQualifiedTypeName");
-		}
+		if (operation.getUpper() >= 0) {
+			// Upper Cardinality 0..1
+			// Only for parameterized type
+			if (dataTypeUtils.isParameterizedType(umlTypeName)) {
+				Map<String, String> types = umlHelper
+						.checkParameterizedTypeForTemplateParameterSubstitution(type);
+				umlTypeName = types.get("umlTypeName");
+				umlQualifiedTypeName = types.get("umlQualifiedTypeName");
+			}
 
-		jdtHelper.createReturnType(ast, td, md, umlTypeName,
-				umlQualifiedTypeName, sourceDirectoryPackageName);
+			jdtHelper.createReturnType(ast, td, md, umlTypeName,
+					umlQualifiedTypeName, sourceDirectoryPackageName);
+		} else {
+			// Upper Cardinality 0..*
+			generateAssociationEndUpperCardinalityMultiples(ast, td, operation,
+					md, umlTypeName, umlQualifiedTypeName);
+		}
 	}
 
 	/**
@@ -643,22 +738,31 @@ public class InterfaceGenerator {
 				Type type = parameter.getType();
 				String umlTypeName = type.getName();
 				String umlQualifiedTypeName = type.getQualifiedName();
-
-				// Only for parameterized type
-				if (dataTypeUtils.isParameterizedType(umlTypeName)) {
-					Map<String, String> types = umlHelper
-							.checkParameterizedTypeForTemplateParameterSubstitution(type);
-					umlTypeName = types.get("umlTypeName");
-					umlQualifiedTypeName = types.get("umlQualifiedTypeName");
-				}
-
 				String umlPropertyName = StringUtils.uncapitalize(parameter
 						.getName());
 				logger.log(Level.FINE, "Parameter: " + parameter.getName()
 						+ " - " + "Type: " + umlTypeName);
-				jdtHelper.createParameterTypes(ast, td, md, umlTypeName,
-						umlQualifiedTypeName, umlPropertyName,
-						sourceDirectoryPackageName);
+
+				if (parameter.getUpper() >= 0) {
+					// Upper Cardinality 0..1
+					// Only for parameterized type
+					if (dataTypeUtils.isParameterizedType(umlTypeName)) {
+						Map<String, String> types = umlHelper
+								.checkParameterizedTypeForTemplateParameterSubstitution(type);
+						umlTypeName = types.get("umlTypeName");
+						umlQualifiedTypeName = types
+								.get("umlQualifiedTypeName");
+					}
+
+					jdtHelper.createParameterTypes(ast, td, md, umlTypeName,
+							umlQualifiedTypeName, umlPropertyName,
+							sourceDirectoryPackageName);
+				} else {
+					// Upper Cardinality 0..*
+					generateAssociationEndUpperCardinalityMultiples(ast, td,
+							parameter, md, umlTypeName, umlQualifiedTypeName,
+							umlPropertyName);
+				}
 			}
 		}
 	}
