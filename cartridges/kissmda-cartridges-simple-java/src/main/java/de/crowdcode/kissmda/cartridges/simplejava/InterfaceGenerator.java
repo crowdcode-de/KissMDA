@@ -249,7 +249,9 @@ public class InterfaceGenerator {
 	}
 
 	/**
-	 * Generate the getter method.
+	 * Generate the getter method with sourceDirectoryPackageName as input
+	 * parameter. Use this method if you need to call the method
+	 * generateGetterMethod from outside this class.
 	 * 
 	 * @param ast
 	 *            AST JDT

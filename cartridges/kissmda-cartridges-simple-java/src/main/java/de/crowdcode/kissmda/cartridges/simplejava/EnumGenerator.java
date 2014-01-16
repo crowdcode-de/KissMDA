@@ -205,6 +205,25 @@ public class EnumGenerator {
 	}
 
 	/**
+	 * Generate getter method. Use this method if you need to call the method
+	 * generateGetterMethod from outside this class.
+	 * 
+	 * @param clazz
+	 *            UML2 classifier
+	 * @param ast
+	 *            JDT AST tree
+	 * @param ed
+	 *            EnumDeclaration JDT
+	 * @param sourceDirectoryPackageName
+	 *            root package name of the UML model
+	 */
+	public void generateGetterMethod(Classifier clazz, AST ast,
+			EnumDeclaration ed, String sourceDirectoryPackageName) {
+		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
+		generateGetterMethod(clazz, ast, ed);
+	}
+
+	/**
 	 * Generate constructor.
 	 * 
 	 * @param clazz

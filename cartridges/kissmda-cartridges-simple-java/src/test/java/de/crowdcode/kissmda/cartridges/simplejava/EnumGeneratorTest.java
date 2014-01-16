@@ -341,6 +341,76 @@ public class EnumGeneratorTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
+	public void testGenerateGetterMethodWithSourceDirectoryPackageNameWrong() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+
+		EList<Property> properties = mock(EList.class);
+		Iterator<Property> propertyIter = mock(Iterator.class);
+		Property property = mock(Property.class);
+		Type type = mock(Type.class);
+		String name = "type";
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(clazz.getAttributes()).thenReturn(properties);
+		when(properties.iterator()).thenReturn(propertyIter);
+		when(propertyIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(propertyIter.next()).thenReturn(property);
+		when(property.getType()).thenReturn(type);
+		when(property.getName()).thenReturn(name);
+		when(property.getUpper()).thenReturn(1);
+		when(property.getLower()).thenReturn(1);
+		when(property.getOwnedComments()).thenReturn(comments);
+		when(type.getName()).thenReturn("Data::String");
+		when(type.getQualifiedName()).thenReturn("Data::String");
+
+		enumGenerator.generateGetterMethod(clazz, ast, ed);
+
+		assertEquals(
+				"public enum Company {; public Data.String getType(){\n  return type;\n}\n}\n",
+				cu.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateGetterMethodWithSourceDirectoryPackageNameCorrect() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+
+		EList<Property> properties = mock(EList.class);
+		Iterator<Property> propertyIter = mock(Iterator.class);
+		Property property = mock(Property.class);
+		Type type = mock(Type.class);
+		String name = "type";
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(clazz.getAttributes()).thenReturn(properties);
+		when(properties.iterator()).thenReturn(propertyIter);
+		when(propertyIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(propertyIter.next()).thenReturn(property);
+		when(property.getType()).thenReturn(type);
+		when(property.getName()).thenReturn(name);
+		when(property.getUpper()).thenReturn(1);
+		when(property.getLower()).thenReturn(1);
+		when(property.getOwnedComments()).thenReturn(comments);
+		when(type.getName()).thenReturn("Data::String");
+		when(type.getQualifiedName()).thenReturn("Data::String");
+
+		enumGenerator.generateGetterMethod(clazz, ast, ed, "Data");
+
+		assertEquals(
+				"public enum Company {; public String getType(){\n  return type;\n}\n}\n",
+				cu.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
 	public void testGenerateAttribute() {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
