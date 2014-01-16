@@ -249,6 +249,30 @@ public class InterfaceGenerator {
 	}
 
 	/**
+	 * Generate the getter method.
+	 * 
+	 * @param ast
+	 *            AST JDT
+	 * @param td
+	 *            Abstract Type Declaration JDT
+	 * @param property
+	 *            UML2 property
+	 * @param umlTypeName
+	 *            UML2 type name
+	 * @param umlQualifiedTypeName
+	 *            UML2 qualified type name
+	 * @param sourceDirectoryPackageName
+	 *            root package name of the UML model
+	 */
+	public MethodDeclaration generateGetterMethod(AST ast,
+			AbstractTypeDeclaration td, Property property, String umlTypeName,
+			String umlQualifiedTypeName, String sourceDirectoryPackageName) {
+		this.sourceDirectoryPackageName = sourceDirectoryPackageName;
+		return generateGetterMethod(ast, td, property, umlTypeName,
+				umlQualifiedTypeName);
+	}
+
+	/**
 	 * Generate the setter method.
 	 * 
 	 * @param ast

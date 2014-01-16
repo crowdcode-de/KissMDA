@@ -188,7 +188,7 @@ public class EnumGenerator {
 			String umlQualifiedTypeName = type.getQualifiedName();
 			MethodDeclaration methodDeclaration = interfaceGenerator
 					.generateGetterMethod(ast, ed, property, umlTypeName,
-							umlQualifiedTypeName);
+							umlQualifiedTypeName, sourceDirectoryPackageName);
 
 			// Public
 			methodDeclaration.modifiers().add(
