@@ -32,6 +32,8 @@ import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Comment;
@@ -444,13 +446,17 @@ public class EnumGeneratorTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateConstructor() {
+	public void testGenerateConstructorWithOneParameter() {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
 
-		EList<Property> properties = mock(EList.class);
-		Iterator<Property> propertyIter = mock(Iterator.class);
+		EList<Property> firstProperties = mock(EList.class);
+		Iterator<Property> firstPropertyIter = mock(Iterator.class);
+
+		EList<Property> secondProperties = mock(EList.class);
+		Iterator<Property> secondPropertyIter = mock(Iterator.class);
+
 		Property property = mock(Property.class);
 		Type type = mock(Type.class);
 		String name = "type";
@@ -458,10 +464,16 @@ public class EnumGeneratorTest {
 		EList<Comment> comments = mock(EList.class,
 				Answers.RETURNS_DEEP_STUBS.get());
 
-		when(clazz.getAttributes()).thenReturn(properties);
-		when(properties.iterator()).thenReturn(propertyIter);
-		when(propertyIter.hasNext()).thenReturn(true).thenReturn(false);
-		when(propertyIter.next()).thenReturn(property);
+		when(clazz.getAttributes()).thenReturn(firstProperties).thenReturn(
+				secondProperties);
+		when(firstProperties.iterator()).thenReturn(firstPropertyIter);
+		when(firstPropertyIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(firstPropertyIter.next()).thenReturn(property);
+
+		when(secondProperties.iterator()).thenReturn(secondPropertyIter);
+		when(secondPropertyIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(secondPropertyIter.next()).thenReturn(property);
+
 		when(property.getType()).thenReturn(type);
 		when(property.getName()).thenReturn(name);
 		when(property.getUpper()).thenReturn(1);
@@ -474,6 +486,123 @@ public class EnumGeneratorTest {
 
 		assertEquals(
 				"public enum Company {; private Company(String type){\n  this.type=type;\n}\n}\n",
+				cu.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateConstructorWithTwoParameters() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+
+		EList<Property> firstProperties = mock(EList.class);
+		Iterator<Property> firstPropertyIter = mock(Iterator.class);
+
+		EList<Property> secondProperties = mock(EList.class);
+		Iterator<Property> secondPropertyIter = mock(Iterator.class);
+
+		Property firstProperty = mock(Property.class);
+		Type firstType = mock(Type.class);
+		String firstName = "type";
+
+		Property secondProperty = mock(Property.class);
+		Type secondType = mock(Type.class);
+		String secondName = "count";
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(clazz.getAttributes()).thenReturn(firstProperties).thenReturn(
+				secondProperties);
+		when(firstProperties.iterator()).thenReturn(firstPropertyIter);
+		when(firstPropertyIter.hasNext()).thenReturn(true).thenReturn(true)
+				.thenReturn(false);
+		when(firstPropertyIter.next()).thenReturn(firstProperty).thenReturn(
+				secondProperty);
+
+		when(secondProperties.iterator()).thenReturn(secondPropertyIter);
+		when(secondPropertyIter.hasNext()).thenReturn(true).thenReturn(true)
+				.thenReturn(false);
+		when(secondPropertyIter.next()).thenReturn(firstProperty).thenReturn(
+				secondProperty);
+
+		when(firstProperty.getType()).thenReturn(firstType);
+		when(firstProperty.getName()).thenReturn(firstName);
+		when(firstProperty.getUpper()).thenReturn(1);
+		when(firstProperty.getLower()).thenReturn(1);
+		when(firstProperty.getOwnedComments()).thenReturn(comments);
+		when(firstType.getName()).thenReturn("String");
+		when(firstType.getQualifiedName()).thenReturn("String");
+
+		when(secondProperty.getType()).thenReturn(secondType);
+		when(secondProperty.getName()).thenReturn(secondName);
+		when(secondProperty.getUpper()).thenReturn(1);
+		when(secondProperty.getLower()).thenReturn(1);
+		when(secondProperty.getOwnedComments()).thenReturn(comments);
+		when(secondType.getName()).thenReturn("Integer");
+		when(secondType.getQualifiedName()).thenReturn("Integer");
+
+		enumGenerator.generateConstructor(clazz, ast, ed);
+
+		assertEquals(
+				"public enum Company {; private Company(String type,Integer count){\n  this.type=type;\n  this.count=count;\n}\n}\n",
+				cu.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateContructorParameters() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+		MethodDeclaration md = ast.newMethodDeclaration();
+		md.setConstructor(true);
+		md.setName(ast.newSimpleName(clazz.getName()));
+		md.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PRIVATE_KEYWORD));
+
+		EList<Property> properties = mock(EList.class);
+		Iterator<Property> propertyIter = mock(Iterator.class);
+		Property propertyName = mock(Property.class);
+		String name = "name";
+		Type typeName = mock(Type.class);
+		Property propertyCount = mock(Property.class);
+		String count = "count";
+		Type typeCount = mock(Type.class);
+
+		EList<Comment> comments = mock(EList.class,
+				Answers.RETURNS_DEEP_STUBS.get());
+
+		when(clazz.getAttributes()).thenReturn(properties);
+		when(properties.iterator()).thenReturn(propertyIter);
+		when(propertyIter.hasNext()).thenReturn(true).thenReturn(true)
+				.thenReturn(false);
+		when(propertyIter.next()).thenReturn(propertyName).thenReturn(
+				propertyCount);
+
+		when(propertyName.getType()).thenReturn(typeName);
+		when(propertyName.getName()).thenReturn(name);
+		when(propertyName.getUpper()).thenReturn(1);
+		when(propertyName.getLower()).thenReturn(1);
+		when(propertyName.getOwnedComments()).thenReturn(comments);
+		when(typeName.getName()).thenReturn("String");
+		when(typeName.getQualifiedName()).thenReturn("String");
+
+		when(propertyCount.getType()).thenReturn(typeCount);
+		when(propertyCount.getName()).thenReturn(count);
+		when(propertyCount.getUpper()).thenReturn(1);
+		when(propertyCount.getLower()).thenReturn(1);
+		when(propertyCount.getOwnedComments()).thenReturn(comments);
+		when(typeCount.getName()).thenReturn("Integer");
+		when(typeCount.getQualifiedName()).thenReturn("Integer");
+
+		enumGenerator.generateContructorParameters(clazz, ast, md);
+
+		ed.bodyDeclarations().add(md);
+
+		assertEquals(
+				"public enum Company {; private Company(String name,Integer count);\n}\n",
 				cu.toString());
 	}
 }

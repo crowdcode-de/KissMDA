@@ -18,6 +18,7 @@ x * Licensed to the Apache Software Foundation (ASF) under one
  */
 package de.crowdcode.kissmda.cartridges.simplejava;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,6 +85,8 @@ public class EnumGenerator {
 
 	private String sourceDirectoryPackageName;
 
+	private final ArrayList<Type> constructorParameterTypes = new ArrayList<Type>();
+
 	/**
 	 * Generate the Class Interface. This is the main generation part for this
 	 * SimpleJavaTransformer.
@@ -101,9 +104,9 @@ public class EnumGenerator {
 
 		generatePackage(clazz, ast, cu);
 		EnumDeclaration ed = generateEnum(clazz, ast, cu);
-		generateConstants(clazz, ast, ed);
 		generateAttributes(clazz, ast, ed);
 		generateConstructor(clazz, ast, ed);
+		generateConstants(clazz, ast, ed);
 		generateGetterMethod(clazz, ast, ed);
 
 		logger.log(Level.INFO, "Compilation unit: \n\n" + cu.toString());
@@ -236,38 +239,26 @@ public class EnumGenerator {
 	@SuppressWarnings("unchecked")
 	public void generateConstructor(Classifier clazz, AST ast,
 			EnumDeclaration ed) {
+		// Constructor
+		MethodDeclaration md = ast.newMethodDeclaration();
+		md.setConstructor(true);
+		md.setName(ast.newSimpleName(clazz.getName()));
+		md.modifiers().add(
+				ast.newModifier(Modifier.ModifierKeyword.PRIVATE_KEYWORD));
+		ed.bodyDeclarations().add(md);
+
+		// We need to build contructor parameters for each properties
+		generateContructorParameters(clazz, ast, md);
+
+		// Content of constructor
+		Block block = ast.newBlock();
+
 		EList<Property> properties = clazz.getAttributes();
 		for (Property property : properties) {
-			Type type = property.getType();
 			logger.log(Level.FINE, "Class: " + clazz.getName() + " - "
 					+ "Property: " + property.getName() + " - "
 					+ "Property Upper: " + property.getUpper() + " - "
 					+ "Property Lower: " + property.getLower());
-			String umlTypeName = type.getName();
-			String umlQualifiedTypeName = type.getQualifiedName();
-
-			// Check whether primitive or array type or simple type?
-			org.eclipse.jdt.core.dom.Type chosenType = jdtHelper.getChosenType(
-					ast, umlTypeName, umlQualifiedTypeName,
-					sourceDirectoryPackageName);
-
-			// Constructor
-			MethodDeclaration md = ast.newMethodDeclaration();
-			md.setConstructor(true);
-			md.setName(ast.newSimpleName(clazz.getName()));
-			md.modifiers().add(
-					ast.newModifier(Modifier.ModifierKeyword.PRIVATE_KEYWORD));
-
-			SingleVariableDeclaration variableDeclaration = ast
-					.newSingleVariableDeclaration();
-			variableDeclaration.setType(chosenType);
-			variableDeclaration.setName(ast.newSimpleName(property.getName()));
-			md.parameters().add(variableDeclaration);
-
-			ed.bodyDeclarations().add(md);
-
-			// Content of constructor
-			Block block = ast.newBlock();
 
 			// Left expression
 			SimpleName simpleName = ast.newSimpleName(property.getName());
@@ -290,7 +281,51 @@ public class EnumGenerator {
 					.newExpressionStatement(assignment);
 
 			block.statements().add(expressionStatement);
-			md.setBody(block);
+		}
+
+		// Set Body to MethodDeclaration
+		md.setBody(block);
+	}
+
+	@SuppressWarnings("unchecked")
+	void generateContructorParameters(Classifier clazz, AST ast,
+			MethodDeclaration md) {
+		// Empty the list first
+		constructorParameterTypes.clear();
+
+		EList<Property> constructorProperties = clazz.getAttributes();
+		for (Property constructorProperty : constructorProperties) {
+			Type constructorType = constructorProperty.getType();
+			// Save the variable declaration for later use
+			constructorParameterTypes.add(constructorType);
+
+			logger.log(
+					Level.FINE,
+					"Class: " + clazz.getName() + " - "
+							+ "Constructor property: "
+							+ constructorProperty.getName() + " - "
+							+ "Constructor property Upper: "
+							+ constructorProperty.getUpper() + " - "
+							+ "Constructor property Lower: "
+							+ constructorProperty.getLower());
+
+			String contructorUmlTypeName = constructorType.getName();
+			String constructorUmlQualifiedTypeName = constructorType
+					.getQualifiedName();
+
+			// Check whether primitive or array type or simple type?
+			org.eclipse.jdt.core.dom.Type constructorChosenType = jdtHelper
+					.getChosenType(ast, contructorUmlTypeName,
+							constructorUmlQualifiedTypeName,
+							sourceDirectoryPackageName);
+
+			SingleVariableDeclaration variableDeclaration = ast
+					.newSingleVariableDeclaration();
+			variableDeclaration.setType(constructorChosenType);
+			variableDeclaration.setName(ast.newSimpleName(constructorProperty
+					.getName()));
+
+			md.parameters().add(variableDeclaration);
 		}
 	}
 
@@ -363,40 +398,85 @@ public class EnumGenerator {
 			EnumConstantDeclaration ec = ast.newEnumConstantDeclaration();
 			ec.setName(ast.newSimpleName(enumLiteral.getName().toUpperCase()));
 
-			EList<Slot> slots = enumLiteral.getSlots();
-			for (Slot slot : slots) {
-				Property property = (Property) slot.getDefiningFeature();
-				Type type = property.getType();
-				EList<ValueSpecification> valueSpecifications = slot
-						.getValues();
+			// We need to sort the arguments so that it match the
+			// constructor!
+			if (!constructorParameterTypes.isEmpty()) {
+				for (Type constructorParameterType : constructorParameterTypes) {
+					logger.log(Level.FINE, "constructorParameterType: "
+							+ constructorParameterTypes.toString());
 
-				for (ValueSpecification valueSpecification : valueSpecifications) {
-					if (type.getName().equalsIgnoreCase("Integer")) {
-						NumberLiteral numberLiteral = ast.newNumberLiteral();
-						numberLiteral.setToken(String
-								.valueOf(valueSpecification.integerValue()));
-						ec.arguments().add(numberLiteral);
-					} else if (type.getName().equalsIgnoreCase("Long")) {
-						NumberLiteral numberLiteral = ast.newNumberLiteral();
-						numberLiteral.setToken(String.valueOf(
-								valueSpecification.integerValue()).concat("L"));
-						ec.arguments().add(numberLiteral);
-					} else if (type.getName().equalsIgnoreCase("Boolean")) {
-						BooleanLiteral booleanLiteral = ast
-								.newBooleanLiteral(valueSpecification
-										.booleanValue());
-						ec.arguments().add(booleanLiteral);
-					} else if (type.getName().equalsIgnoreCase("String")) {
-						StringLiteral stringLiteral = ast.newStringLiteral();
-						stringLiteral.setLiteralValue(valueSpecification
-								.stringValue());
-						ec.arguments().add(stringLiteral);
+					Slot slot = findSlotByType(
+							constructorParameterType.getName(), enumLiteral);
+					if (slot != null) {
+						// We found a slot with the same type
+						Property property = (Property) slot
+								.getDefiningFeature();
+						Type type = property.getType();
+						chooseLiteralTypeAndAddToEnumConstantArguments(ast, ec,
+								slot, type);
+					} else {
+						// We didn't find the slot
+						// TODO doing something...
 					}
+				}
+			} else {
+				// Constructor parameter types is empty
+				// So we are adding the literal to the EnumConstant arguments
+				// just as it is
+				EList<Slot> slots = enumLiteral.getSlots();
+				for (Slot slot : slots) {
+					Property property = (Property) slot.getDefiningFeature();
+					Type type = property.getType();
+					chooseLiteralTypeAndAddToEnumConstantArguments(ast, ec,
+							slot, type);
 				}
 			}
 
 			ed.enumConstants().add(ec);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	void chooseLiteralTypeAndAddToEnumConstantArguments(AST ast,
+			EnumConstantDeclaration ec, Slot slot, Type type) {
+		EList<ValueSpecification> valueSpecifications = slot.getValues();
+		for (ValueSpecification valueSpecification : valueSpecifications) {
+			if (type.getName().equalsIgnoreCase("Integer")) {
+				NumberLiteral numberLiteral = ast.newNumberLiteral();
+				numberLiteral.setToken(String.valueOf(valueSpecification
+						.integerValue()));
+				ec.arguments().add(numberLiteral);
+			} else if (type.getName().equalsIgnoreCase("Long")) {
+				NumberLiteral numberLiteral = ast.newNumberLiteral();
+				numberLiteral.setToken(String.valueOf(
+						valueSpecification.integerValue()).concat("L"));
+				ec.arguments().add(numberLiteral);
+			} else if (type.getName().equalsIgnoreCase("Boolean")) {
+				BooleanLiteral booleanLiteral = ast
+						.newBooleanLiteral(valueSpecification.booleanValue());
+				ec.arguments().add(booleanLiteral);
+			} else if (type.getName().equalsIgnoreCase("String")) {
+				StringLiteral stringLiteral = ast.newStringLiteral();
+				stringLiteral.setLiteralValue(valueSpecification.stringValue());
+				ec.arguments().add(stringLiteral);
+			}
+		}
+	}
+
+	Slot findSlotByType(String name, EnumerationLiteral enumLiteral) {
+		EList<Slot> slots = enumLiteral.getSlots();
+		for (Slot slot : slots) {
+			Property property = (Property) slot.getDefiningFeature();
+			Type type = property.getType();
+
+			if (type.getName().equals(name)) {
+				// We found it
+				return slot;
+			}
+		}
+
+		// We finished but cannot find it
+		return null;
 	}
 
 	private String getClassName(Classifier clazz) {
