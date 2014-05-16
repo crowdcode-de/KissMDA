@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.inject.Inject;
@@ -108,7 +109,7 @@ public class EnumGeneratorTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateConstantsInteger() {
+	public void testGenerateConstantsIntegerWithNoParamNames() {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
@@ -158,7 +159,7 @@ public class EnumGeneratorTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateConstantsString() {
+	public void testGenerateConstantsStringWithNoParamNames() {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
@@ -208,7 +209,7 @@ public class EnumGeneratorTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateConstantsLong() {
+	public void testGenerateConstantsLongWithNoParamNames() {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
@@ -258,7 +259,7 @@ public class EnumGeneratorTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGenerateConstantsBoolean() {
+	public void testGenerateConstantsBooleanWithNoParamNames() {
 		AST ast = AST.newAST(AST.JLS3);
 		CompilationUnit cu = ast.newCompilationUnit();
 		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
@@ -604,5 +605,217 @@ public class EnumGeneratorTest {
 		assertEquals(
 				"public enum Company {; private Company(String name,Integer count);\n}\n",
 				cu.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testFindSlotByNameFoundIt() {
+		EnumerationLiteral enumLiteral = mock(EnumerationLiteral.class);
+		EList<Slot> slots = mock(EList.class, Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Slot> slotIter = mock(Iterator.class);
+		Slot slot1 = mock(Slot.class);
+		Slot slot2 = mock(Slot.class);
+		Property property1 = mock(Property.class);
+		Property property2 = mock(Property.class);
+
+		when(enumLiteral.getSlots()).thenReturn(slots);
+		when(slots.iterator()).thenReturn(slotIter);
+		when(slotIter.hasNext()).thenReturn(true).thenReturn(true)
+				.thenReturn(false);
+		when(slotIter.next()).thenReturn(slot1).thenReturn(slot2);
+		when(slot1.getDefiningFeature()).thenReturn(property1);
+		when(slot2.getDefiningFeature()).thenReturn(property2);
+		when(property1.getName()).thenReturn("test1");
+		when(property2.getName()).thenReturn("test2");
+
+		Slot slotResult = enumGenerator.findSlotByName("test1", enumLiteral);
+
+		assertEquals(slot1, slotResult);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testFindSlotByNameNotFound() {
+		EnumerationLiteral enumLiteral = mock(EnumerationLiteral.class);
+		EList<Slot> slots = mock(EList.class, Answers.RETURNS_DEEP_STUBS.get());
+		Iterator<Slot> slotIter = mock(Iterator.class);
+		Slot slot1 = mock(Slot.class);
+		Slot slot2 = mock(Slot.class);
+		Property property1 = mock(Property.class);
+		Property property2 = mock(Property.class);
+
+		when(enumLiteral.getSlots()).thenReturn(slots);
+		when(slots.iterator()).thenReturn(slotIter);
+		when(slotIter.hasNext()).thenReturn(true).thenReturn(true)
+				.thenReturn(false);
+		when(slotIter.next()).thenReturn(slot1).thenReturn(slot2);
+		when(slot1.getDefiningFeature()).thenReturn(property1);
+		when(slot2.getDefiningFeature()).thenReturn(property2);
+		when(property1.getName()).thenReturn("test1");
+		when(property2.getName()).thenReturn("test2");
+
+		Slot slotResult = enumGenerator.findSlotByName("test3", enumLiteral);
+
+		assertEquals(null, slotResult);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateConstantsWithConstructorParameterNamesAndWithFoundSlot() {
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+
+		Enumeration enumeration = mock(Enumeration.class);
+		EList<EnumerationLiteral> enumLiterals = mock(EList.class);
+		Iterator<EnumerationLiteral> enumIter = mock(Iterator.class);
+		EnumerationLiteral enumLiteral = mock(EnumerationLiteral.class);
+
+		EList<Slot> slots = mock(EList.class);
+		Iterator<Slot> slotIter = mock(Iterator.class);
+		Slot slot1 = mock(Slot.class);
+		Slot slot2 = mock(Slot.class);
+
+		Property property1 = mock(Property.class);
+		Property property2 = mock(Property.class);
+		Type type1 = mock(Type.class);
+		Type type2 = mock(Type.class);
+
+		EList<ValueSpecification> valueSpecifications1 = mock(EList.class);
+		Iterator<ValueSpecification> valueSpecificationIter1 = mock(Iterator.class);
+		EList<ValueSpecification> valueSpecifications2 = mock(EList.class);
+		Iterator<ValueSpecification> valueSpecificationIter2 = mock(Iterator.class);
+		ValueSpecification valueSpecification1 = mock(ValueSpecification.class);
+		ValueSpecification valueSpecification2 = mock(ValueSpecification.class);
+
+		when(enumeration.getOwnedLiterals()).thenReturn(enumLiterals);
+		when(enumLiterals.iterator()).thenReturn(enumIter);
+		when(enumIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(enumIter.next()).thenReturn(enumLiteral);
+		when(enumLiteral.getName()).thenReturn("Home");
+
+		when(enumLiteral.getSlots()).thenReturn(slots);
+		when(slots.iterator()).thenReturn(slotIter);
+		when(slotIter.hasNext()).thenReturn(true).thenReturn(true)
+				.thenReturn(false);
+		when(slotIter.next()).thenReturn(slot1).thenReturn(slot2);
+		when(slot1.getDefiningFeature()).thenReturn(property1);
+		when(slot2.getDefiningFeature()).thenReturn(property2);
+
+		when(property1.getType()).thenReturn(type1);
+		when(property2.getType()).thenReturn(type2);
+		when(property1.getName()).thenReturn("type");
+		when(property2.getName()).thenReturn("name");
+		when(type1.getName()).thenReturn("boolean");
+		when(type2.getName()).thenReturn("String");
+
+		when(slot1.getValues()).thenReturn(valueSpecifications1);
+		when(slot2.getValues()).thenReturn(valueSpecifications2);
+		when(valueSpecifications1.iterator()).thenReturn(
+				valueSpecificationIter1);
+		when(valueSpecifications2.iterator()).thenReturn(
+				valueSpecificationIter2);
+		when(valueSpecificationIter1.hasNext()).thenReturn(true).thenReturn(
+				false);
+		when(valueSpecificationIter2.hasNext()).thenReturn(true).thenReturn(
+				false);
+		when(valueSpecificationIter1.next()).thenReturn(valueSpecification1);
+		when(valueSpecificationIter2.next()).thenReturn(valueSpecification2);
+		when(valueSpecification1.booleanValue()).thenReturn(true);
+		when(valueSpecification2.stringValue()).thenReturn("Lofi");
+
+		ArrayList<String> constructorParameterNames = new ArrayList<String>();
+		constructorParameterNames.add("type");
+		constructorParameterNames.add("name");
+		enumGenerator.setConstructorParameterNames(constructorParameterNames);
+
+		enumGenerator.generateConstants(enumeration, ast, ed);
+
+		assertEquals("public enum Company {HOME(true,\"Lofi\")}\n",
+				ed.toString());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGenerateConstantsWithConstructorParameterNamesAndWithSlotNotFound() {
+		// TODO
+		AST ast = AST.newAST(AST.JLS3);
+		CompilationUnit cu = ast.newCompilationUnit();
+		EnumDeclaration ed = enumGenerator.generateEnum(clazz, ast, cu);
+
+		Enumeration enumeration = mock(Enumeration.class);
+		EList<EnumerationLiteral> enumLiterals = mock(EList.class);
+		Iterator<EnumerationLiteral> enumIter = mock(Iterator.class);
+		EnumerationLiteral enumLiteral = mock(EnumerationLiteral.class);
+
+		EList<Slot> slots1 = mock(EList.class);
+		EList<Slot> slots2 = mock(EList.class);
+		Iterator<Slot> slotIter1 = mock(Iterator.class);
+		Iterator<Slot> slotIter2 = mock(Iterator.class);
+		Slot slot1 = mock(Slot.class);
+		Slot slot2 = mock(Slot.class);
+
+		Property property1 = mock(Property.class);
+		Property property2 = mock(Property.class);
+		Type type1 = mock(Type.class);
+		Type type2 = mock(Type.class);
+
+		EList<ValueSpecification> valueSpecifications1 = mock(EList.class);
+		Iterator<ValueSpecification> valueSpecificationIter1 = mock(Iterator.class);
+		EList<ValueSpecification> valueSpecifications2 = mock(EList.class);
+		Iterator<ValueSpecification> valueSpecificationIter2 = mock(Iterator.class);
+		ValueSpecification valueSpecification1 = mock(ValueSpecification.class);
+		ValueSpecification valueSpecification2 = mock(ValueSpecification.class);
+
+		when(enumeration.getOwnedLiterals()).thenReturn(enumLiterals);
+		when(enumLiterals.iterator()).thenReturn(enumIter);
+		when(enumIter.hasNext()).thenReturn(true).thenReturn(false);
+		when(enumIter.next()).thenReturn(enumLiteral);
+		when(enumLiteral.getName()).thenReturn("Home");
+
+		when(enumLiteral.getSlots()).thenReturn(slots1).thenReturn(slots2);
+		when(slots1.iterator()).thenReturn(slotIter1);
+		when(slots2.iterator()).thenReturn(slotIter2);
+		when(slotIter1.hasNext()).thenReturn(true).thenReturn(true)
+				.thenReturn(false);
+		when(slotIter2.hasNext()).thenReturn(true).thenReturn(true)
+				.thenReturn(false);
+		when(slotIter1.next()).thenReturn(slot1).thenReturn(slot2);
+		when(slotIter2.next()).thenReturn(slot1).thenReturn(slot2);
+		when(slot1.getDefiningFeature()).thenReturn(property1);
+		when(slot2.getDefiningFeature()).thenReturn(property2);
+
+		when(property1.getType()).thenReturn(type1);
+		when(property2.getType()).thenReturn(type2);
+		when(property1.getName()).thenReturn("type");
+		when(property2.getName()).thenReturn("name");
+		when(type1.getName()).thenReturn("boolean");
+		when(type2.getName()).thenReturn("String");
+
+		when(slot1.getValues()).thenReturn(valueSpecifications1);
+		when(slot2.getValues()).thenReturn(valueSpecifications2);
+		when(valueSpecifications1.iterator()).thenReturn(
+				valueSpecificationIter1);
+		when(valueSpecifications2.iterator()).thenReturn(
+				valueSpecificationIter2);
+		when(valueSpecificationIter1.hasNext()).thenReturn(true).thenReturn(
+				false);
+		when(valueSpecificationIter2.hasNext()).thenReturn(true).thenReturn(
+				false);
+		when(valueSpecificationIter1.next()).thenReturn(valueSpecification1);
+		when(valueSpecificationIter2.next()).thenReturn(valueSpecification2);
+		when(valueSpecification1.booleanValue()).thenReturn(true);
+		when(valueSpecification2.stringValue()).thenReturn("Lofi");
+
+		// Cannot find the parameter name of the constructor!
+		ArrayList<String> constructorParameterNames = new ArrayList<String>();
+		constructorParameterNames.add("typeX");
+		constructorParameterNames.add("nameY");
+		enumGenerator.setConstructorParameterNames(constructorParameterNames);
+
+		enumGenerator.generateConstants(enumeration, ast, ed);
+
+		assertEquals("public enum Company {HOME(true,\"Lofi\")}\n",
+				ed.toString());
 	}
 }

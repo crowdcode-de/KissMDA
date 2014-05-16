@@ -85,7 +85,12 @@ public class EnumGenerator {
 
 	private String sourceDirectoryPackageName;
 
-	private final ArrayList<String> constructorParameterNames = new ArrayList<String>();
+	private ArrayList<String> constructorParameterNames = new ArrayList<String>();
+
+	public void setConstructorParameterNames(
+			ArrayList<String> constructorParameterNames) {
+		this.constructorParameterNames = constructorParameterNames;
+	}
 
 	/**
 	 * Generate the Class Interface. This is the main generation part for this
@@ -399,7 +404,7 @@ public class EnumGenerator {
 			ec.setName(ast.newSimpleName(enumLiteral.getName().toUpperCase()));
 
 			// We need to sort the arguments so that it match the
-			// constructor!
+			// constructor arguments!
 			if (!constructorParameterNames.isEmpty()) {
 				for (String constructorParameterName : constructorParameterNames) {
 					logger.log(Level.FINE, "constructorParameterName: "
@@ -408,31 +413,43 @@ public class EnumGenerator {
 					Slot slot = findSlotByName(constructorParameterName,
 							enumLiteral);
 					if (slot != null) {
-						// We found a slot with the same type
+						// We found a slot with the same name
 						Property property = (Property) slot
 								.getDefiningFeature();
 						Type type = property.getType();
 						chooseLiteralTypeAndAddToEnumConstantArguments(ast, ec,
 								slot, type);
 					} else {
-						// We didn't find the slot
-						// TODO doing something...
+						// We didn't find the slot with the same name as in the
+						// constructor
+						logger.log(
+								Level.SEVERE,
+								"EnumGenerator: Error in Generating Enum: we cannot find the correct slot by its name as it was given by the constructor!");
+						// Doing something intelligent...
+						// So we are adding the literal to the EnumConstant
+						// arguments just as it is, so this is not intelligent
+						// at the moment...
+						getSlotsNotIntelligent(ast, enumLiteral, ec);
 					}
 				}
 			} else {
 				// Constructor parameter types is empty
 				// So we are adding the literal to the EnumConstant arguments
 				// just as it is
-				EList<Slot> slots = enumLiteral.getSlots();
-				for (Slot slot : slots) {
-					Property property = (Property) slot.getDefiningFeature();
-					Type type = property.getType();
-					chooseLiteralTypeAndAddToEnumConstantArguments(ast, ec,
-							slot, type);
-				}
+				getSlotsNotIntelligent(ast, enumLiteral, ec);
 			}
 
 			ed.enumConstants().add(ec);
+		}
+	}
+
+	private void getSlotsNotIntelligent(AST ast,
+			EnumerationLiteral enumLiteral, EnumConstantDeclaration ec) {
+		EList<Slot> slots = enumLiteral.getSlots();
+		for (Slot slot : slots) {
+			Property property = (Property) slot.getDefiningFeature();
+			Type type = property.getType();
+			chooseLiteralTypeAndAddToEnumConstantArguments(ast, ec, slot, type);
 		}
 	}
 
