@@ -85,7 +85,7 @@ public class EnumGenerator {
 
 	private String sourceDirectoryPackageName;
 
-	private final ArrayList<Type> constructorParameterTypes = new ArrayList<Type>();
+	private final ArrayList<String> constructorParameterNames = new ArrayList<String>();
 
 	/**
 	 * Generate the Class Interface. This is the main generation part for this
@@ -291,13 +291,13 @@ public class EnumGenerator {
 	void generateContructorParameters(Classifier clazz, AST ast,
 			MethodDeclaration md) {
 		// Empty the list first
-		constructorParameterTypes.clear();
+		constructorParameterNames.clear();
 
 		EList<Property> constructorProperties = clazz.getAttributes();
 		for (Property constructorProperty : constructorProperties) {
 			Type constructorType = constructorProperty.getType();
 			// Save the variable declaration for later use
-			constructorParameterTypes.add(constructorType);
+			constructorParameterNames.add(constructorProperty.getName());
 
 			logger.log(
 					Level.FINE,
@@ -400,13 +400,13 @@ public class EnumGenerator {
 
 			// We need to sort the arguments so that it match the
 			// constructor!
-			if (!constructorParameterTypes.isEmpty()) {
-				for (Type constructorParameterType : constructorParameterTypes) {
-					logger.log(Level.FINE, "constructorParameterType: "
-							+ constructorParameterTypes.toString());
+			if (!constructorParameterNames.isEmpty()) {
+				for (String constructorParameterName : constructorParameterNames) {
+					logger.log(Level.FINE, "constructorParameterName: "
+							+ constructorParameterNames.toString());
 
-					Slot slot = findSlotByType(
-							constructorParameterType.getName(), enumLiteral);
+					Slot slot = findSlotByName(constructorParameterName,
+							enumLiteral);
 					if (slot != null) {
 						// We found a slot with the same type
 						Property property = (Property) slot
@@ -463,13 +463,13 @@ public class EnumGenerator {
 		}
 	}
 
-	Slot findSlotByType(String name, EnumerationLiteral enumLiteral) {
+	Slot findSlotByName(String name, EnumerationLiteral enumLiteral) {
 		EList<Slot> slots = enumLiteral.getSlots();
 		for (Slot slot : slots) {
 			Property property = (Property) slot.getDefiningFeature();
-			Type type = property.getType();
+			String slotPropertyName = property.getName();
 
-			if (type.getName().equals(name)) {
+			if (slotPropertyName.equals(name)) {
 				// We found it
 				return slot;
 			}
