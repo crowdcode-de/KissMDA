@@ -238,15 +238,4 @@
 			</build>
 		</profile>
 	</profiles>
-	  <distributionManagement>
-    <repository>
-      <id>releases</id>
-      <url>https://ers-build.deutschepost.dpwn.com:9443/nexus/content/repositories/thirdparty</url>
-    </repository>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <url>https://ers-build.deutschepost.dpwn.com:9443/nexus/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
-	
 </project>
