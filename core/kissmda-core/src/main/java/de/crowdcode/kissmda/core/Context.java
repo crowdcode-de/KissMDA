@@ -41,6 +41,13 @@ public interface Context {
 	String getTargetModel();
 
 	/**
+	 * Get the target encoding.
+	 * 
+	 * @return targetEncoding as String
+	 */
+	String getTargetEncoding();
+
+	/**
 	 * Set source model.
 	 * 
 	 * @param sourceModel
@@ -53,4 +60,11 @@ public interface Context {
 	 * @param targetModel
 	 */
 	void setTargetModel(String targetModel);
+
+	/**
+	 * Set target encoding.
+	 * 
+	 * @param targetEncoding
+	 */
+	void setTargetEncoding(String targetEncoding);
 }

@@ -20,7 +20,9 @@ package de.crowdcode.kissmda.core.file;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import de.crowdcode.kissmda.core.Context;
@@ -47,19 +49,22 @@ public class FileWriter {
 	 *            the target content
 	 * @throws IOException
 	 */
-	public void createFile(final Context context, final String directory,
-			final String fileName, final String fileContent) throws IOException {
+	public void createFile(final Context context, final String directory, final String fileName,
+			final String fileContent) throws IOException {
 
-		String directoryToBeCreated = context.getTargetModel() + File.separator
-				+ directory;
+		String directoryToBeCreated = context.getTargetModel() + File.separator + directory;
 		new File(directoryToBeCreated).mkdirs();
 
 		// Create the class file
 		Writer writer = null;
 		try {
-			File file = new File(directoryToBeCreated + File.separator
-					+ fileName);
-			writer = new BufferedWriter(new java.io.FileWriter(file));
+			File file = new File(directoryToBeCreated + File.separator + fileName);
+			if (context.getTargetEncoding() != null) {
+				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),
+						context.getTargetEncoding()));
+			} else {
+				writer = new BufferedWriter(new java.io.FileWriter(file));
+			}
 			writer.write(fileContent);
 		} finally {
 			if (writer != null) {
