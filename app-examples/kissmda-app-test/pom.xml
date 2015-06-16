@@ -124,6 +124,7 @@
 					</transformerNameWithOrders>
 					<modelFile>src/main/resources/model/emf/test-uml.uml</modelFile>
 					<loggingLevel>SEVERE</loggingLevel>
+					<targetEncoding>UTF-8</targetEncoding>					
 				</configuration>
 			</plugin>
 			<plugin>
