@@ -27,6 +27,7 @@ package de.crowdcode.kissmda.core;
 public class StandardContext implements Context {
 	private String sourceModel;
 	private String targetModel;
+	private String targetEncoding;
 
 	/**
 	 * {@link Context #setSourceModel(String)}
@@ -45,6 +46,14 @@ public class StandardContext implements Context {
 	}
 
 	/**
+	 * {@link Context #getTargetEncoding()}
+	 */
+	@Override
+	public String getTargetEncoding() {
+		return targetEncoding;
+	}
+
+	/**
 	 * {@link Context #setSourceModel(String)}
 	 */
 	@Override
@@ -58,5 +67,13 @@ public class StandardContext implements Context {
 	@Override
 	public void setTargetModel(String targetModel) {
 		this.targetModel = targetModel;
+	}
+
+	/**
+	 * {@link Context #setTargetEncoding(String)}
+	 */
+	@Override
+	public void setTargetEncoding(String targetEncoding) {
+		this.targetEncoding = targetEncoding;
 	}
 }

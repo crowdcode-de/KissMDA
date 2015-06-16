@@ -29,14 +29,14 @@
 	
 	<groupId>de.crowdcode.kissmda.cartridges</groupId>
 	<artifactId>kissmda-cartridges-simple-java</artifactId>
-	<version>2.0.2</version>
+	<version>2.0.3</version>
 	<packaging>jar</packaging>
 	<name>kissmda-cartridges-simple-java</name>
 
 	<properties>
 		<jukito.version>1.1</jukito.version>
         <junit.version>4.10</junit.version>
-        <kissmda.core.version>2.0.0</kissmda.core.version>
+        <kissmda.core.version>2.0.1</kissmda.core.version>
     </properties>
 
 	<dependencies>

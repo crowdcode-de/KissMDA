@@ -29,6 +29,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
@@ -36,6 +37,7 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.NumberLiteral;
@@ -44,9 +46,12 @@ import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Comment;
+import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Property;
@@ -168,8 +173,29 @@ public class EnumGenerator {
 
 		FieldDeclaration fieldDeclaration = ast.newFieldDeclaration(fragment);
 		fieldDeclaration.setType(chosenType);
+		EList<Comment> comments = property.getOwnedComments();
+		for (Comment comment : comments) {
+			Javadoc javadoc = ast.newJavadoc();
+			generateJavadoc(ast, comment, javadoc);
+			fieldDeclaration.setJavadoc(javadoc);
+		}
 
 		return fieldDeclaration;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void generateJavadoc(AST ast, Comment comment, Javadoc javadoc) {
+		String[] commentContents = parseComment(comment.getBody());
+		for (String commentContent : commentContents) {
+			TagElement tagElement = ast.newTagElement();
+			tagElement.setTagName(commentContent);
+			javadoc.tags().add(tagElement);
+		}
+	}
+
+	private String[] parseComment(String body) {
+		String lines[] = body.split("\\r?\\n");
+		return lines;
 	}
 
 	/**
@@ -353,8 +379,32 @@ public class EnumGenerator {
 		ed.modifiers().add(
 				ast.newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		ed.setName(ast.newSimpleName(className));
+		// Add Javadoc
+		generateClassJavadoc(clazz, ast, ed);
+
 		cu.types().add(ed);
 		return ed;
+	}
+
+	/**
+	 * Generate Javadoc for Interface.
+	 * 
+	 * @param clazz
+	 *            Element
+	 * @param ast
+	 *            JDT AST tree
+	 * @param td
+	 *            BodyDeclaration
+	 */
+	public void generateClassJavadoc(Element clazz, AST ast, BodyDeclaration td) {
+		EList<Comment> comments = clazz.getOwnedComments();
+		if (comments != null) {
+			for (Comment comment : comments) {
+				Javadoc javadoc = ast.newJavadoc();
+				generateJavadoc(ast, comment, javadoc);
+				td.setJavadoc(javadoc);
+			}
+		}
 	}
 
 	/**
@@ -402,6 +452,7 @@ public class EnumGenerator {
 		for (EnumerationLiteral enumLiteral : enumerationLiterals) {
 			EnumConstantDeclaration ec = ast.newEnumConstantDeclaration();
 			ec.setName(ast.newSimpleName(enumLiteral.getName().toUpperCase()));
+			generateClassJavadoc(enumLiteral, ast, ec);
 
 			// We need to sort the arguments so that it match the
 			// constructor arguments!
