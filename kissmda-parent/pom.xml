@@ -42,11 +42,11 @@
 	<!-- =============================================================== -->
 	<developers>
 		<developer>
-			<id>lofi.dewanto@crowdcode.de</id>
+			<id>lofi.dewanto@crowdcode.io</id>
 			<name>Dr. Lofi Dewanto</name>
-			<email>lofi.dewanto@crowdcode.de</email>
-			<organization>CrowdCode</organization>
-			<organizationUrl>http://crowdcode.de</organizationUrl>
+			<email>lofi.dewanto@crowdcode.io</email>
+			<organization>Crowdcode</organization>
+			<organizationUrl>https://crowdcode.io</organizationUrl>
 			<roles>
 				<role>Architect</role>
 				<role>Developer</role>
@@ -54,11 +54,11 @@
 			<timezone>+1</timezone>
 		</developer>
 		<developer>
-			<id>ingo.dueppe@crowdcode.de</id>
+			<id>ingo.dueppe@crowdcode.io</id>
 			<name>Ingo Dueppe</name>
-			<email>ingo.dueppe@crowdcode.de</email>
-			<organization>CrowdCode</organization>
-			<organizationUrl>http://crowdcode.de</organizationUrl>
+			<email>ingo.dueppe@crowdcode.io</email>
+			<organization>Crowdcode</organization>
+			<organizationUrl>https://crowdcode.io</organizationUrl>
 			<roles>
 				<role>Architect</role>
 				<role>Developer</role>
