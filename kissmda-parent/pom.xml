@@ -34,7 +34,7 @@
 
 	<name>kissmda-parent</name>
 	<description>KissMDA Parent-POM</description>
-	<url>https://github.com/crowdcode-de/KissMDA</url>
+	<url>https://www.kissmda.org</url>
 	<inceptionYear>2012</inceptionYear>
 
 	<!-- =============================================================== -->
