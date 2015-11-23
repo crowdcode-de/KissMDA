@@ -24,13 +24,13 @@
 	<parent>
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
-		<version>1.0.0</version>
+		<version>2.1.0-SNAPSHOT</version>
 		<relativePath>../../kissmda-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>de.crowdcode.kissmda.cartridges</groupId>
 	<artifactId>kissmda-extensions-import-packer</artifactId>
-	<version>1.0.0</version>
+	<!--<version>1.0.0</version>-->
 	<packaging>jar</packaging>
 	<name>kissmda-extensions-import-packer</name>
 	<description>kissmda-extensions-import-packer</description>
@@ -39,7 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jukito.version>1.1</jukito.version>
 		<junit.version>4.10</junit.version>
-		<kissmda.cartridges.simple.java.version>2.0.0</kissmda.cartridges.simple.java.version>
+		<kissmda.cartridges.simple.java.version>2.1.0-SNAPSHOT</kissmda.cartridges.simple.java.version>
 	</properties>
 
 	<!-- Dependencies -->
@@ -113,7 +113,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.3</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -122,7 +122,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.12</version>
+				<version>2.19</version>
 				<inherited>true</inherited>
 				<configuration>
 					<includes>
