@@ -2,6 +2,7 @@ KissMDA - Keep It Simple Stupid, MDA!
 =====================================
 
 [![Build Status](https://travis-ci.org/crowdcode-de/KissMDA.svg?branch=master)](https://travis-ci.org/crowdcode-de/KissMDA)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.crowdcode.kissmda.core/kissmda-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.crowdcode.kissmda.core/kissmda-core)
 
 After working a while with MDA / MDSD technologies like AndroMDA, oAW, ... we feel like we need just another MDA tool!
 Why?
