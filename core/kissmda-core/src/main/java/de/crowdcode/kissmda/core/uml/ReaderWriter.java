@@ -56,7 +56,7 @@ public class ReaderWriter {
 	private static final Logger logger = Logger.getLogger(ReaderWriter.class
 			.getName());
 
-	protected static final ResourceSet resourceSet = new ResourceSetImpl();
+	protected final ResourceSet resourceSet = new ResourceSetImpl();
 
 	protected void out(String output) {
 		logger.log(Level.FINE, output);
