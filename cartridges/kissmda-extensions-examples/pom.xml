@@ -30,7 +30,7 @@
 	
 	<groupId>de.crowdcode.kissmda.cartridges</groupId>
 	<artifactId>kissmda-extensions-examples</artifactId>
-	<!--<version>1.0.0</version>-->
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 	<name>kissmda-extensions-examples</name>
 	<description>kissmda-extensions-examples</description>
