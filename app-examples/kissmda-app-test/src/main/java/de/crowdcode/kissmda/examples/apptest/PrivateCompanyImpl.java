@@ -18,6 +18,8 @@
  */
 package de.crowdcode.kissmda.examples.apptest;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Set;
 import java.util.SortedSet;
@@ -31,11 +33,15 @@ public class PrivateCompanyImpl extends CompanyImpl implements PrivateCompany {
 
 	private String owner;
 
+    private LocalTime createdTime;
+
+    private LocalDateTime createdComplete;
+
 	private Collection<Company> companies;
 
 	private SortedSet<CompanyAttribute<String, Integer>> companyAttributes;
 
-	@Override
+    @Override
 	public Integer calculateRevenue() {
 		return 1000;
 	}
@@ -78,4 +84,24 @@ public class PrivateCompanyImpl extends CompanyImpl implements PrivateCompany {
 			Set<CompanyAttribute<String, Integer>> companyCompleteAttributes) {
 		return this.companyAttributes;
 	}
+
+	@Override
+	public LocalTime getCreatedTime() {
+		return createdTime;
+	}
+
+	@Override
+	public void setCreatedTime(LocalTime createdTime) {
+		this.createdTime = createdTime;
+	}
+
+    @Override
+    public LocalDateTime getCreatedCompleted() {
+        return createdComplete;
+    }
+
+    @Override
+    public void setCreatedCompleted(LocalDateTime createdCompleted) {
+        this.createdComplete = createdCompleted;
+    }
 }

@@ -18,6 +18,8 @@
  */
 package de.crowdcode.kissmda.examples.apptest.components;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Date;
 
@@ -37,6 +39,8 @@ public class CompanyImpl implements Company {
 	private Collection<Person> oldPersons;
 	private Collection<Company> internalCompanies;
 	private HeadquarterOffice headquarterOffice;
+	private LocalTime createdTime;
+	private LocalDateTime createdComplete;
 
 	@Override
 	public String getName() {
@@ -66,6 +70,16 @@ public class CompanyImpl implements Company {
 	@Override
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	@Override
+	public LocalTime getCreatedTime() {
+		return createdTime;
+	}
+
+	@Override
+	public void setCreatedTime(LocalTime createdTime) {
+		this.createdTime = createdTime;
 	}
 
 	@Override
@@ -115,5 +129,15 @@ public class CompanyImpl implements Company {
 	@Override
 	public void setHeadquarterOffice(HeadquarterOffice headquarterOffice) {
 		this.headquarterOffice = headquarterOffice;
+	}
+
+	@Override
+	public LocalDateTime getCreatedCompleted() {
+		return createdComplete;
+	}
+
+	@Override
+	public void setCreatedCompleted(LocalDateTime createdCompleted) {
+		this.createdComplete = createdCompleted;
 	}
 }
