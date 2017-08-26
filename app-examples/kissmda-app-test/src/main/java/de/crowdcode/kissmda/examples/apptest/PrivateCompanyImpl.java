@@ -32,13 +32,7 @@ import de.crowdcode.kissmda.testapp.components.CompanyAttribute;
 public class PrivateCompanyImpl extends CompanyImpl implements PrivateCompany {
 
 	private String owner;
-
-    private LocalTime createdTime;
-
-    private LocalDateTime createdComplete;
-
 	private Collection<Company> companies;
-
 	private SortedSet<CompanyAttribute<String, Integer>> companyAttributes;
 
     @Override
@@ -85,23 +79,4 @@ public class PrivateCompanyImpl extends CompanyImpl implements PrivateCompany {
 		return this.companyAttributes;
 	}
 
-	@Override
-	public LocalTime getCreatedTime() {
-		return createdTime;
-	}
-
-	@Override
-	public void setCreatedTime(LocalTime createdTime) {
-		this.createdTime = createdTime;
-	}
-
-    @Override
-    public LocalDateTime getCreatedCompleted() {
-        return createdComplete;
-    }
-
-    @Override
-    public void setCreatedCompleted(LocalDateTime createdCompleted) {
-        this.createdComplete = createdCompleted;
-    }
 }
