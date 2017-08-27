@@ -39,7 +39,7 @@ public class CompanyImpl implements Company {
 	private LocalTime createdTime;
 	private LocalDateTime createdComplete;
 	private ZonedDateTime createdCompletedWithZoned;
-	private LocalDate lastUpdated;
+	private Date lastUpdated;
 	private CompanyAttribute<String, Integer> companyAttribute;
 	private Person person;
 	private Collection<Person> oldPersons;
@@ -156,12 +156,12 @@ public class CompanyImpl implements Company {
 	}
 
 	@Override
-	public LocalDate getLastUpdated() {
+	public Date getLastUpdated() {
 		return lastUpdated;
 	}
 
 	@Override
-	public void setLastUpdated(LocalDate lastUpdated) {
+	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
 }

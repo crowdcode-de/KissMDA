@@ -105,7 +105,6 @@ public class DataTypeUtils {
 		javaTypes.put("Character", "Character");
 		javaTypes.put("Date", "java.util.Date");
 		javaTypes.put("date", "java.util.Date");
-        javaTypes.put("DateLocal", "java.time.LocalDate");
 		javaTypes.put("DateTime", "java.time.LocalDateTime");
         javaTypes.put("Time", "java.time.LocalTime");
         javaTypes.put("DateTimeZoned", "java.time.ZonedDateTime");
