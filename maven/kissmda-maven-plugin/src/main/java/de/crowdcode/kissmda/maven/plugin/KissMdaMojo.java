@@ -18,6 +18,21 @@
  */
 package de.crowdcode.kissmda.maven.plugin;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import de.crowdcode.kissmda.core.CoreModule;
+import de.crowdcode.kissmda.core.StandardContext;
+import de.crowdcode.kissmda.core.Transformer;
+import de.crowdcode.kissmda.core.TransformerException;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
+import org.reflections.Reflections;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,28 +42,13 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
-import org.reflections.Reflections;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-
-import de.crowdcode.kissmda.core.CoreModule;
-import de.crowdcode.kissmda.core.StandardContext;
-import de.crowdcode.kissmda.core.Transformer;
-import de.crowdcode.kissmda.core.TransformerException;
-
 /**
  * KissMDA Mojo.
  * 
  * @goal generate
  * @phase generate-sources
+ * @configurator include-project-dependencies
+ * @requiresDependencyResolution compile+runtime
  * 
  * @author Lofi Dewanto
  * @version 1.0.0
