@@ -47,8 +47,6 @@ import java.util.logging.Logger;
  * 
  * @goal generate
  * @phase generate-sources
- * @configurator include-project-dependencies
- * @requiresDependencyResolution compile+runtime
  * 
  * @author Lofi Dewanto
  * @version 1.0.0

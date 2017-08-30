@@ -136,7 +136,7 @@ public class DataTypeUtils {
 		javaTypes.put("URL", "java.net.URL");
 
 		// Check if we can find a properties file
-        // Default: application.properties
+        // Default: src/main/resources/application.properties
         overwriteJavaTypes();
 
 		// Publish an event to the bus
