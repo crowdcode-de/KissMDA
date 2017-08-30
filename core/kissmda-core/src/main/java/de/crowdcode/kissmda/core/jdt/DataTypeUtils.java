@@ -19,14 +19,15 @@
 package de.crowdcode.kissmda.core.jdt;
 
 import com.google.common.eventbus.EventBus;
+import de.crowdcode.kissmda.core.StandardContext;
 import de.crowdcode.kissmda.core.jdt.event.JavaTypeCodesCreatedEvent;
 import de.crowdcode.kissmda.core.jdt.event.PrimitiveTypeCodesCreatedEvent;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 
 import javax.inject.Inject;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,12 +49,17 @@ public class DataTypeUtils {
 
     private static final String PREFIX_KISSMDA_PROPERTIES_CONST = "kissmda.datatypes.mapping.type.";
 
-	private Map<String, Code> primitiveTypeCodes = null;
+    private static final String STANDARD_PROPERTY_FILE = "src/main/resources/application.properties";
+
+    private Map<String, Code> primitiveTypeCodes = null;
 
 	private Map<String, String> javaTypes = null;
 
 	@Inject
 	private EventBus eventBus;
+
+	@Inject
+    private StandardContext context;
 
 	/**
 	 * Get the primitive type codes.
@@ -168,9 +174,15 @@ public class DataTypeUtils {
 
     private Properties getConfigProperties() {
         final Properties properties = new Properties();
-        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        try (final InputStream stream =
-                     loader.getResourceAsStream("application.properties")) {
+        String propertyFile = context.getPropertyFile();
+        logger.info("Configuration property file: " + propertyFile);
+
+        if (propertyFile == null || propertyFile.equals("")) {
+            propertyFile = STANDARD_PROPERTY_FILE;
+        }
+
+        try (final FileInputStream stream =
+                     new FileInputStream(propertyFile)) {
             if (stream != null) {
                 properties.load(stream);
                 logger.info("File application.properties is loaded.");

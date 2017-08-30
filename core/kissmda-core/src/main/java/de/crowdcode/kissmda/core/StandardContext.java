@@ -28,8 +28,9 @@ public class StandardContext implements Context {
 	private String sourceModel;
 	private String targetModel;
 	private String targetEncoding;
+    private String propertyFile;
 
-	/**
+    /**
 	 * {@link Context #setSourceModel(String)}
 	 */
 	@Override
@@ -53,7 +54,15 @@ public class StandardContext implements Context {
 		return targetEncoding;
 	}
 
-	/**
+    /**
+     * {@link Context #getPropertyFile()}
+     */
+    @Override
+    public String getPropertyFile() {
+        return propertyFile;
+    }
+
+    /**
 	 * {@link Context #setSourceModel(String)}
 	 */
 	@Override
@@ -76,4 +85,12 @@ public class StandardContext implements Context {
 	public void setTargetEncoding(String targetEncoding) {
 		this.targetEncoding = targetEncoding;
 	}
+
+    /**
+     * {@link Context #setPropertyFile(String)}
+     */
+    @Override
+    public void setPropertyFile(String propertyFile) {
+        this.propertyFile = propertyFile;
+    }
 }

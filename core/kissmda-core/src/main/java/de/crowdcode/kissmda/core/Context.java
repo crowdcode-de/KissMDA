@@ -48,6 +48,13 @@ public interface Context {
 	String getTargetEncoding();
 
 	/**
+	 * Get property file and its location.
+	 *
+	 * @return propertyFile as String
+	 */
+	String getPropertyFile();
+
+	/**
 	 * Set source model.
 	 * 
 	 * @param sourceModel
@@ -67,4 +74,11 @@ public interface Context {
 	 * @param targetEncoding
 	 */
 	void setTargetEncoding(String targetEncoding);
+
+	/**
+	 * Set property file location.
+	 *
+	 * @param propertyFile
+	 */
+	void setPropertyFile(String propertyFile);
 }

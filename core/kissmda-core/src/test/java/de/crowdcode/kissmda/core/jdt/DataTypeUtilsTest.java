@@ -19,6 +19,7 @@
 package de.crowdcode.kissmda.core.jdt;
 
 import com.google.common.eventbus.EventBus;
+import de.crowdcode.kissmda.core.StandardContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,7 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit test for Data Type Utils.
@@ -50,6 +52,9 @@ public class DataTypeUtilsTest {
 
 	@Mock
 	private EventBus eventBus;
+
+	@Mock
+    private StandardContext context;
 
 	@Before
 	public void setUp() throws Exception {
@@ -114,6 +119,9 @@ public class DataTypeUtilsTest {
 
     @Test
     public void testOverwriteJavaTypes() throws Exception {
+        when(context.getPropertyFile()).thenReturn(
+                "src/test/resources/application.properties");
+
         Map<String, String> javaTypes = dataTypeUtils.getJavaTypes();
         boolean found = false;
         for (String value : javaTypes.values()) {

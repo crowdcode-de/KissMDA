@@ -115,11 +115,18 @@ public class KissMdaMojo extends AbstractMojo {
 	 */
 	private String loggingLevel;
 
+    /**
+     * Property file for configuration and datatypes.
+     *
+     * @parameter default-value="src/main/resources/application.properties"
+     */
+    private String propertyFile;
+
 	private final StandardContext context;
 
 	private final LoggingLevelMapper loggingLevelMapper;
 
-	public KissMdaMojo() {
+    public KissMdaMojo() {
 		super();
 		loggingLevelMapper = new LoggingLevelMapper();
 		context = new StandardContext();
@@ -157,6 +164,10 @@ public class KissMdaMojo extends AbstractMojo {
 		this.targetEncoding = targetEncoding;
 	}
 
+	public void setPropertyFile(String propertyFile) {
+	    this.propertyFile = propertyFile;
+    }
+
 	/**
 	 * Execute.
 	 * 
@@ -173,7 +184,7 @@ public class KissMdaMojo extends AbstractMojo {
 
 		try {
 			// Create parent Guice module injector from kissmda core
-			Injector parentInjector = Guice.createInjector(new CoreModule());
+			Injector parentInjector = Guice.createInjector(new CoreModule(context));
 			// Go through other module injectors and create child module
 			// injectors
 			String fullNameModelFile = project.getBasedir() + "/" + modelFile;
@@ -181,6 +192,7 @@ public class KissMdaMojo extends AbstractMojo {
 			context.setSourceModel(fullNameModelFile);
 			context.setTargetModel(fullNameTargetDirectory);
 			context.setTargetEncoding(targetEncoding);
+			context.setPropertyFile(propertyFile);
 
 			if (transformerNameWithOrders != null && transformerNameWithOrders.size() != 0) {
 				// transformerNameWithOrders wins if both are configured
