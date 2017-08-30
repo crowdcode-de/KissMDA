@@ -18,9 +18,7 @@
  */
 package de.crowdcode.kissmda.core.jdt;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import com.google.common.eventbus.EventBus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +26,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.eventbus.EventBus;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test for Data Type Utils.
@@ -39,7 +42,10 @@ import com.google.common.eventbus.EventBus;
 @RunWith(MockitoJUnitRunner.class)
 public class DataTypeUtilsTest {
 
-	@InjectMocks
+    private static final Logger logger = Logger
+            .getLogger(DataTypeUtils.class.getName());
+
+    @InjectMocks
 	private DataTypeUtils dataTypeUtils;
 
 	@Mock
@@ -105,4 +111,38 @@ public class DataTypeUtilsTest {
 				.isParameterizedType("datatype.Collection<String");
 		assertFalse(isParameterizedType);
 	}
+
+    @Test
+    public void testOverwriteJavaTypes() throws Exception {
+        Map<String, String> javaTypes = dataTypeUtils.getJavaTypes();
+        boolean found = false;
+        for (String value : javaTypes.values()) {
+            if (value.equals("java.time.LocalDate")) {
+                assertTrue("Overwritten is ok.", true);
+                found = true;
+                logger.log(Level.SEVERE,"java.util.Date overwritten with java.time.LocalDate!");
+            }
+
+            if (value.equals("de.lofi.Test")) {
+                found = true;
+                assertTrue("Overwritten is ok.", true);
+                logger.log(Level.SEVERE,"java.time.LocalDateTime overwritten with de.lofi.Test!");
+            }
+
+            if (value.equals("java.util.Date")) {
+                logger.log(Level.SEVERE, "java.util.Date found!");
+                assertTrue(false);
+            }
+
+            if (value.equals("java.time.LocalDateTime")) {
+                logger.log(Level.SEVERE, "java.time.LocalDateTime found!");
+                assertTrue(false);
+            }
+        }
+
+        if (!found) {
+            assertTrue("Overwrite does not work!", false);
+        }
+    }
+
 }

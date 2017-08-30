@@ -18,18 +18,21 @@
  */
 package de.crowdcode.kissmda.core.jdt;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-
+import com.google.common.eventbus.EventBus;
+import de.crowdcode.kissmda.core.jdt.event.JavaTypeCodesCreatedEvent;
+import de.crowdcode.kissmda.core.jdt.event.PrimitiveTypeCodesCreatedEvent;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.PrimitiveType.Code;
 
-import com.google.common.eventbus.EventBus;
-
-import de.crowdcode.kissmda.core.jdt.event.JavaTypeCodesCreatedEvent;
-import de.crowdcode.kissmda.core.jdt.event.PrimitiveTypeCodesCreatedEvent;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Data Type Helper class for Java language with JDT.
@@ -39,6 +42,11 @@ import de.crowdcode.kissmda.core.jdt.event.PrimitiveTypeCodesCreatedEvent;
  * @version 1.0.0
  */
 public class DataTypeUtils {
+
+    private static final Logger logger = Logger
+            .getLogger(DataTypeUtils.class.getName());
+
+    private static final String PREFIX_KISSMDA_PROPERTIES_CONST = "kissmda.datatypes.mapping.type.";
 
 	private Map<String, Code> primitiveTypeCodes = null;
 
@@ -127,11 +135,56 @@ public class DataTypeUtils {
 		javaTypes.put("URI", "java.net.URI");
 		javaTypes.put("URL", "java.net.URL");
 
+		// Check if we can find a properties file
+        // Default: application.properties
+        overwriteJavaTypes();
+
 		// Publish an event to the bus
 		eventBus.post(new JavaTypeCodesCreatedEvent(javaTypes));
 	}
 
-	/**
+    void overwriteJavaTypes() {
+        // Check if we can find a properties file in the classpath
+        // Default: application.properties
+        // If yes, we overwrite the content of javaTypes
+        // Get the application.properties
+        Properties properties = getConfigProperties();
+
+        // Check for kissmda.datatypes.mapping.type.*
+        final Enumeration<?> propertyNames = properties.propertyNames();
+        while (propertyNames.hasMoreElements()) {
+            String key = (String) propertyNames.nextElement();
+            String value = properties.getProperty(key);
+            logger.info(key + ":" + value);
+
+            if (key.startsWith(PREFIX_KISSMDA_PROPERTIES_CONST)) {
+                logger.info("KissMDA datatypes.");
+                String keyDataType = key.replace(PREFIX_KISSMDA_PROPERTIES_CONST, "");
+                logger.info("Key: " + keyDataType + " - " + "Value: " + value);
+                javaTypes.put(keyDataType, value);
+            }
+        }
+    }
+
+    private Properties getConfigProperties() {
+        final Properties properties = new Properties();
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        try (final InputStream stream =
+                     loader.getResourceAsStream("application.properties")) {
+            if (stream != null) {
+                properties.load(stream);
+                logger.info("File application.properties is loaded.");
+            } else {
+                logger.log(Level.SEVERE,"File application.properties cannot be found! Ignore the properties!");
+            }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE,"File application.properties cannot be found! Ignore the properties!");
+        }
+
+        return properties;
+    }
+
+    /**
 	 * Check whether the type name is a primitive type.
 	 * 
 	 * @param typeName
