@@ -26,12 +26,12 @@ To use this plugin you can see following example:
     </executions>
     <configuration>
         <transformerScanPackageNames>
-		    <transformerScanPackageName>de.crowdcode.kissmda.cartridges</transformerScanPackageName>
-		</transformerScanPackageNames>
-		<loggingLevel>SEVERE</loggingLevel>
+            <transformerScanPackageName>de.crowdcode.kissmda.cartridges</transformerScanPackageName>
+        </transformerScanPackageNames>
+        <loggingLevel>SEVERE</loggingLevel>
         <targetEncoding>UTF-8</targetEncoding>
-		<modelFile>src/main/resources/model/emf/test-uml.uml</modelFile>
-		<propertyFile>src/main/resources/application.properties</propertyFile>
+        <modelFile>src/main/resources/model/emf/test-uml.uml</modelFile>
+        <propertyFile>src/main/resources/application.properties</propertyFile>
     </configuration>
 </plugin>
 ```
