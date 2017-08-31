@@ -24,13 +24,13 @@
 	<parent>
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1</version>
 		<relativePath>../../kissmda-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>de.crowdcode.kissmda.cartridges</groupId>
 	<artifactId>kissmda-extensions-import-packer</artifactId>
-	<version>2.1.0</version>
+	<version>2.1.1</version>
 	<packaging>jar</packaging>
 	<name>kissmda-extensions-import-packer</name>
 	<description>kissmda-extensions-import-packer</description>
@@ -39,7 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jukito.version>1.1</jukito.version>
 		<junit.version>4.10</junit.version>
-		<kissmda.cartridges.simple.java.version>2.1.0-SNAPSHOT</kissmda.cartridges.simple.java.version>
+		<kissmda.cartridges.simple.java.version>2.1.1</kissmda.cartridges.simple.java.version>
 	</properties>
 
 	<!-- Dependencies -->

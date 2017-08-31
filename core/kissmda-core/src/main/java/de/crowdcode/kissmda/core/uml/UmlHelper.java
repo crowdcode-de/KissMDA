@@ -18,17 +18,7 @@
  */
 package de.crowdcode.kissmda.core.uml;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
+import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -37,31 +27,14 @@ import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.uml2.uml.Association;
+import org.eclipse.uml2.uml.*;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Comment;
-import org.eclipse.uml2.uml.Component;
-import org.eclipse.uml2.uml.Dependency;
-import org.eclipse.uml2.uml.Element;
-import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.InterfaceRealization;
-import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.NamedElement;
-import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Package;
-import org.eclipse.uml2.uml.Parameter;
-import org.eclipse.uml2.uml.ParameterDirectionKind;
-import org.eclipse.uml2.uml.ParameterableElement;
-import org.eclipse.uml2.uml.PrimitiveType;
-import org.eclipse.uml2.uml.Profile;
-import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.TemplateBinding;
-import org.eclipse.uml2.uml.TemplateParameterSubstitution;
-import org.eclipse.uml2.uml.Type;
-import org.eclipse.uml2.uml.ValueSpecification;
 
-import de.crowdcode.kissmda.core.jdt.DataTypeUtils;
+import javax.inject.Inject;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class is taken from JavaBasic-Generator Fornax oAW project. Extended by
@@ -590,7 +563,7 @@ public class UmlHelper {
 	 * This method takes a string and try's to cut it down into its peaces. The
 	 * character given as delimiter will be used to determine the single peaces.
 	 * 
-	 * @param thwString
+	 * @param theString
 	 *            .
 	 * @return theList
 	 * @since 2.1.0

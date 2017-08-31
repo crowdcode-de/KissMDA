@@ -23,13 +23,13 @@
 	<parent>
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1</version>
 		<relativePath>../../kissmda-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>de.crowdcode.kissmda.profiles</groupId>
 	<artifactId>kissmda-profile-datatype</artifactId>
-	<version>2.1.0</version>
+	<version>2.1.1</version>
 	<packaging>jar</packaging>
 	<name>kissmda-profile-datatype</name>
 </project>

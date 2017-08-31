@@ -24,22 +24,22 @@
 	<parent>
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1</version>
 		<relativePath>../../kissmda-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>de.crowdcode.kissmda.app-examples</groupId>
 	<artifactId>kissmda-app-test</artifactId>
-	<version>2.1.0</version>
+	<version>2.1.1</version>
 	<packaging>jar</packaging>
 	<name>kissmda-app-test</name>
 
 	<properties>
 		<junit.version>4.10</junit.version>
-		<kissmda.maven.plugin.version>2.1.0-SNAPSHOT</kissmda.maven.plugin.version>
-		<kissmda.cartridges.simple.java.version>2.1.0-SNAPSHOT</kissmda.cartridges.simple.java.version>
-		<kissmda.extensions.examples.version>2.1.0-SNAPSHOT</kissmda.extensions.examples.version>
-		<kissmda.extensions.importpacker.version>2.1.0-SNAPSHOT</kissmda.extensions.importpacker.version>
+		<kissmda.maven.plugin.version>2.1.1</kissmda.maven.plugin.version>
+		<kissmda.cartridges.simple.java.version>2.1.1</kissmda.cartridges.simple.java.version>
+		<kissmda.extensions.examples.version>2.1.1</kissmda.extensions.examples.version>
+		<kissmda.extensions.importpacker.version>2.1.1</kissmda.extensions.importpacker.version>
 	</properties>
 
 	<dependencies>
