@@ -36,7 +36,7 @@
 
 	<properties>
 		<version.maven>3.3.9</version.maven>
-		<kissmda.core.version>2.1.1T</kissmda.core.version>
+		<kissmda.core.version>2.1.1</kissmda.core.version>
 	</properties>
 
 	<dependencies>
