@@ -41,7 +41,7 @@ They both are the main entering point for the generation of Java codes. Both cla
 
 There are some other MDA / MDSD tools available outside: [Taylor](http://taylor.sourceforge.net), [Topcased](http://www.topcased.org), [openMDX](http://www.openmdx.org). But all of them suffer the problems we mentioned above.
 
-***Our solution is KissMDA (Keep It Simple Stupid, MDA!)***.
+**Our solution is KissMDA (Keep It Simple Stupid, MDA!)**.
 
 1. KissMDA is a pure Java API approach 
 --------------------------------------
