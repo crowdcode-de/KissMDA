@@ -7,3 +7,5 @@
 *.iml
 pom.xml.*
 release.properties
+.vscode
+.factorypath
