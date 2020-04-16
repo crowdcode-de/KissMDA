@@ -17,7 +17,7 @@ You also need to use a lot of XML files and elements to [configure your cartridg
 As an application developer you have all those XML elements to be able [configure AndroMDA](http://www.andromda.org/docs/configuration.html) 
 which makes AndroMDA a configuration monster.
 
-2. [oAW](http://www.openarchitectureware.org) has a different story. Until the version 4.3 it seems everything looks very smooth. After the project went 
+2. [oAW](https://de.wikipedia.org/wiki/OpenArchitectureWare) has a different story. Until the version 4.3 it seems everything looks very smooth. After the project went 
 to Eclipse it seems that the project has no activity anymore. No news anymore from oAW 5 release. 
 It's really a pitty. The big problem of oAW is its Domain Specific Language (DSL) Xtend und Xpand. Since
 they depend on their own editor capabilities in Eclipse and because the project seems to be dead, you will 
