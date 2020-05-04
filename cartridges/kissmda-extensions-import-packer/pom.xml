@@ -24,13 +24,13 @@
 	<parent>
 		<groupId>de.crowdcode.kissmda</groupId>
 		<artifactId>kissmda-parent</artifactId>
-		<version>2.1.1</version>
+		<version>2.2.0-SNAPSHOT</version>
 		<relativePath>../../kissmda-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>de.crowdcode.kissmda.cartridges</groupId>
 	<artifactId>kissmda-extensions-import-packer</artifactId>
-	<version>2.1.1</version>
+	<version>2.2.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>kissmda-extensions-import-packer</name>
 	<description>kissmda-extensions-import-packer</description>
