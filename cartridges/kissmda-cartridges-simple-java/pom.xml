@@ -35,7 +35,7 @@
 
 	<properties>
 		<jukito.version>1.1</jukito.version>
-        <junit.version>4.10</junit.version>
+        <junit.version>4.13.1</junit.version>
         <kissmda.core.version>2.1.1</kissmda.core.version>
     </properties>
 
