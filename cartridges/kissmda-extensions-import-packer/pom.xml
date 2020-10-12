@@ -38,7 +38,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jukito.version>1.1</jukito.version>
-		<junit.version>4.10</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<kissmda.cartridges.simple.java.version>2.1.1</kissmda.cartridges.simple.java.version>
 	</properties>
 
