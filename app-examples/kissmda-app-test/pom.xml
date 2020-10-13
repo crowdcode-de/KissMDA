@@ -35,7 +35,7 @@
 	<name>kissmda-app-test</name>
 
 	<properties>
-		<junit.version>4.10</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<kissmda.maven.plugin.version>2.1.1</kissmda.maven.plugin.version>
 		<kissmda.cartridges.simple.java.version>2.1.1</kissmda.cartridges.simple.java.version>
 		<kissmda.extensions.examples.version>2.1.1</kissmda.extensions.examples.version>
